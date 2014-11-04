@@ -9,7 +9,7 @@ Members & contributors:
 * Dr. Andrea Ballatore  <http://sites.google.com/site/andreaballatore>
 * Eric Ahlgren
 * Marc Thiemann
-* Michel Zimmer 
+* Michel Zimmer <https://www.mzimmer.net/>
 
 Contents
 ----------------------
