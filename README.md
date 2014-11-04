@@ -14,7 +14,9 @@ Members & contributors:
 Contents
 ----------------------
 
-TODO
+`CoreConceptsHs`: The Haskell specifications of the core concepts.
+
+`CoreConceptsPy`: A Python implementation of the core concepts.
 
 Contact
 ----------------------
