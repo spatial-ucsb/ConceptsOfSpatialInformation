@@ -18,8 +18,8 @@ Contents
 
 `CoreConceptsPy`: A Python implementation of the core concepts.
 
-Contact
-----------------------
-Andrea Ballatore
 
-e-mail: `andrea [dot] ballatore [at] gmail [dot] com`
+References
+----------------------
+
+Kuhn, W. (2012). Core concepts of spatial information for transdisciplinary research. International Journal of Geographical Information Science, 26(12), 2267-2276.
