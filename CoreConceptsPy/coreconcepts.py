@@ -167,8 +167,29 @@ class AObjects(object):
 class ANetworks(object):
     """ Abstract class for core concept 'network' """
     @staticmethod
-    def exampleMethod( obj ):
-        raise NotImplementedError("exampleMethod")
+    def nodes( netw ):
+        """ @return all nodes part of this network """
+        raise NotImplementedError("nodes")
+    
+    @staticmethod
+    def edges( netw ):
+        """ @return all edges part of this network """
+        raise NotImplementedError("edges")
+    
+    @staticmethod
+    def addNode( netw, node ):
+        """ adds given node to this network """
+        raise NotImplementedError("addNode")
+    
+    @staticmethod
+    def addEdge( netw, edge ):
+        """ adds given edge to this network """
+        raise NotImplementedError("addEdge")
+    
+    @staticmethod
+    def linking( netw, edge ):
+        """ @return the nodes encapsulating given edge in this network """
+        raise NotImplementedError("linking")
     
 class AEvents(object):
     """ Abstract class for core concept 'event' """
