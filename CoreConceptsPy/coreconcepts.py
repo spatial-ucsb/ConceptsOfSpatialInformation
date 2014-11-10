@@ -191,6 +191,31 @@ class ANetworks(object):
         """ @return the nodes encapsulating given edge in this network """
         raise NotImplementedError("linking")
     
+    @staticmethod
+    def degree( netw, node ):
+        """ @return the number of edges to other nodes in this network """
+        raise NotImplementedError("degree")
+    
+    @staticmethod
+    def connected( netw, nodeA, nodeB ):
+        """ @return whether B can be reached from A in this network """
+        raise NotImplementedError("connected")
+    
+    @staticmethod
+    def shortestPath( netw, nodeA, nodeB ):
+        """ @return the shortest path from A to B in this network """
+        raise NotImplementedError("shortestPath")
+    
+    @staticmethod
+    def distance( netw, nodeA, nodeB ):
+        """ @return the length of shortest path from A to B in this network """
+        raise NotImplementedError("distance")
+    
+    @staticmethod
+    def breadthFirst( netw, node, distance ):
+        """ @return all nodes within the distance from node in this network """
+        raise NotImplementedError("breadthFirst")
+    
 class AEvents(object):
     """ Abstract class for core concept 'event' """
     @staticmethod
