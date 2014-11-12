@@ -7,8 +7,17 @@ from gdal_calculations import *
 
 
 class GeoTiffFields(AFields):
+    """
+    TODO: add description of class here
+    """
     @staticmethod
     def getValue( gtiff, position ):
+        """
+        TODO: add description of function here
+        @param gtiff ? 
+        @param position ?
+        @return ?
+        """
         #Get geo-coords for transformation
         transform = gtiff.GetGeoTransform()
         #Convert geo-coords to image space
@@ -27,6 +36,13 @@ class GeoTiffFields(AFields):
     
     @staticmethod
     def setValue ( gtiff, position, value ):
+        """
+        TODO: add description of function here
+        @param gtiff ? 
+        @param position ?
+        @param value ?
+        @return ?
+        """
         #Get geo-coords for transformation
         transform = gtiff.GetGeoTransform()
         #Convert geo-coords to image space
@@ -46,6 +62,13 @@ class GeoTiffFields(AFields):
 
     @staticmethod
     def local (gtiff, position, func):
+        """
+        TODO: add description of function here
+        @param gtiff ? 
+        @param position ?
+        @param func ?
+        @return ?
+        """
         #Get geo-coords for transformation
         transform = gtiff.GetGeoTransform()
         #Convert geo-coords to image space
@@ -70,6 +93,13 @@ class GeoTiffFields(AFields):
         # assign a new value to position based on input function
         # we use here the mean of a 3X3 window
     def focal (gtiff, position, func):
+        """
+        TODO: add description of function here
+        @param gtiff ? 
+        @param position ?
+        @param func ?
+        @return ?
+        """
         #Get geo-coords for transformation
         transform = gtiff.GetGeoTransform()
         #Convert geo-coords to image space

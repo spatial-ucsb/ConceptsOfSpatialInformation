@@ -6,6 +6,9 @@ import numpy as np
 
 
 class ArcShpObjects(AObjects):
+    """
+    TODO: add description of class here
+    """
     @staticmethod
     def getBounds (obj):
         #Get geometery
@@ -25,8 +28,6 @@ class ArcShpObjects(AObjects):
             return True
         else:
             return False
-    
-        
 
     @staticmethod
     def getProperty (obj, prop):

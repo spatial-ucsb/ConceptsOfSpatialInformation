@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+"""
+Utils: Various utilities methods.
+"""
+
 import logging
 import math
 import re
