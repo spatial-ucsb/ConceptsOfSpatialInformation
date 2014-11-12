@@ -7,7 +7,7 @@ import numpy as np
 
 class ArcShpObjects(AObjects):
     """
-    TODO: add description of class here
+    Subclass of Abstract Objects (AObjects) in the ArcMap Shapefile format
     """
     @staticmethod
     def getBounds (obj):
@@ -28,11 +28,26 @@ class ArcShpObjects(AObjects):
             return True
         else:
             return False
+    
+        
 
     @staticmethod
     def getProperty (obj, prop):
         #Get index of property - note: index 13 is building name
         index = obj.GetFieldIndex(prop)
-        #Return value as a string
-        value = obj.GetFieldAsString(index)
+        propDefn = obj.GetFieldDefnRef(index)
+        propType = propDefn.GetType()
+        #Return value as a propType
+        if propType == "OFTInteger":
+            value = obj.GetFieldAsInteger(index)
+        elif propType == "OFTReal":
+            value = obj.GetFieldAsDouble(index)
+        elif propType == "OFTString":
+            value = obj.GetFieldAsString(index)
+        elif propType == "OFTBinary":
+            value = obj.GetFieldAsBinary(index)
+        elif propType == "OFTDateTime":
+            value = obj.GetFieldAsDateTime(index)
+        else:
+            value = obj.GetFieldAsString(index)
         return value

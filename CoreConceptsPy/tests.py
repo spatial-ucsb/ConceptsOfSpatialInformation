@@ -8,7 +8,10 @@ import unittest
 from utils import _init_log
 import numpy as np
 
-from coreconcepts import ALocate, ExLoc, AFields, ArrFields 
+from coreconcepts import ALocate, ExLoc, AFields, ArrFields
+from fields_impl import *
+from objects_impl import *
+import random 
 
 log = _init_log("tests")
 
@@ -52,11 +55,64 @@ class CoreConceptsTest(unittest.TestCase):
         print "numpyFieldFloat after change\n",numpyFieldFloat
         #print ArrField.getValue( basicArr, [1, 1] )
     
+    def testGeoTiffFields(self):
+        """ Import DEM of CalPoly campus and test functions on upper left coords"""
+        
+        print "\nTest geotiff fields - getValue on CalPoly DEM\n"
+        gtiffPath = "data/fields/output_hh.tif"
+        dem = gdal.Open(gtiffPath, GA_Update) #GA_Update gives write access
+        ulCoords =(711743.5, 3910110.5) #Coordinates are UTM Zone 10N
+        #test getValue for upper left coords
+        ulVal = GeoTiffFields.getValue(dem, ulCoords)
+        print "value of upper left pixel =", round(ulVal,2)
+        self.assertEqual(ulVal, 117.2)
+        
+        #test setValue for upper left coords
+        print "\nTest geotiff fields - setValue on CalPoly DEM\n"
+        newVal = random.randrange(1,100)
+        GeoTiffFields.setValue(dem, ulCoords, newVal)
+        GeoTiffFields.getValue(dem, ulCoords)
+        testVal = GeoTiffFields.getValue(dem, ulCoords)
+        print "\nnew value of upper left pixel =", round(testVal,2)
+        self.assertEqual(testVal, newVal)
+
+        #reset ulCoords to original value of 117.2
+        print "\nresetting value to 117.2\n"
+        GeoTiffFields.setValue(dem, ulCoords, 117.2)
+    
     def testFieldsMapAlgebra(self):
         print "TODO: test map algebra on fields"
         
     def testObjects(self):
         print "TODO: test objects"
+    
+    def testArcShpObjects(self):
+        """ Import 2 ArcMap shapefiles and test core concept functions """
+
+        #Get objects from shapefiles
+        shapefile1 = "data/objects/Rooftops.shp"
+        shapefile2 = "data/objects/ViablePVArea.shp"
+        layer_src1 = ogr.Open(shapefile1)
+        layer_src2 = ogr.Open(shapefile2)
+        lyr1 = layer_src1.GetLayer(0)
+        lyr2 = layer_src2.GetLayer(0)
+        roofObj = lyr1.GetFeature(0)
+        pvObj = lyr2.GetFeature(236)
+
+        #test getBounds on roof object - Poultry Science building
+        print "\nTest shapefile objects - getBounds for CalPoly roof"
+        roofBounds = ArcShpObjects.getBounds(roofObj)
+        roofBounds = (round(roofBounds[0],2),round(roofBounds[1],2),round(roofBounds[2],2),round(roofBounds[3],2))
+        print "\nBounding box coordinates, UTM Zone 10N, in form (MinX, MaxX, MinY, MaxY):\n",roofBounds,"\n"
+        self.assertEqual(roofBounds, (710915.55, 710983.25, 3910040.96, 3910095.28))
+        
+        #test hasRelation for PV object within roof object
+        rel = ArcShpObjects.hasRelation(pvObj,roofObj,'Within')
+        self.assertEqual(rel,True)
+        
+        #test getProprty for Poultry Science building name
+        roofName = ArcShpObjects.getProperty(roofObj, 'name')
+        self.assertEqual(roofName,"Poultry Science")
     
     def testFunctionCall(self):
         """ For @Eric: Pass a function as a parameter """

@@ -8,12 +8,12 @@ from gdal_calculations import *
 
 class GeoTiffFields(AFields):
     """
-    TODO: add description of class here
+    Subclass of Abstract Fields in the GeoTiff format
     """
     @staticmethod
     def getValue( gtiff, position ):
         """
-        TODO: add description of function here
+        Returns the value of a pixel at an input position
         @param gtiff ? 
         @param position ?
         @return ?
