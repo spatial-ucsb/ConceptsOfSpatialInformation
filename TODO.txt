@@ -2,8 +2,13 @@ Core Concepts of Spatial Information
 =============================================
 TODO list
 
-* Andrea: 
-* Werner: update Haskell specs
+* Andrea:
+	find data for events and networks 
+* Werner: 
+	update Haskell specs
 * Eric: 
+	update tests for fields and objects
 * Michel: 
-* Marc: 
+	
+* Marc:
+	 
