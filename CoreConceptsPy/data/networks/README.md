@@ -3,8 +3,8 @@ Core Concepts of Spatial Information - Network Data
 
 Abstract: TODO
 
-`power.gml.zip`: Power grid (no geographic data)
-`us-air97.net.zip`: US Airports network
+* `power.gml.zip`: Power grid (no geographic data)
+* `us-air97.net.zip`: US Airports network
  
 Other examples: 
 
