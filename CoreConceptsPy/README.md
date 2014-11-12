@@ -22,3 +22,7 @@ To run the Unit Tests: `make test`
 Dependencies
 ----------------------
 TODO: specify other packages needed to run this code
+
+Style guidelines
+----------------------
+https://google-styleguide.googlecode.com/svn/trunk/pyguide.html
