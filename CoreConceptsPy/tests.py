@@ -8,7 +8,7 @@ import unittest
 from utils import _init_log
 import numpy as np
 
-from coreconcepts import ALocate, ExLoc, AFields, Entity, ArrFields 
+from coreconcepts import ALocate, ExLoc, AFields, ArrFields 
 
 log = _init_log("tests")
 
@@ -18,13 +18,9 @@ class CoreConceptsTest(unittest.TestCase):
     def testExample(self):
         self.assertEqual(1+3,4)
         
-    def testAnotherExample(self):
-        pass
-        #print "This is a unit test that fails"
-        #self.assertEqual(1+3,5)
-        
     def testLocate(self):
-        
+        pass
+        """
         figureA = Entity()
         figureB = Entity()
         groundA = Entity()
@@ -32,7 +28,8 @@ class CoreConceptsTest(unittest.TestCase):
         
         self.assertTrue( ExLoc.isAt( figureA, groundA ) )
         self.assertFalse( ExLoc.isPart( figureA, groundA ) )
-    
+        """
+        
     def testFields(self):
         
         # basic python list of tuples
@@ -57,11 +54,29 @@ class CoreConceptsTest(unittest.TestCase):
     
     def testFieldsMapAlgebra(self):
         print "TODO: test map algebra on fields"
-        assert False
         
     def testObjects(self):
         print "TODO: test objects"
-        assert False
+    
+    def testFunctionCall(self):
+        """ For @Eric: Pass a function as a parameter """
+        
+        def myFunction(x):
+            return x * 2 + 4
+        
+        def myFunction2(x):
+            return x - 5
+        
+        def funcCaller( a, func ):
+            # call func on parameter a
+            # "func" is a function can that can be called normally
+            return func(a)
+        
+        # call funcCaller passing myFunction and myFunction2 as parameters, checking outputs
+        self.assertEquals( funcCaller( 3, myFunction ), 10 )
+        self.assertEquals( funcCaller( 3, myFunction2 ), -2 )
+        self.assertEquals( funcCaller( 5, myFunction ), 14 )
+        self.assertEquals( funcCaller( 5, myFunction2 ), 0 )
         
 if __name__ == '__main__':
     unittest.main()

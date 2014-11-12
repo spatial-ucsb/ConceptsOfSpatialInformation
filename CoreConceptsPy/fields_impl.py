@@ -114,6 +114,7 @@ class GeoTiffFields(AFields):
         #Convert image to array
         oldArray = gtiff.ReadAsArray(arrx-1,arry-1,3,3) #get neighborhood window (3X3 matrix)
         try:
+            # TODO: I've added an example of this call in the tests, called "testFunctionCall" (AB) 
             newArray = np.array([eval(str(float(oldArray))+func)], ndmin=2) #perform func on value
         except TypeError:
             newArray = np.array([eval(func)(oldArray)], ndmin=2)
