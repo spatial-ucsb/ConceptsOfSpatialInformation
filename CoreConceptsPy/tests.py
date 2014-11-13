@@ -59,7 +59,7 @@ class CoreConceptsTest(unittest.TestCase):
         """ Import DEM of CalPoly campus and test functions on upper left coords"""
         
         print "\nTest geotiff fields - getValue on CalPoly DEM\n"
-        gtiffPath = "data/fields/output_hh.tif"
+        gtiffPath = "data/fields/CalPolyDEM.tif"
         dem = gdal.Open(gtiffPath, GA_Update) #GA_Update gives write access
         ulCoords =(711743.5, 3910110.5) #Coordinates are UTM Zone 10N
         #test getValue for upper left coords
