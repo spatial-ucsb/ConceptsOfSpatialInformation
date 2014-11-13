@@ -81,7 +81,21 @@ class CoreConceptsTest(unittest.TestCase):
         GeoTiffFields.setValue(dem, ulCoords, 117.2)
     
     def testFieldsMapAlgebra(self):
-        print "TODO: test map algebra on fields"
+        """ Import DEM of CalPoly campus and test Map Albegra functions"""
+        print "Test Map Algebra local function"
+        
+        gtiffPath = "data/fields/CalPolyDEM.tif"
+        dem = gdal.Open(gtiffPath, GA_Update) #GA_Update gives write access
+        ulCoords =(711743.5, 3910110.5)
+        oldVal = GeoTiffFields.getValue(dem, ulCoords) 
+        def localFunc(x):
+            return x/2
+        GeoTiffFields.local(dem,ulCoords,localFunc)
+        testVal = GeoTiffFields.getValue(dem, ulCoords)
+        self.assertEquals(oldVal, testVal*2)       
+        #reset ulCoords to original value of 117.2
+        print "\nresetting value to 117.2\n"
+        GeoTiffFields.setValue(dem, ulCoords, 117.2)
         
     def testObjects(self):
         print "TODO: test objects"
