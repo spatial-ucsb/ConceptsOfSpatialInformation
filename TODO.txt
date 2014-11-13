@@ -9,6 +9,7 @@ TODO list
 * Eric:
 	update tests for fields and objects
 	update documentation for fields/objects data
+	update dependencies in the README.md file in the python package
 * Michel: 
 	
 * Marc:
