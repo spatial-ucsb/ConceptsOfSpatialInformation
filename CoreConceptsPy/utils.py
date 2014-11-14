@@ -132,5 +132,5 @@ def _split_list(alist, wanted_parts):
     assert i == len(alist)
     return sublists
 
-def _float_eq( a, b, err=1e-08):
+def float_eq( a, b, err=1e-08):
     return abs(a - b) <= err

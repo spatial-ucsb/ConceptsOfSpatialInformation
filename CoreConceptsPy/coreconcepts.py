@@ -44,27 +44,6 @@ class ALocate(object):
         @return Bool
         """
         raise NotImplementedError("isPart")
-     
-class ExLoc(ALocate):
-    """ 
-    IGNORE THIS CLASS FOR THE MOMENT.
-    A toy implementation of ALocate.
-    """
-    
-    @staticmethod
-    def isAt( figure, ground ):
-        # TODO: implementation with some geometric computation
-        return True
-    
-    @staticmethod
-    def isIn( figure, ground ):
-        # TODO: implementation with some geometric computation
-        return True
-    
-    @staticmethod
-    def isPart( figure, ground ):
-        # TODO: implementation with some geometric computation
-        return False
     
 class AFields(object):
     """ Class defining abstract fields """
@@ -148,6 +127,7 @@ class ArrFields(AFields):
 
 class AObjects(object):
     """ Abstract class for core concept 'object' """
+    #TODO: update with new names 
     @staticmethod
     def getBounds( obj ):
         raise NotImplementedError("getBounds")
@@ -161,7 +141,11 @@ class AObjects(object):
     
     @staticmethod
     def getProperty( obj, prop ):
-        """ @return value of prop """
+        """
+        @param obj the object
+        @param prop the property name 
+        @return value of property in obj
+        """
         raise NotImplementedError("getProperty")
     
 class ANetworks(object):

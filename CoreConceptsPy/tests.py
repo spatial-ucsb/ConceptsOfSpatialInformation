@@ -92,10 +92,12 @@ class CoreConceptsTest(unittest.TestCase):
             return x/2
         GeoTiffFields.local(dem,ulCoords,localFunc)
         testVal = GeoTiffFields.getValue(dem, ulCoords)
-        self.assertEquals(oldVal, testVal*2)       
+        #TODO: never compare floats directly. use float_eq in utils
+        self.assertEquals(oldVal, testVal*2)
         #reset ulCoords to original value of 117.2
         print "\nresetting value to 117.2\n"
         GeoTiffFields.setValue(dem, ulCoords, 117.2)
+        # TODO: check value here
         
     def testObjects(self):
         print "TODO: test objects"
@@ -118,6 +120,7 @@ class CoreConceptsTest(unittest.TestCase):
         roofBounds = ArcShpObjects.getBounds(roofObj)
         roofBounds = (round(roofBounds[0],2),round(roofBounds[1],2),round(roofBounds[2],2),round(roofBounds[3],2))
         print "\nBounding box coordinates, UTM Zone 10N, in form (MinX, MaxX, MinY, MaxY):\n",roofBounds,"\n"
+        #TODO: never compare floats directly. use float_eq in utils
         self.assertEqual(roofBounds, (710915.55, 710983.25, 3910040.96, 3910095.28))
         
         #test hasRelation for PV object within roof object
