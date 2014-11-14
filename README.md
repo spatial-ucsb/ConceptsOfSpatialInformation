@@ -10,6 +10,8 @@ Members & contributors:
 * Eric Ahlgren
 * Marc Thiemann
 * Michel Zimmer <https://www.mzimmer.net/>
+* Nhi Chung
+* Ben Schock
 
 Contents
 ----------------------
