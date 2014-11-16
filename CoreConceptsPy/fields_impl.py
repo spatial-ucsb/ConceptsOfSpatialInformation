@@ -1,8 +1,7 @@
 from coreconcepts import AFields
-from osgeo import gdal, gdal_array
-import ogr, os, osr
-from gdalconst import *
 import numpy as np
+import gdal
+from gdalconst import *
 
 def funcCaller (a, func):
     return func(a)
