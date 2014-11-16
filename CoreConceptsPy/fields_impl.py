@@ -16,9 +16,9 @@ class GeoTiffFields(AFields):
     def getValue( gtiff, position ):
         """
         Returns the value of a pixel at an input position
-        @param gtiff ? 
-        @param position ?
-        @return ?
+        @param gtiff the GeoTiff
+        @param position the coordinate pair in GeoTiff's coordinate system
+        @return the raw value of the pixel at position in GeoTiff
         """
         #Get geo-coords for transformation
         transform = gtiff.GetGeoTransform()
