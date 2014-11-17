@@ -48,8 +48,8 @@ class GeoTiffFields(AFields):
         @return n/a; write to gtiff
         """
         offset = getOffset( gtiff, position )
-        #Convert image to array
-        array = np.array([value], ndmin=2)
+        #Convert input value to numpy array
+        array = np.array([value], ndmin=2)   #Array has to be 2D in order to write
         band = gtiff.GetRasterBand(1)
         band.WriteArray( array, offset[0],offset[1] )
       
