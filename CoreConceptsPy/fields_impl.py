@@ -42,7 +42,7 @@ class GeoTiffFields(AFields):
         @param gtiff the GeoTiff
         @param position the coordinate pair in GeoTiff's coordinate system
         @param value the new value for pixel at position in GeoTiff
-        @return ?
+        @return n/a; write to GeoTiff
         """
         #Get geo-coords for transformation
         transform = gtiff.GetGeoTransform()
@@ -64,11 +64,11 @@ class GeoTiffFields(AFields):
     @staticmethod
     def local (gtiff, position, func):
         """
-        Assign a new value to position based on input function.
-        @param gtiff ? 
-        @param position ?
-        @param func ?
-        @return ?
+        Assign a new value to a pixel at position based on input function
+        @param gtiff the GeoTiff 
+        @param position the coordinate pair in GeoTiff's coordinate system
+        @param func the function to be applied to the pixel at position
+        @return n/a; write to GeoTiff
         """
         #Get geo-coords for transformation
         transform = gtiff.GetGeoTransform()
