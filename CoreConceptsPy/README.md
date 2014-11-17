@@ -21,7 +21,8 @@ To run the Unit Tests: `make test`
 
 Dependencies
 ----------------------
-TODO: specify other packages needed to run this code
+GDAL (http://www.gdal.org/)
+NumPy (http://www.numpy.org/)
 
 Style guidelines
 ----------------------
