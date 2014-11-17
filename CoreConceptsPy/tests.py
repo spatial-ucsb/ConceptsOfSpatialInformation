@@ -65,7 +65,7 @@ class CoreConceptsTest(unittest.TestCase):
         #test getValue for upper left coords
         ulVal = GeoTiffFields.getValue(dem, ulCoords)
         print "value of upper left pixel =", round(ulVal,2)
-        self.assertTrue(float_eq(ulVal, 117.2))
+        self.assertTrue(float_eq(ulVal, 117.36))
         
         #test setValue for upper left coords
         print "\nTest geotiff fields - setValue on CalPoly DEM\n"
@@ -77,9 +77,9 @@ class CoreConceptsTest(unittest.TestCase):
         self.assertTrue(float_eq(testVal, newVal))
 
         #reset ulCoords to original value of 117.2
-        print "\nresetting value to 117.2\n"
-        GeoTiffFields.setValue(dem, ulCoords, 117.2)
-        self.assertTrue(float_eq(GeoTiffFields.getValue(dem, ulCoords), 117.2))
+        print "\nresetting value to 117.36\n"
+        GeoTiffFields.setValue(dem, ulCoords, 117.36)
+        self.assertTrue(float_eq(GeoTiffFields.getValue(dem, ulCoords), 117.36))
     
     def testFieldsMapAlgebra(self):
         """ Import DEM of CalPoly campus and test Map Albegra functions"""
@@ -93,12 +93,23 @@ class CoreConceptsTest(unittest.TestCase):
             return x/2
         GeoTiffFields.local(dem,ulCoords,localFunc)
         testVal = GeoTiffFields.getValue(dem, ulCoords)
-        #TODO: never compare floats directly. use float_eq in utils
         self.assertTrue(float_eq(oldVal, testVal*2))
         #reset ulCoords to original value of 117.2
-        print "\nresetting value to 117.2\n"
-        GeoTiffFields.setValue(dem, ulCoords, 117.2)
-        self.assertTrue(float_eq(GeoTiffFields.getValue(dem, ulCoords), 117.2))
+        print "\nresetting value to 117.36\n"
+        GeoTiffFields.setValue(dem, ulCoords, 117.36)
+        self.assertTrue(float_eq(GeoTiffFields.getValue(dem, ulCoords), 117.36))
+        
+        print "Test Map Algebra focal function"
+        focalCoords = (711745,3910109)
+        oldVal = GeoTiffFields.getValue(dem, focalCoords)
+        def focalFunc(x):
+            return x.mean()
+        oldArray = GeoTiffFields.focal(dem, focalCoords, focalFunc)                          #Update pixel value and return old window array
+        self.assertTrue(float_eq(GeoTiffFields.getValue(dem, focalCoords), oldArray.mean())) #Confirm new value is mean of focal window
+        #reset focalCoords to original value of 117.28
+        print "\nresetting value to 117.28\n"
+        GeoTiffFields.setValue(dem, focalCoords, 117.28)
+        self.assertTrue(float_eq(GeoTiffFields.getValue(dem, focalCoords), 117.28))
         
     def testObjects(self):
         print "TODO: test objects"

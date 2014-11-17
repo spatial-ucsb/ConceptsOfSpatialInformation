@@ -78,12 +78,14 @@ class GeoTiffFields(AFields):
         @param gtiff the GeoTiff
         @param position the coordinate pair of the center of the window, in gtiff's coordinate system
         @param func the function to be applied to the matrix and return new value for pixel at position
-        @return n/a; write to gtiff
+        @return original matrix for testing; write to gtiff
         """
         offset = getOffset( gtiff, position )
         #Convert image to array
-        oldArray = gtiff.ReadAsArray( offset[0]-1,offset[1]-1, 3,3 ) #get neighborhood window (3X3 matrix)
+        oldArray = gtiff.ReadAsArray( offset[0]-1,offset[1]-1, 3,3 )    #get neighborhood window (3X3 matrix)
         newArray = funcCaller(oldArray, func)
+        newArray = np.array([newArray], ndmin = 2)
         band = gtiff.GetRasterBand(1)
         band.WriteArray( newArray, offset[0],offset[1] )
+        return oldArray
 
