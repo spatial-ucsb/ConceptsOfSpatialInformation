@@ -38,10 +38,10 @@ class GeoTiffFields(AFields):
     @staticmethod
     def setValue ( gtiff, position, value ):
         """
-        TODO: add description of function here
-        @param gtiff ? 
-        @param position ?
-        @param value ?
+        Updates the value of a pixel at an input position
+        @param gtiff the GeoTiff
+        @param position the coordinate pair in GeoTiff's coordinate system
+        @param value the new value for pixel at position in GeoTiff
         @return ?
         """
         #Get geo-coords for transformation
