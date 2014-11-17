@@ -6,6 +6,19 @@ from gdalconst import *
 def funcCaller (a, func):
     return func(a)
 
+def getOffset ( gtiff, position ):
+        #Get geo-coords for transformation
+        transform = gtiff.GetGeoTransform()
+        #Convert geo-coords to image space
+        ulx = int(transform [0])
+        uly = int(transform [3])
+        xQuery = position [0]
+        yQuery = position [1]
+        pixWidth = transform [1]
+        pixHeight = transform [5]
+        arrx = int((xQuery - ulx)/pixWidth)
+        arry = int((yQuery - uly)/pixHeight)
+        return arrx, arry
 
 class GeoTiffFields(AFields):
     """
@@ -19,19 +32,9 @@ class GeoTiffFields(AFields):
         @param position the coordinate pair in gtiff's coordinate system
         @return the raw value of the pixel at position in gtiff
         """
-        #Get geo-coords for transformation
-        transform = gtiff.GetGeoTransform()
-        #Convert geo-coords to image space
-        ulx = int(transform [0])
-        uly = int(transform [3])
-        xQuery = position [0]
-        yQuery = position [1]
-        pixWidth = transform [1]
-        pixHeight = transform [5]
-        arrx = int((xQuery - ulx)/pixWidth)
-        arry = int((yQuery - uly)/pixHeight)
+        offset = getOffset( gtiff, position )
         #Convert image to array
-        array = gtiff.ReadAsArray(arrx,arry,1,1)
+        array = gtiff.ReadAsArray( offset[0],offset[1], 1,1 )
         return array
 
     
@@ -44,21 +47,11 @@ class GeoTiffFields(AFields):
         @param value the new value for pixel at position in GeoTiff
         @return n/a; write to gtiff
         """
-        #Get geo-coords for transformation
-        transform = gtiff.GetGeoTransform()
-        #Convert geo-coords to image space
-        ulx = int(transform [0])
-        uly = int(transform [3])
-        xQuery = position [0]
-        yQuery = position [1]
-        pixWidth = transform [1]
-        pixHeight = transform [5]
-        arrx = int((xQuery - ulx)/pixWidth)
-        arry = int((yQuery - uly)/pixHeight)
+        offset = getOffset( gtiff, position )
         #Convert image to array
         array = np.array([value], ndmin=2)
         band = gtiff.GetRasterBand(1)
-        band.WriteArray(array,arrx,arry)
+        band.WriteArray( array, offset[0],offset[1] )
       
 
     @staticmethod
@@ -70,22 +63,12 @@ class GeoTiffFields(AFields):
         @param func the function to be applied to the pixel at position
         @return n/a; write to gtiff
         """
-        #Get geo-coords for transformation
-        transform = gtiff.GetGeoTransform()
-        #Convert geo-coords to image space
-        ulx = int(transform [0])
-        uly = int(transform [3])
-        xQuery = position [0]
-        yQuery = position [1]
-        pixWidth = transform [1]
-        pixHeight = transform [5]
-        arrx = int((xQuery - ulx)/pixWidth)
-        arry = int((yQuery - uly)/pixHeight)
+        offset = getOffset( gtiff, position )
         #Convert image to array
-        oldArray = gtiff.ReadAsArray(arrx,arry,1,1)
+        oldArray = gtiff.ReadAsArray( offset[0],offset[1], 1,1 )
         newArray = funcCaller(oldArray, func)
         band = gtiff.GetRasterBand(1)
-        band.WriteArray(newArray,arrx,arry)
+        band.WriteArray( newArray, offset[0],offset[1] )
 
     @staticmethod
     def focal (gtiff, position, func):
@@ -97,20 +80,10 @@ class GeoTiffFields(AFields):
         @param func the function to be applied to the matrix and return new value for pixel at position
         @return n/a; write to gtiff
         """
-        #Get geo-coords for transformation
-        transform = gtiff.GetGeoTransform()
-        #Convert geo-coords to image space
-        ulx = int(transform [0])
-        uly = int(transform [3])
-        xQuery = position [0]
-        yQuery = position [1]
-        pixWidth = transform [1]
-        pixHeight = transform [5]
-        arrx = int((xQuery - ulx)/pixWidth)
-        arry = int((yQuery - uly)/pixHeight)
+        offset = getOffset( gtiff, position )
         #Convert image to array
-        oldArray = gtiff.ReadAsArray(arrx-1,arry-1,3,3) #get neighborhood window (3X3 matrix)
+        oldArray = gtiff.ReadAsArray( offset[0]-1,offset[1]-1, 3,3 ) #get neighborhood window (3X3 matrix)
         newArray = funcCaller(oldArray, func)
         band = gtiff.GetRasterBand(1)
-        band.WriteArray(newArray,arrx,arry)
+        band.WriteArray( newArray, offset[0],offset[1] )
 
