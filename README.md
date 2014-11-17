@@ -20,6 +20,10 @@ Contents
 
 `CoreConceptsPy`: A Python implementation of the core concepts.
 
+Contributing
+----------------------
+Have a look at the project Wiki: https://github.com/michel-zimmer/ConceptsOfSpatialInformation/wiki/Contributing
+
 
 References
 ----------------------
