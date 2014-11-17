@@ -16,8 +16,8 @@ class GeoTiffFields(AFields):
         """
         Returns the value of a pixel at an input position
         @param gtiff the GeoTiff
-        @param position the coordinate pair in GeoTiff's coordinate system
-        @return the raw value of the pixel at position in GeoTiff
+        @param position the coordinate pair in gtiff's coordinate system
+        @return the raw value of the pixel at position in gtiff
         """
         #Get geo-coords for transformation
         transform = gtiff.GetGeoTransform()
@@ -42,7 +42,7 @@ class GeoTiffFields(AFields):
         @param gtiff the GeoTiff
         @param position the coordinate pair in GeoTiff's coordinate system
         @param value the new value for pixel at position in GeoTiff
-        @return n/a; write to GeoTiff
+        @return n/a; write to gtiff
         """
         #Get geo-coords for transformation
         transform = gtiff.GetGeoTransform()
@@ -68,7 +68,7 @@ class GeoTiffFields(AFields):
         @param gtiff the GeoTiff 
         @param position the coordinate pair in GeoTiff's coordinate system
         @param func the function to be applied to the pixel at position
-        @return n/a; write to GeoTiff
+        @return n/a; write to gtiff
         """
         #Get geo-coords for transformation
         transform = gtiff.GetGeoTransform()
@@ -90,12 +90,12 @@ class GeoTiffFields(AFields):
     @staticmethod
     def focal (gtiff, position, func):
         """
-        Assign a new value to position based on input function using neighboring values.
-        Here we use a 3X3 window, but this is arbitrary.
-        @param gtiff ? 
-        @param position ?
-        @param func ?
-        @return ?
+        Assign a new value to position based on input function using neighboring values
+        (Here we use a 3X3 window, but this is arbitrary)
+        @param gtiff the GeoTiff
+        @param position the coordinate pair of the center of the window, in gtiff's coordinate system
+        @param func the function to be applied to the matrix and return new value for pixel at position
+        @return n/a; write to gtiff
         """
         #Get geo-coords for transformation
         transform = gtiff.GetGeoTransform()
