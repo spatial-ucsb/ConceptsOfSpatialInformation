@@ -22,7 +22,7 @@ Contents
 
 Contributing
 ----------------------
-Have a look at the project Wiki: https://github.com/michel-zimmer/ConceptsOfSpatialInformation/wiki/Contributing
+Have a look at the project Wiki: [Contributing](https://github.com/michel-zimmer/ConceptsOfSpatialInformation/wiki/Contributing)
 
 
 References
