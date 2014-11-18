@@ -13,8 +13,11 @@ TODO list
   - [x] update dependencies in the README.md file in the python package
 - Michel:
   - [x] how to contribute
-  - [ ] look for more/other network data (pure networks/without spatial information)
-  - [ ] look for file formats defining how to store network data
+  - [x] look for more/other network data (pure networks/without spatial information)
+    - http://www-personal.umich.edu/~mejn/netdata/
+  - [x] look for file formats defining how to store network data
+    - https://gephi.github.io/users/supported-graph-formats/
+    - https://networkx.github.io/documentation/latest/reference/readwrite.gml.html
   - [ ] implement abstract network methods for file formats
 - Marc:
 - Ben:
