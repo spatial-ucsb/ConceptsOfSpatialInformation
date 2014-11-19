@@ -4,7 +4,7 @@ Core Concepts of Spatial Information
 TODO list
 ---------
 - Andrea:
-  - [ ] find data for events 
+  - [ ] find data for events
 - Werner:
   - [ ] update Haskell specs
 - Eric:
@@ -14,7 +14,6 @@ TODO list
 - Michel:
   - [x] how to contribute
   - [x] look for more/other network data (pure networks/without spatial information)
-    - http://www-personal.umich.edu/~mejn/netdata/
   - [x] look for file formats defining how to store network data
     - https://gephi.github.io/users/supported-graph-formats/
     - https://networkx.github.io/documentation/latest/reference/readwrite.gml.html
