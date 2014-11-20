@@ -1,11 +1,12 @@
 {-# LANGUAGE MultiParamTypeClasses #-} 
 -- core concept: object 
--- core questions: what are this object's properties and relations? 
--- examples: boundary (property) and location (relation)
--- can we have something that corresponds to OGC's get capabilities, returning defined properties and relations?
+-- core questions: where is this object? what are its properties and relations? is it the same as that object?
+-- properties and relations are limited to thematic ones
+-- spatial properties and relations come from Location
+-- objects have no temporal properties or relations
+-- can we have something that corresponds to OGC's get capabilities, returning implemented properties and relations?
 -- (c) Werner Kuhn
--- latest change: Jul 25, 2014
-
+-- latest change: Nov 20, 2014
 
 module Object where
 
@@ -13,9 +14,11 @@ import Location
 
 -- the class of all object types
 -- Eq captures identity
-class Eq object => OBJECTS object where
-	bounds :: object -> Geometry -- boundedness, returning any geometry containing the object
+-- LOCATE captures spatial relations between objects (others may yet need to be instantiated)
+class (Eq object, LOCATE object object) => OBJECTS object where
 	get :: (object -> value) -> object -> value
+	set :: (object -> value) -> object -> value -> object
 	is :: (object -> object -> Bool) -> object -> object -> Bool
-	get property o = property o
-	is relation o1 o2 = relation o1 o2
+	be :: (object -> object -> Bool) -> (object -> object) -> object -- needs testing and a decision on how to record relations in objects
+	get property = property
+	is relation = relation
