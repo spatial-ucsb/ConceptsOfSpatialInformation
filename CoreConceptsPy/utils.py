@@ -133,4 +133,5 @@ def _split_list(alist, wanted_parts):
     return sublists
 
 def float_eq( a, b, err=1e-08):
+    """ Check if floats a and b are equal within tolerance err """
     return abs(a - b) <= err
