@@ -20,6 +20,28 @@ def getOffset ( gtiff, position ):
         arry = int((yQuery - uly)/pixHeight)
         return arrx, arry
 
+class ArrFields(AFields):
+    """ Implementation of AField with Python arrays. """
+        
+    @staticmethod
+    def getValue( field, position ):
+        x = position[0]
+        y = position[1]
+        return field[x,y]
+    
+    @staticmethod
+    def setValue( field, position, value ):
+        """ @return the position of new value in field """
+        x = position[0]
+        y = position[1]
+        field[x,y] = value
+        return field, position, value
+     
+    @staticmethod
+    def domain( field, position, value ):
+        """ @return Domains can be described as intervals, rectangles, corner points, convex hulls or boundaries """
+        raise NotImplementedError("domain")
+
 class GeoTiffFields(AFields):
     """
     Subclass of Abstract Fields in the GeoTiff format

@@ -8,8 +8,9 @@ import unittest
 from utils import _init_log, float_eq
 import numpy as np
 
-from coreconcepts import ALocate, AFields, ArrFields
+from coreconcepts import ALocate, AFields
 from fields_impl import *
+# TODO: avoid 'import *', only import used methods/classes
 from objects_impl import *
 import random 
 
@@ -18,8 +19,9 @@ log = _init_log("tests")
 class CoreConceptsTest(unittest.TestCase):
     """ Unit tests for module CoreConceptsPy """
     
-    def testExample(self):
+    def testExamples(self):
         self.assertEqual(1+3,4)
+        self.assertNotEqual(5,1)
         
     def testLocate(self):
         pass
@@ -113,6 +115,9 @@ class CoreConceptsTest(unittest.TestCase):
         
     def testObjects(self):
         print "TODO: test objects"
+        
+    def testEvents(self):
+        print "TODO: test events"
     
     def testArcShpObjects(self):
         """ Import 2 ArcMap shapefiles and test core concept functions """
@@ -164,4 +169,5 @@ class CoreConceptsTest(unittest.TestCase):
         self.assertEquals( funcCaller( 5, myFunction2 ), 0 )
         
 if __name__ == '__main__':
+    print "Running unit tests for Core Concepts"
     unittest.main()
