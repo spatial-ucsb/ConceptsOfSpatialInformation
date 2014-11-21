@@ -3,9 +3,11 @@ import numpy as np
 import gdal
 from gdalconst import *
 
+# TODO: remove. This is actually unnecessary. You can call func(oldArray) directly 
 def funcCaller (a, func):
     return func(a)
 
+# TODO: document it. What does it do? Call it something like "getGtiffOffset"  
 def getOffset ( gtiff, position ):
         #Get geo-coords for transformation
         transform = gtiff.GetGeoTransform()
@@ -44,7 +46,14 @@ class ArrFields(AFields):
 
 class GeoTiffFields(AFields):
     """
-    Subclass of Abstract Fields in the GeoTiff format
+    Subclass of Abstract Fields in the GeoTiff format. Based on GDAL.
+    
+    Map algebra based on (TODO: specify reference. To clarify what we're doing here, it's important to 
+    rely on a GIS textbook.
+    e.g. Local operations works on individual raster cells, or pixels.
+        Focal operations work on cells and their neighbors, whereas global operations work on the entire layer. 
+        Finally, zonal operations work on areas of cells that share the same value.
+    )
     """
     @staticmethod
     def getValue( gtiff, position ):
@@ -59,8 +68,8 @@ class GeoTiffFields(AFields):
         array = gtiff.ReadAsArray( offset[0],offset[1], 1,1 )
         return array
 
-    
     @staticmethod
+    #TODO: style: be consistent with "func (" or "func(". "func(" is more common.
     def setValue ( gtiff, position, value ):
         """
         Updates the value of a pixel at an input position
@@ -75,7 +84,6 @@ class GeoTiffFields(AFields):
         band = gtiff.GetRasterBand(1)
         band.WriteArray( array, offset[0],offset[1] )
       
-
     @staticmethod
     def local (gtiff, position, func):
         """
@@ -84,6 +92,7 @@ class GeoTiffFields(AFields):
         @param position the coordinate pair in GeoTiff's coordinate system
         @param func the function to be applied to the pixel at position
         @return n/a; write to gtiff
+        TODO: update with new specs. return new field. read whole field as array and then apply func on it.
         """
         offset = getOffset( gtiff, position )
         #Convert image to array
@@ -101,6 +110,7 @@ class GeoTiffFields(AFields):
         @param position the coordinate pair of the center of the window, in gtiff's coordinate system
         @param func the function to be applied to the matrix and return new value for pixel at position
         @return original matrix for testing; write to gtiff
+        TODO: update with new specs. return new field. read whole field as array and then apply func on it.     
         """
         offset = getOffset( gtiff, position )
         #Convert image to array

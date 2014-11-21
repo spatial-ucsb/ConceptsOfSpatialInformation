@@ -20,8 +20,11 @@ class CoreConceptsTest(unittest.TestCase):
     """ Unit tests for module CoreConceptsPy """
     
     def testExamples(self):
+        """ Examples of unit tests """
         self.assertEqual(1+3,4)
         self.assertNotEqual(5,1)
+        self.assertTrue(float_eq(4.2,4.2))
+        self.assertFalse(float_eq(4.2,4.200001))
         
     def testLocate(self):
         pass
@@ -86,7 +89,7 @@ class CoreConceptsTest(unittest.TestCase):
     def testFieldsMapAlgebra(self):
         """ Import DEM of CalPoly campus and test Map Albegra functions"""
         print "Test Map Algebra local function"
-        
+        # TODO: apply methods on whole fields, and check for a few values.
         gtiffPath = "data/fields/CalPolyDEM.tif"
         dem = gdal.Open(gtiffPath, GA_Update) #GA_Update gives write access
         ulCoords =(711743.5, 3910110.5)
@@ -118,6 +121,10 @@ class CoreConceptsTest(unittest.TestCase):
         
     def testEvents(self):
         print "TODO: test events"
+        
+    def getTestField(self):
+        # TODO: return test field. Re-use this to avoid redundancy. 
+        return None
     
     def testArcShpObjects(self):
         """ Import 2 ArcMap shapefiles and test core concept functions """
@@ -169,5 +176,4 @@ class CoreConceptsTest(unittest.TestCase):
         self.assertEquals( funcCaller( 5, myFunction2 ), 0 )
         
 if __name__ == '__main__':
-    print "Running unit tests for Core Concepts"
     unittest.main()

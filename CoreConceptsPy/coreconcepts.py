@@ -76,37 +76,37 @@ class AFields(object):
     def zone( field, position ):
         """
         Map algebra: zone function
-        @return Geometry 
+        @return Geometry
         """
         raise NotImplementedError("neigh")
     
     @staticmethod
-    def local( field, position, fun ):
+    def local( field, fun ):
         """
-        Map algebra: zone function
-        @return new values for field based on function fun
+        Map algebra's local operations, with a function to compute the new values
+        @return new field
         """
         raise NotImplementedError("local")
     
     @staticmethod
-    def focal( field, position, fun ):
+    def focal( field, fun ):
         """
-        Map algebra: zone function
-        @return new values for field based on function fun
+        Map algebra's focal operations, with a kernel function to compute the new values based on the neighborhood of the position
+        @return new field
         """
         raise NotImplementedError("focal")
     
     @staticmethod
-    def zonal( field, position, fun ):
+    def zonal( field, fun ):
         """
-        Map algebra: zone function
-        @return new values for field based on function fun
+        Map algebra's zonal operations, with a function to compute the new values based on zones containing the positions.
+        @return new field
         """
         raise NotImplementedError("zonal")
 
 class AObjects(object):
     """ Abstract class for core concept 'object' """
-    #TODO: update with new names 
+    #TODO: update with new specs 
     @staticmethod
     def getBounds( obj ):
         raise NotImplementedError("getBounds")
@@ -241,4 +241,3 @@ class Event(object):
 class Period(object):
     """ Simple period class. TODO: implement"""
     pass
-
