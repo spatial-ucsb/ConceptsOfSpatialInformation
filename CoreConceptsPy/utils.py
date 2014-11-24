@@ -29,24 +29,28 @@ def _to_unicode(s):
     else: return s
     
 def _read_file( filePath ):
+    """ Loads file into a string """
     with open (filePath, "r") as f:
         res = f.read()#.replace('\n', '')
         return res
     return None
 
 def _is_str(*objs):
+    """ Checks if objs are strings """
     for i in range(len(objs)):
         b = (type(objs[i]) is str) or (type(objs[i]) is unicode)
         if not b: return False
     return True
 
 def _is_nan(*objs):
+    """ Checks if objs are not-a-number """
     for i in range(len(objs)):
         b = math.isnan(objs[i])
         if not b: return False
     return True
 
 def _is_number(*objs):
+    """ Checks if objs are numbers """
     for i in range(len(objs)):
         b = isinstance(objs[i], (int, long, float, complex))
         if not b: return False
@@ -120,6 +124,12 @@ def _clean_str_for_xml( s ):
     return clean_s
 
 def _str_to_ascii( a ):
+    """ 
+    Decode any string to ASCII. 
+    This avoids many unicode problems, but loses non English characters.
+    @param a a string
+    @return an ASCII string
+    """
     assert _is_str(a)
     return a.decode('ascii', 'ignore')
 
@@ -132,5 +142,9 @@ def _split_list(alist, wanted_parts):
     assert i == len(alist)
     return sublists
 
-def _float_eq( a, b, err=1e-08):
+def float_eq( a, b, err=1e-08):
+    """
+    Check if floats a and b are equal within tolerance err 
+    @return boolean 
+    """
     return abs(a - b) <= err

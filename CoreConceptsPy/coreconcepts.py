@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 """
- Module abstract goes here.
+ Abtract: These classes are the specifications of the core concepts, adapted from Haskell.
+          The classes are written in a functional style.
 """
 
 __author__ = "Werner Kuhn and Andrea Ballatore"
@@ -9,7 +10,7 @@ __copyright__ = "Copyright 2014"
 __credits__ = ["Werner Kuhn", "Andrea Ballatore"]
 __license__ = ""
 __version__ = "0.1"
-__maintainer__ = ""
+__maintainer__ = "Andrea Ballatore"
 __email__ = ""
 __date__ = "August 2014"
 __status__ = "Development"
@@ -44,27 +45,6 @@ class ALocate(object):
         @return Bool
         """
         raise NotImplementedError("isPart")
-     
-class ExLoc(ALocate):
-    """ 
-    IGNORE THIS CLASS FOR THE MOMENT.
-    A toy implementation of ALocate.
-    """
-    
-    @staticmethod
-    def isAt( figure, ground ):
-        # TODO: implementation with some geometric computation
-        return True
-    
-    @staticmethod
-    def isIn( figure, ground ):
-        # TODO: implementation with some geometric computation
-        return True
-    
-    @staticmethod
-    def isPart( figure, ground ):
-        # TODO: implementation with some geometric computation
-        return False
     
 class AFields(object):
     """ Class defining abstract fields """
@@ -96,58 +76,37 @@ class AFields(object):
     def zone( field, position ):
         """
         Map algebra: zone function
-        @return Geometry 
+        @return Geometry
         """
         raise NotImplementedError("neigh")
     
     @staticmethod
-    def local( field, position, fun ):
+    def local( field, fun ):
         """
-        Map algebra: zone function
-        @return new values for field based on function fun
+        Map algebra's local operations, with a function to compute the new values
+        @return new field
         """
         raise NotImplementedError("local")
     
     @staticmethod
-    def focal( field, position, fun ):
+    def focal( field, fun ):
         """
-        Map algebra: zone function
-        @return new values for field based on function fun
+        Map algebra's focal operations, with a kernel function to compute the new values based on the neighborhood of the position
+        @return new field
         """
         raise NotImplementedError("focal")
     
     @staticmethod
-    def zonal( field, position, fun ):
+    def zonal( field, fun ):
         """
-        Map algebra: zone function
-        @return new values for field based on function fun
+        Map algebra's zonal operations, with a function to compute the new values based on zones containing the positions.
+        @return new field
         """
         raise NotImplementedError("zonal")
-    
-class ArrFields(AFields):
-    """ Implementation of AField with Python arrays """
-        
-    @staticmethod
-    def getValue( field, position ):
-        x = position[0]
-        y = position[1]
-        return field[x,y]
-    
-    @staticmethod
-    def setValue( field, position, value ):
-        """ @return the position of new value in field """
-        x = position[0]
-        y = position[1]
-        field[x,y] = value
-        return field, position, value
-     
-    @staticmethod
-    def domain( field, position, value ):
-        """ @return Domains can be described as intervals, rectangles, corner points, convex hulls or boundaries """
-        raise NotImplementedError("domain")
 
 class AObjects(object):
     """ Abstract class for core concept 'object' """
+    #TODO: update with new specs 
     @staticmethod
     def getBounds( obj ):
         raise NotImplementedError("getBounds")
@@ -161,7 +120,11 @@ class AObjects(object):
     
     @staticmethod
     def getProperty( obj, prop ):
-        """ @return value of prop """
+        """
+        @param obj the object
+        @param prop the property name 
+        @return value of property in obj
+        """
         raise NotImplementedError("getProperty")
     
 class ANetworks(object):
@@ -217,7 +180,64 @@ class ANetworks(object):
         raise NotImplementedError("breadthFirst")
     
 class AEvents(object):
-    """ Abstract class for core concept 'event' """
+    """ Abstract class for core concept 'event'. Based on Event.hs """
+    
     @staticmethod
-    def exampleMethod( obj ):
-        raise NotImplementedError("exampleMethod")
+    def within( ev ):
+        """
+        @ev an event
+        @return a Period 
+        """
+        raise NotImplementedError("within")
+    
+    @staticmethod
+    def when( ev ):
+        """
+        @ev an event
+        @return a Period 
+        """
+        raise NotImplementedError("when")
+    
+    @staticmethod
+    def during( ev, otherEv ):
+        """
+        @ev an event
+        @ev otherEvent another event
+        @return boolean
+        """
+        raise NotImplementedError("during")
+    
+    @staticmethod
+    def before( ev, otherEv ):
+        """
+        @ev an event
+        @ev otherEvent another event
+        @return boolean
+        """
+        raise NotImplementedError("before")
+    
+    @staticmethod
+    def after( ev, otherEv ):
+        """
+        @ev an event
+        @ev otherEvent another event
+        @return boolean
+        """
+        raise NotImplementedError("after")
+    
+    @staticmethod
+    def overlap( ev, otherEv ):
+        """
+        @ev an event
+        @ev otherEvent another event
+        @return boolean
+        """
+        raise NotImplementedError("overlap")
+    
+class Event(object):
+    """ Simple event class. TODO: implement"""
+    pass
+
+class Period(object):
+    """ Simple period class. TODO: implement"""
+    pass

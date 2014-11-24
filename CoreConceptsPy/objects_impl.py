@@ -1,8 +1,5 @@
 from coreconcepts import AObjects
-from osgeo import gdal, gdal_array
-import ogr, os, osr
-from gdalconst import *
-import numpy as np
+import ogr
 
 
 class ArcShpObjects(AObjects):

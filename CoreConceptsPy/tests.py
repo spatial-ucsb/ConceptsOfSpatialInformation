@@ -5,11 +5,12 @@
 #
 
 import unittest
-from utils import _init_log
+from utils import _init_log, float_eq
 import numpy as np
 
-from coreconcepts import ALocate, ExLoc, AFields, ArrFields
+from coreconcepts import ALocate, AFields
 from fields_impl import *
+# TODO: avoid 'import *', only import used methods/classes
 from objects_impl import *
 import random 
 
@@ -18,8 +19,12 @@ log = _init_log("tests")
 class CoreConceptsTest(unittest.TestCase):
     """ Unit tests for module CoreConceptsPy """
     
-    def testExample(self):
+    def testExamples(self):
+        """ Examples of unit tests """
         self.assertEqual(1+3,4)
+        self.assertNotEqual(5,1)
+        self.assertTrue(float_eq(4.2,4.2))
+        self.assertFalse(float_eq(4.2,4.200001))
         
     def testLocate(self):
         pass
@@ -65,7 +70,7 @@ class CoreConceptsTest(unittest.TestCase):
         #test getValue for upper left coords
         ulVal = GeoTiffFields.getValue(dem, ulCoords)
         print "value of upper left pixel =", round(ulVal,2)
-        self.assertEqual(ulVal, 117.2)
+        self.assertTrue(float_eq(ulVal, 117.36))
         
         #test setValue for upper left coords
         print "\nTest geotiff fields - setValue on CalPoly DEM\n"
@@ -74,16 +79,17 @@ class CoreConceptsTest(unittest.TestCase):
         GeoTiffFields.getValue(dem, ulCoords)
         testVal = GeoTiffFields.getValue(dem, ulCoords)
         print "\nnew value of upper left pixel =", round(testVal,2)
-        self.assertEqual(testVal, newVal)
+        self.assertTrue(float_eq(testVal, newVal))
 
         #reset ulCoords to original value of 117.2
-        print "\nresetting value to 117.2\n"
-        GeoTiffFields.setValue(dem, ulCoords, 117.2)
+        print "\nresetting value to 117.36\n"
+        GeoTiffFields.setValue(dem, ulCoords, 117.36)
+        self.assertTrue(float_eq(GeoTiffFields.getValue(dem, ulCoords), 117.36))
     
     def testFieldsMapAlgebra(self):
         """ Import DEM of CalPoly campus and test Map Albegra functions"""
         print "Test Map Algebra local function"
-        
+        # TODO: apply methods on whole fields, and check for a few values.
         gtiffPath = "data/fields/CalPolyDEM.tif"
         dem = gdal.Open(gtiffPath, GA_Update) #GA_Update gives write access
         ulCoords =(711743.5, 3910110.5)
@@ -92,13 +98,33 @@ class CoreConceptsTest(unittest.TestCase):
             return x/2
         GeoTiffFields.local(dem,ulCoords,localFunc)
         testVal = GeoTiffFields.getValue(dem, ulCoords)
-        self.assertEquals(oldVal, testVal*2)       
+        self.assertTrue(float_eq(oldVal, testVal*2))
         #reset ulCoords to original value of 117.2
-        print "\nresetting value to 117.2\n"
-        GeoTiffFields.setValue(dem, ulCoords, 117.2)
+        print "\nresetting value to 117.36\n"
+        GeoTiffFields.setValue(dem, ulCoords, 117.36)
+        self.assertTrue(float_eq(GeoTiffFields.getValue(dem, ulCoords), 117.36))
+        
+        print "Test Map Algebra focal function"
+        focalCoords = (711745,3910109)
+        oldVal = GeoTiffFields.getValue(dem, focalCoords)
+        def focalFunc(x):
+            return x.mean()
+        oldArray = GeoTiffFields.focal(dem, focalCoords, focalFunc)                          #Update pixel value and return old window array
+        self.assertTrue(float_eq(GeoTiffFields.getValue(dem, focalCoords), oldArray.mean())) #Confirm new value is mean of focal window
+        #reset focalCoords to original value of 117.28
+        print "\nresetting value to 117.28\n"
+        GeoTiffFields.setValue(dem, focalCoords, 117.28)
+        self.assertTrue(float_eq(GeoTiffFields.getValue(dem, focalCoords), 117.28))
         
     def testObjects(self):
         print "TODO: test objects"
+        
+    def testEvents(self):
+        print "TODO: test events"
+        
+    def getTestField(self):
+        # TODO: return test field. Re-use this to avoid redundancy. 
+        return None
     
     def testArcShpObjects(self):
         """ Import 2 ArcMap shapefiles and test core concept functions """
@@ -118,7 +144,8 @@ class CoreConceptsTest(unittest.TestCase):
         roofBounds = ArcShpObjects.getBounds(roofObj)
         roofBounds = (round(roofBounds[0],2),round(roofBounds[1],2),round(roofBounds[2],2),round(roofBounds[3],2))
         print "\nBounding box coordinates, UTM Zone 10N, in form (MinX, MaxX, MinY, MaxY):\n",roofBounds,"\n"
-        self.assertEqual(roofBounds, (710915.55, 710983.25, 3910040.96, 3910095.28))
+        #TODO: never compare floats directly. use float_eq in utils
+        self.assertTupleEqual(roofBounds, (710915.55, 710983.25, 3910040.96, 3910095.28))
         
         #test hasRelation for PV object within roof object
         rel = ArcShpObjects.hasRelation(pvObj,roofObj,'Within')

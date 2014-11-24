@@ -1,117 +1,123 @@
 from coreconcepts import AFields
-from osgeo import gdal, gdal_array
-import ogr, os, osr
-from gdalconst import *
 import numpy as np
+import gdal
+from gdalconst import *
 
+# TODO: remove. This is actually unnecessary. You can call func(oldArray) directly 
 def funcCaller (a, func):
     return func(a)
 
+# TODO: document it. What does it do? Call it something like "getGtiffOffset"  
+def getOffset ( gtiff, position ):
+        #Get geo-coords for transformation
+        transform = gtiff.GetGeoTransform()
+        #Convert geo-coords to image space
+        ulx = int(transform [0])
+        uly = int(transform [3])
+        xQuery = position [0]
+        yQuery = position [1]
+        pixWidth = transform [1]
+        pixHeight = transform [5]
+        arrx = int((xQuery - ulx)/pixWidth)
+        arry = int((yQuery - uly)/pixHeight)
+        return arrx, arry
+
+class ArrFields(AFields):
+    """ Implementation of AField with Python arrays. """
+        
+    @staticmethod
+    def getValue( field, position ):
+        x = position[0]
+        y = position[1]
+        return field[x,y]
+    
+    @staticmethod
+    def setValue( field, position, value ):
+        """ @return the position of new value in field """
+        x = position[0]
+        y = position[1]
+        field[x,y] = value
+        return field, position, value
+     
+    @staticmethod
+    def domain( field, position, value ):
+        """ @return Domains can be described as intervals, rectangles, corner points, convex hulls or boundaries """
+        raise NotImplementedError("domain")
 
 class GeoTiffFields(AFields):
     """
-    Subclass of Abstract Fields in the GeoTiff format
+    Subclass of Abstract Fields in the GeoTiff format. Based on GDAL.
+    
+    Map algebra based on (TODO: specify reference. To clarify what we're doing here, it's important to 
+    rely on a GIS textbook.
+    e.g. Local operations works on individual raster cells, or pixels.
+        Focal operations work on cells and their neighbors, whereas global operations work on the entire layer. 
+        Finally, zonal operations work on areas of cells that share the same value.
+    )
     """
     @staticmethod
     def getValue( gtiff, position ):
         """
         Returns the value of a pixel at an input position
-        @param gtiff ? 
-        @param position ?
-        @return ?
+        @param gtiff the GeoTiff
+        @param position the coordinate pair in gtiff's coordinate system
+        @return the raw value of the pixel at position in gtiff
         """
-        #Get geo-coords for transformation
-        transform = gtiff.GetGeoTransform()
-        #Convert geo-coords to image space
-        ulx = int(transform [0])
-        uly = int(transform [3])
-        xQuery = position [0]
-        yQuery = position [1]
-        pixWidth = transform [1]
-        pixHeight = transform [5]
-        arrx = int((xQuery - ulx)/pixWidth)
-        arry = int((yQuery - uly)/pixHeight)
+        offset = getOffset( gtiff, position )
         #Convert image to array
-        array = gtiff.ReadAsArray(arrx,arry,1,1)
+        array = gtiff.ReadAsArray( offset[0],offset[1], 1,1 )
         return array
 
-    
     @staticmethod
+    #TODO: style: be consistent with "func (" or "func(". "func(" is more common.
     def setValue ( gtiff, position, value ):
         """
-        TODO: add description of function here
-        @param gtiff ? 
-        @param position ?
-        @param value ?
-        @return ?
+        Updates the value of a pixel at an input position
+        @param gtiff the GeoTiff
+        @param position the coordinate pair in GeoTiff's coordinate system
+        @param value the new value for pixel at position in GeoTiff
+        @return n/a; write to gtiff
         """
-        #Get geo-coords for transformation
-        transform = gtiff.GetGeoTransform()
-        #Convert geo-coords to image space
-        ulx = int(transform [0])
-        uly = int(transform [3])
-        xQuery = position [0]
-        yQuery = position [1]
-        pixWidth = transform [1]
-        pixHeight = transform [5]
-        arrx = int((xQuery - ulx)/pixWidth)
-        arry = int((yQuery - uly)/pixHeight)
-        #Convert image to array
-        array = np.array([value], ndmin=2)
+        offset = getOffset( gtiff, position )
+        #Convert input value to numpy array
+        array = np.array([value], ndmin=2)   #Array has to be 2D in order to write
         band = gtiff.GetRasterBand(1)
-        band.WriteArray(array,arrx,arry)
+        band.WriteArray( array, offset[0],offset[1] )
       
-
     @staticmethod
     def local (gtiff, position, func):
         """
-        Assign a new value to position based on input function.
-        @param gtiff ? 
-        @param position ?
-        @param func ?
-        @return ?
+        Assign a new value to a pixel at position based on input function
+        @param gtiff the GeoTiff 
+        @param position the coordinate pair in GeoTiff's coordinate system
+        @param func the function to be applied to the pixel at position
+        @return n/a; write to gtiff
+        TODO: update with new specs. return new field. read whole field as array and then apply func on it.
         """
-        #Get geo-coords for transformation
-        transform = gtiff.GetGeoTransform()
-        #Convert geo-coords to image space
-        ulx = int(transform [0])
-        uly = int(transform [3])
-        xQuery = position [0]
-        yQuery = position [1]
-        pixWidth = transform [1]
-        pixHeight = transform [5]
-        arrx = int((xQuery - ulx)/pixWidth)
-        arry = int((yQuery - uly)/pixHeight)
+        offset = getOffset( gtiff, position )
         #Convert image to array
-        oldArray = gtiff.ReadAsArray(arrx,arry,1,1)
+        oldArray = gtiff.ReadAsArray( offset[0],offset[1], 1,1 )
         newArray = funcCaller(oldArray, func)
         band = gtiff.GetRasterBand(1)
-        band.WriteArray(newArray,arrx,arry)
+        band.WriteArray( newArray, offset[0],offset[1] )
 
     @staticmethod
     def focal (gtiff, position, func):
         """
-        Assign a new value to position based on input function using neighboring values.
-        Here we use a 3X3 window, but this is arbitrary.
-        @param gtiff ? 
-        @param position ?
-        @param func ?
-        @return ?
+        Assign a new value to position based on input function using neighboring values
+        (Here we use a 3X3 window, but this is arbitrary)
+        @param gtiff the GeoTiff
+        @param position the coordinate pair of the center of the window, in gtiff's coordinate system
+        @param func the function to be applied to the matrix and return new value for pixel at position
+        @return original matrix for testing; write to gtiff
+        TODO: update with new specs. return new field. read whole field as array and then apply func on it.     
         """
-        #Get geo-coords for transformation
-        transform = gtiff.GetGeoTransform()
-        #Convert geo-coords to image space
-        ulx = int(transform [0])
-        uly = int(transform [3])
-        xQuery = position [0]
-        yQuery = position [1]
-        pixWidth = transform [1]
-        pixHeight = transform [5]
-        arrx = int((xQuery - ulx)/pixWidth)
-        arry = int((yQuery - uly)/pixHeight)
+        offset = getOffset( gtiff, position )
         #Convert image to array
-        oldArray = gtiff.ReadAsArray(arrx-1,arry-1,3,3) #get neighborhood window (3X3 matrix)
+        oldArray = gtiff.ReadAsArray( offset[0]-1,offset[1]-1, 3,3 )    #get neighborhood window (3X3 matrix)
         newArray = funcCaller(oldArray, func)
+        newArray = np.array([newArray], ndmin = 2)
         band = gtiff.GetRasterBand(1)
-        band.WriteArray(newArray,arrx,arry)
+        band.WriteArray( newArray, offset[0],offset[1] )
+        return oldArray
 

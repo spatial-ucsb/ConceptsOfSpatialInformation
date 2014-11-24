@@ -10,6 +10,8 @@ Members & contributors:
 * Eric Ahlgren
 * Marc Thiemann
 * Michel Zimmer <https://www.mzimmer.net/>
+* Nhi Chung
+* Ben Schock
 
 Contents
 ----------------------
@@ -17,6 +19,10 @@ Contents
 `CoreConceptsHs`: The Haskell specifications of the core concepts.
 
 `CoreConceptsPy`: A Python implementation of the core concepts.
+
+Contributing
+----------------------
+Have a look at the project Wiki: [Contributing](https://github.com/michel-zimmer/ConceptsOfSpatialInformation/wiki/Contributing)
 
 
 References

@@ -1,5 +1,5 @@
 # 
-# Makefile for CoreConcepts
+# Makefile for Core Concepts
 #
 # Andrea Ballatore
 #
