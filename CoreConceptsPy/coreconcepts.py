@@ -3,6 +3,8 @@
 """
  Abtract: These classes are the specifications of the core concepts, adapted from Haskell.
           The classes are written in a functional style.
+          
+          TODO: Andrea: redesign based on new specs.
 """
 
 __author__ = "Werner Kuhn and Andrea Ballatore"
