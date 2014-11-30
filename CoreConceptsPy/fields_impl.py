@@ -8,19 +8,25 @@ def funcCaller (a, func):
     return func(a)
 
 # TODO: document it. What does it do? Call it something like "getGtiffOffset"  
-def getOffset ( gtiff, position ):
-        #Get geo-coords for transformation
-        transform = gtiff.GetGeoTransform()
-        #Convert geo-coords to image space
-        ulx = int(transform [0])
-        uly = int(transform [3])
-        xQuery = position [0]
-        yQuery = position [1]
-        pixWidth = transform [1]
-        pixHeight = transform [5]
-        arrx = int((xQuery - ulx)/pixWidth)
-        arry = int((yQuery - uly)/pixHeight)
-        return arrx, arry
+def getGtiffOffset ( gtiff, position ):
+    """ 
+    Convert GeoTiff coordinates to matrix offset. Used for getValue and setValue GeoTiffField functions. 
+    @param gtiff - the geotiff
+    @param position - the input geocoordinates
+    @return - the i,j pair representing position in the image matrix
+    """
+        
+    transform = gtiff.GetGeoTransform()
+    #Convert geo-coords to image space
+    ulx = int(transform [0])
+    uly = int(transform [3])
+    xQuery = position [0]
+    yQuery = position [1]
+    pixWidth = transform [1]
+    pixHeight = transform [5]
+    arrx = int((xQuery - ulx)/pixWidth)
+    arry = int((yQuery - uly)/pixHeight)
+    return arrx, arry
 
 class ArrFields(AFields):
     """ Implementation of AField with Python arrays. """
