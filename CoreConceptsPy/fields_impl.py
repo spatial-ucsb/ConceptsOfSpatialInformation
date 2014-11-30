@@ -3,9 +3,6 @@ import numpy as np
 import gdal
 from gdalconst import *
 
-# TODO: remove. This is actually unnecessary. You can call func(oldArray) directly 
-def funcCaller (a, func):
-    return func(a)
 
 # TODO: document it. What does it do? Call it something like "getGtiffOffset"  
 def getGtiffOffset ( gtiff, position ):
@@ -69,7 +66,7 @@ class GeoTiffFields(AFields):
         @param position the coordinate pair in gtiff's coordinate system
         @return the raw value of the pixel at position in gtiff
         """
-        offset = getOffset( gtiff, position )
+        offset = getGtiffOffset( gtiff, position )
         #Convert image to array
         array = gtiff.ReadAsArray( offset[0],offset[1], 1,1 )
         return array
@@ -84,7 +81,7 @@ class GeoTiffFields(AFields):
         @param value the new value for pixel at position in GeoTiff
         @return n/a; write to gtiff
         """
-        offset = getOffset( gtiff, position )
+        offset = getGtiffOffset( gtiff, position )
         #Convert input value to numpy array
         array = np.array([value], ndmin=2)   #Array has to be 2D in order to write
         band = gtiff.GetRasterBand(1)
@@ -100,10 +97,10 @@ class GeoTiffFields(AFields):
         @return n/a; write to gtiff
         TODO: update with new specs. return new field. read whole field as array and then apply func on it.
         """
-        offset = getOffset( gtiff, position )
+        offset = getGtiffOffset( gtiff, position )
         #Convert image to array
         oldArray = gtiff.ReadAsArray( offset[0],offset[1], 1,1 )
-        newArray = funcCaller(oldArray, func)
+        newArray = func(oldArray)
         band = gtiff.GetRasterBand(1)
         band.WriteArray( newArray, offset[0],offset[1] )
 
@@ -118,10 +115,10 @@ class GeoTiffFields(AFields):
         @return original matrix for testing; write to gtiff
         TODO: update with new specs. return new field. read whole field as array and then apply func on it.     
         """
-        offset = getOffset( gtiff, position )
+        offset = getGtiffOffset( gtiff, position )
         #Convert image to array
         oldArray = gtiff.ReadAsArray( offset[0]-1,offset[1]-1, 3,3 )    #get neighborhood window (3X3 matrix)
-        newArray = funcCaller(oldArray, func)
+        newArray = func(oldArray)
         newArray = np.array([newArray], ndmin = 2)
         band = gtiff.GetRasterBand(1)
         band.WriteArray( newArray, offset[0],offset[1] )
