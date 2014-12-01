@@ -1,4 +1,4 @@
-from coreconcepts import AEvents, Event, Period
+from coreconcepts_oo import CCEvent
 
 """
  Module abstract goes here.
@@ -18,75 +18,48 @@ from utils import _init_log
 
 log = _init_log("networks_impl")
 
-class SomeConcreteEvents(AEvents):
+class CCEvent(Object):
 
-	@staticmethod
-    def within( ev ):
+    def __init__(self, startTime, endTime = 0):
+        self.startTime = startTime;
+        self.endTime = startTime if endTime == 0 else endTime;
+    
+    def within( self ):
         """
-        @ev an event
         @return a Period 
         """
-        return ev.period
+        return (self.startTime, self.endTime)
     
-    @staticmethod
-    def when( ev ):
+    def when( self ):
         """
-        @ev an event
-        @return a Period 
+        @return a Date 
         """
-        return ev.period
+        return self.startTime;
     
-    @staticmethod
-    def during( ev, otherEv ):
+    def during( self, event ):
         """
-        @ev an event
-        @ev otherEvent another event
+        @param event an event
         @return boolean
         """
-        return ev.getStartTime >= otherEv.getStartTime and ev.getEndTime <= otherEv.getEndTime
+        return self.startTime >= event.startTime and self.endndTime <= event.endTime
     
-    @staticmethod
-    def before( ev, otherEv ):
+    def before( self, event ):
         """
-        @ev an event
-        @ev otherEvent another event
-        @return boolean
+        @param event an event
+        @return Boolean
         """
-        return ev.getEndTime < otherEv.getStartTime
+        return self.endTime < event.startTime
     
-    @staticmethod
-    def after( ev, otherEv ):
+    def after( self, event ):
         """
-        @ev an event
-        @ev otherEvent another event
-        @return boolean
+        @param event an event
+        @return Boolean
         """
-        return ev.getStartTime > otherEv.getEndTime
+        return self.startTime > event.endTime
     
-    @staticmethod
-    def overlap( ev, otherEv ):
+    def overlap( self, event ):
         """
-        @ev an event
-        @ev otherEvent another event
-        @return boolean
+        @param event an event
+        @return Boolean
         """
-        return (ev.getStartTime < otherEv.getStartTime and ev.getEndTime < otherEv.getEndTime and ev.getEndTime >= otherEv.getStartTime) or (ev.getStartTime > otherEv.getStartTime and ev.getStartTime <= otherEv.getEndTime and ev.getEndTime > otherEv.getEndTime)
-    
-class Event(object):
-    """ Simple event class. TODO: implement"""
-    
-    __init__(self, period):
-    	self.period = period
-
-    def getStartTime(self):
-    	return self.period.startTime
-
-    def getEndTime(self):
-    	return self.period.endTime
-
-class Period(object):
-    """ Simple period class. TODO: implement"""
-    
-    __init__(self, startTime, endTime):
-    	self.startTime = startTime
-    	self.endTime = endTime
+        return (self.startTime < event.startTime and self.endTime < event.endTime and self.endTime >= event.startTime) or (self.startTime > event.startTime and self.startTime <= event.endTime and self.endTime > event.endTime)
