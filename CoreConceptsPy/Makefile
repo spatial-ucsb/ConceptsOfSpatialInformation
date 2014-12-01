@@ -16,3 +16,6 @@ clean:
 
 test: clean
 	python -m unittest discover;
+
+test-networks: clean
+	python -m unittest discover networks_test;
