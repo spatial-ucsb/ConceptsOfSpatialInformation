@@ -60,4 +60,4 @@ class NetworksX(CcNetwork):
 
     def breadthFirst( self, node, cutoff ):
         """ @return all nodes within the distance cutoff from node in this network """
-        return nx.single_source_shortest_path(self.G, node, cutoff)
+        return nx.single_source_shortest_path(self.G, node, cutoff).keys()
