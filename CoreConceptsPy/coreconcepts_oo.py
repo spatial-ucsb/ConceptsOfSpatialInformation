@@ -186,6 +186,9 @@ class CcEvent(object):
     Based on Event.hs
     """
     
+    # suggestion:
+    # 2. parameter (required): start time
+    # 3. parameter (optional): end time
     def __init__(self):
         pass
     
@@ -195,6 +198,8 @@ class CcEvent(object):
         """
         raise NotImplementedError("within")
     
+    # suggestion:
+    # @return a date not a period, as Werners Haskell concepts say. If the event consists of an interval, return the start time.
     def when( self ):
         """
         @return a Period 
@@ -231,7 +236,8 @@ class CcEvent(object):
         @return Boolean
         """
         raise NotImplementedError("overlap")
-    
+
+# suggestion: We may not need an extra period class, because tuples in python would be suitable for periods.    
 class Period(object):
     """ Simple period class. TODO: implement"""
     def __init__(self):
