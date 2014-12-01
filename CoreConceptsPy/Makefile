@@ -19,3 +19,6 @@ test: clean
 
 test-networks: clean
 	python -m unittest networks_test;
+
+test-events: clean
+	python -m unittest events_test;

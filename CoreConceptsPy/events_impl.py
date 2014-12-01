@@ -1,24 +1,19 @@
-from coreconcepts_oo import CCEvent
-
-"""
- Module abstract goes here.
-"""
-
-__author__ = "Werner Kuhn and Andrea Ballatore"
+__author__ = "Marc Tim Thiemann"
 __copyright__ = "Copyright 2014"
-__credits__ = ["Werner Kuhn", "Andrea Ballatore"]
+__credits__ = ["Marc Tim Thiemann", "Andrea Ballatore"]
 __license__ = ""
 __version__ = "0.1"
 __maintainer__ = ""
 __email__ = ""
-__date__ = "August 2014"
+__date__ = "December 2014"
 __status__ = "Development"
 
+from coreconcepts_oo import CcEvent
 from utils import _init_log
 
 log = _init_log("networks_impl")
 
-class CCEvent(Object):
+class PyEvent(CcEvent):
 
     def __init__(self, startTime, endTime = 0):
         self.startTime = startTime;
@@ -41,7 +36,7 @@ class CCEvent(Object):
         @param event an event
         @return boolean
         """
-        return self.startTime >= event.startTime and self.endndTime <= event.endTime
+        return self.startTime >= event.startTime and self.endTime <= event.endTime
     
     def before( self, event ):
         """
