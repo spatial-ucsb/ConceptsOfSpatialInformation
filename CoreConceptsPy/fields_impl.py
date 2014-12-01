@@ -90,11 +90,11 @@ class GeoTiffFields(AFields):
     @staticmethod
     def local (gtiff, newGtiffPath, func):
         """
-        Assign a new value to a pixel at position based on input function
-        @param gtiff the GeoTiff 
-        @param position the coordinate pair in GeoTiff's coordinate system
-        @param func the function to be applied to the pixel at position
-        @return n/a; write to gtiff
+        Assign a new value to each pixel in gtiff based on func. Return a new GeoTiff at newGtiffPath.
+        @param gtiff - the GeoTiff 
+        @param newGtiffPath - file path for the new GeoTiff
+        @param func - the local function to be applied to each value in GeoTiff
+        @return array of new GeoTiff values; write new raster to newGtiffPath
         TODO: update with new specs. return new field. read whole field as array and then apply func on it.
         """
         oldArray = gtiff.ReadAsArray()
@@ -104,6 +104,7 @@ class GeoTiffFields(AFields):
         outBand = newRaster.GetRasterBand(1)
         outBand.WriteArray(newArray)
         outBand.FlushCache()
+        return newArray
 
     @staticmethod
     def focal (gtiff, position, func):
