@@ -11,12 +11,12 @@ Contents
 * `networks_impl.py`: Implementations of networks.
 * `tests.py`: Unit tests.
 * `utils.py`: Utilities.
-* `data/`: Test datasets 
+* `data/`: Test datasets
 * `Makefile`: Common commands for unix platforms
 
 Instructions for Unix/Linux platforms
 ----------------------
- 
+
 To run the Unit Tests: `make test`
 
 Dependencies
@@ -26,6 +26,7 @@ TODO: specify versions
 
 * GDAL <http://www.gdal.org>
 * NumPy <http://www.numpy.org>
+* NetworkX (1.9.1) <https://networkx.github.io/>
 
 Style guidelines
 ----------------------
