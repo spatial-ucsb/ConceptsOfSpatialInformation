@@ -129,55 +129,48 @@ class AObjects(object):
         """
         raise NotImplementedError("getProperty")
     
-class ANetworks(object):
-    """ Abstract class for core concept 'network' """
-    @staticmethod
-    def nodes( netw ):
-        """ @return all nodes part of this network """
+class CcNetwork(object):
+    """
+    Abstract class for core concept 'network' 
+    Based on Network.hs
+    """
+    
+    def __init__(self):
+        pass
+
+    def nodes( self ):
+        """ @return a copy of the graph nodes in a list """
         raise NotImplementedError("nodes")
     
-    @staticmethod
-    def edges( netw ):
-        """ @return all edges part of this network """
+    def edges( self ):
+        """ @return list of edges """
         raise NotImplementedError("edges")
     
-    @staticmethod
-    def addNode( netw, node ):
-        """ adds given node to this network """
+    def addNode( self, n ):
+        """ Add a single node n """
         raise NotImplementedError("addNode")
     
-    @staticmethod
-    def addEdge( netw, edge ):
-        """ adds given edge to this network """
+    def addEdge( self, u, v ):
+        """ Add an edge between u and v """
         raise NotImplementedError("addEdge")
     
-    @staticmethod
-    def linking( netw, edge ):
-        """ @return the nodes encapsulating given edge in this network """
-        raise NotImplementedError("linking")
-    
-    @staticmethod
-    def degree( netw, node ):
-        """ @return the number of edges to other nodes in this network """
-        raise NotImplementedError("degree")
-    
-    @staticmethod
-    def connected( netw, nodeA, nodeB ):
-        """ @return whether B can be reached from A in this network """
+    def connected( self, u, v ):
+        """ @return whether node v can be reached from node u """
         raise NotImplementedError("connected")
-    
-    @staticmethod
-    def shortestPath( netw, nodeA, nodeB ):
-        """ @return the shortest path from A to B in this network """
+
+    def shortestPath( self, source, target ):
+        """ @return shortest path in the graph """
         raise NotImplementedError("shortestPath")
     
-    @staticmethod
-    def distance( netw, nodeA, nodeB ):
-        """ @return the length of shortest path from A to B in this network """
+    def degree( self, n ):
+        """ @return number of the nodes connected to the node n """
+        raise NotImplementedError("degree")
+
+    def distance( self, source, target ):
+        """ @return the length of the shortest path from the source to the target """
         raise NotImplementedError("distance")
     
-    @staticmethod
-    def breadthFirst( netw, node, distance ):
+    def breadthFirst( self, node, distance ):
         """ @return all nodes within the distance from node in this network """
         raise NotImplementedError("breadthFirst")
     

@@ -23,6 +23,20 @@ D. J. Watts and S. H. Strogatz, "Collective dynamics of `small-world' networks",
 
 
 
+Karate club
+-----------
+The file karate.gml contains the network of friendships between the 34
+members of a karate club at a US university, as described by Wayne Zachary
+in 1977.
+
+### Files
+- `karate.gml`
+
+### References
+W. W. Zachary, An information flow model for conflict and fission in small groups, Journal of Anthropological Research 33, 452-473 (1977)
+
+
+
 US Airport network
 ------------------
 
