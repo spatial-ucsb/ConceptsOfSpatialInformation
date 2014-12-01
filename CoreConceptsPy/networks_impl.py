@@ -40,7 +40,11 @@ class NetworksX(CcNetwork):
 
     def connected( self, u, v ):
         """ @return whether node v can be reached from node u """
-        return len(self.G.shortestPath(u, v)) > 0
+        try:
+            self.shortestPath(u, v)
+            return True
+        except nx.NetworkXNoPath:
+            return False
 
     def shortestPath( self, source, target ):
         """ @return shortest path in the graph """
