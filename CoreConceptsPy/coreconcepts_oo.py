@@ -141,39 +141,35 @@ class CcNetwork(object):
         pass
 
     def nodes( self ):
-        """ @return all nodes part of this network """
+        """ @return a copy of the graph nodes in a list """
         raise NotImplementedError("nodes")
     
     def edges( self ):
-        """ @return all edges part of this network """
+        """ @return list of edges """
         raise NotImplementedError("edges")
     
-    def addNode( self, node ):
-        """ adds given node to this network """
+    def addNode( self, n ):
+        """ Add a single node n """
         raise NotImplementedError("addNode")
     
-    def addEdge( self, edge ):
-        """ adds given edge to this network """
+    def addEdge( self, u, v ):
+        """ Add an edge between u and v """
         raise NotImplementedError("addEdge")
     
-    def connected( self, nodeA, nodeB ):
-        """ @return whether B can be reached from A in this network """
+    def connected( self, u, v ):
+        """ @return whether node v can be reached from node u """
         raise NotImplementedError("connected")
 
-    def shortestPath( self, nodeA, nodeB ):
-        """ @return list of edges """
+    def shortestPath( self, source, target ):
+        """ @return shortest path in the graph """
         raise NotImplementedError("shortestPath")
     
-    def degree( self, node ):
-        """ @return the number of edges to other nodes in this network """
+    def degree( self, n ):
+        """ @return number of the nodes connected to the node n """
         raise NotImplementedError("degree")
-    
-    def linking( netw, edge ):
-        """ @return the nodes encapsulating given edge in this network """
-        raise NotImplementedError("linking")
 
-    def distance( self, nodeA, nodeB ):
-        """ @return the length of shortest path from A to B in this network """
+    def distance( self, source, target ):
+        """ @return the length of the shortest path from the source to the target """
         raise NotImplementedError("distance")
     
     def breadthFirst( self, node, distance ):
