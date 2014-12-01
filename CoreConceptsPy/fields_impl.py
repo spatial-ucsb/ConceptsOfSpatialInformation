@@ -88,7 +88,7 @@ class GeoTiffFields(AFields):
         band.WriteArray( array, offset[0],offset[1] )
       
     @staticmethod
-    def local (gtiff, position, func):
+    def local (gtiff, newGtiffPath, func):
         """
         Assign a new value to a pixel at position based on input function
         @param gtiff the GeoTiff 
@@ -97,12 +97,13 @@ class GeoTiffFields(AFields):
         @return n/a; write to gtiff
         TODO: update with new specs. return new field. read whole field as array and then apply func on it.
         """
-        offset = getGtiffOffset( gtiff, position )
-        #Convert image to array
-        oldArray = gtiff.ReadAsArray( offset[0],offset[1], 1,1 )
+        oldArray = gtiff.ReadAsArray()
         newArray = func(oldArray)
-        band = gtiff.GetRasterBand(1)
-        band.WriteArray( newArray, offset[0],offset[1] )
+        driver = gtiff.GetDriver()
+        newRaster = driver.CreateCopy(newGtiffPath, gtiff)
+        outBand = newRaster.GetRasterBand(1)
+        outBand.WriteArray(newArray)
+        outBand.FlushCache()
 
     @staticmethod
     def focal (gtiff, position, func):

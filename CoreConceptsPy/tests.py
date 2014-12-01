@@ -91,18 +91,17 @@ class CoreConceptsTest(unittest.TestCase):
         print "Test Map Algebra local function"
         # TODO: apply methods on whole fields, and check for a few values.
         gtiffPath = "data/fields/CalPolyDEM.tif"
+        newGtiffPath = "data/fields/testLocal.tif"
         dem = gdal.Open(gtiffPath, GA_Update) #GA_Update gives write access
-        ulCoords =(711743.5, 3910110.5)
-        oldVal = GeoTiffFields.getValue(dem, ulCoords) 
+        ulCoords =(711743.5, 3910110.5) 
         def localFunc(x):
             return x/2
-        GeoTiffFields.local(dem,ulCoords,localFunc)
-        testVal = GeoTiffFields.getValue(dem, ulCoords)
+        GeoTiffFields.local(dem,newGtiffPath,localFunc)
+        testDEM = gdal.Open(newGtiffPath, GA_Update)
+        oldVal = GeoTiffFields.getValue(dem, ulCoords)
+        testVal = GeoTiffFields.getValue(testDEM, ulCoords)
         self.assertTrue(float_eq(oldVal, testVal*2))
-        #reset ulCoords to original value of 117.2
-        print "\nresetting value to 117.36\n"
-        GeoTiffFields.setValue(dem, ulCoords, 117.36)
-        self.assertTrue(float_eq(GeoTiffFields.getValue(dem, ulCoords), 117.36))
+       
         
         print "Test Map Algebra focal function"
         focalCoords = (711745,3910109)
