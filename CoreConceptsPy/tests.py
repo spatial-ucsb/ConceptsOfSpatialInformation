@@ -12,6 +12,7 @@ from coreconcepts import ALocate, AFields
 from fields_impl import *
 # TODO: avoid 'import *', only import used methods/classes
 from objects_impl import *
+from coreconcepts_oo import CcField,CcObject,CcNetwork,CcEvent
 import random 
 
 log = _init_log("tests")
@@ -173,6 +174,12 @@ class CoreConceptsTest(unittest.TestCase):
         self.assertEquals( funcCaller( 3, myFunction2 ), -2 )
         self.assertEquals( funcCaller( 5, myFunction ), 14 )
         self.assertEquals( funcCaller( 5, myFunction2 ), 0 )
-        
+    
+    def testCoreConceptsOo(self):
+        field = CcField()
+        obj = CcObject()
+        net = CcNetwork()
+        event = CcEvent()
+    
 if __name__ == '__main__':
     unittest.main()
