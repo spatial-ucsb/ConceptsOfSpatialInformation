@@ -22,3 +22,8 @@ test-events: clean
 	python -m unittest events_test;
 
 test-all: test test-networks test-events
+
+install_py_dependencies:
+	# for Linux/Mac
+	easy_install networkx;
+	# TODO: install other dependencies
