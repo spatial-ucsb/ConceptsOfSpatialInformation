@@ -16,6 +16,8 @@ log = _init_log("networks_impl")
 class PyEvent(CcEvent):
 
     def __init__(self, startTime, endTime = 0):
+        # TODO: endTime default value should be 'None' (unless there's a good reason to set it to 0).
+        # TODO: assert that endTime >= startTime 
         self.startTime = startTime;
         self.endTime = startTime if endTime == 0 else endTime;
     
