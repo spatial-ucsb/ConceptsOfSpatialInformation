@@ -17,6 +17,7 @@ log = _init_log("networks_impl")
 class NetworksX(CcNetwork):
     """
     NetworksX wrapper implementation for core concept 'network'
+    TODO: because CcNetwork is now a classic class, the name of this class should be singular (e.g. NetworkX or NetX).
     """
 
     def __init__( self ):
