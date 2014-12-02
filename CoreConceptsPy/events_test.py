@@ -13,6 +13,9 @@ __status__ = "Development"
 import unittest
 from events_impl import *
 
+# TODO: add tests for real event data, loading it from files (examples by Werner)
+# TODO: it's fine to have times expressed as millisecs, but the class should accept dates and times in human-readable formats.
+
 class TestEventsX(unittest.TestCase):
 
 	def setUp(self):

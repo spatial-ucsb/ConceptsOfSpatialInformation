@@ -13,8 +13,10 @@ __status__ = "Development"
 import unittest
 from networks_impl import *
 
-class TestNetworksXEmptyNetwork(unittest.TestCase):
+# TODO: add tests for larger networks loading them from files (examples by Werner)  
 
+class TestNetworksXEmptyNetwork(unittest.TestCase):
+    
     def setUp( self ):
         self.N = NetworksX()
 
