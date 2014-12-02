@@ -3,8 +3,6 @@ import numpy as np
 import gdal
 from gdalconst import *
 
-
-# TODO: document it. What does it do? Call it something like "getGtiffOffset"  
 def getGtiffOffset ( gtiff, position ):
     """ 
     Convert GeoTiff coordinates to matrix offset. Used for getValue and setValue GeoTiffField functions. 

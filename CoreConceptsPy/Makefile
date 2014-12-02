@@ -1,7 +1,5 @@
 #
-# Makefile for Core Concepts
-#
-# Andrea Ballatore
+# Makefile for Core Concepts Python library
 #
 # ====== VARIABLES ======
 
@@ -22,3 +20,5 @@ test-networks: clean
 
 test-events: clean
 	python -m unittest events_test;
+
+test-all: test test-networks test-events

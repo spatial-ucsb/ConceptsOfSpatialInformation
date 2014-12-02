@@ -116,12 +116,6 @@ class CoreConceptsTest(unittest.TestCase):
         GeoTiffFields.setValue(dem, focalCoords, 117.28)
         self.assertTrue(float_eq(GeoTiffFields.getValue(dem, focalCoords), 117.28))
         
-    def testObjects(self):
-        print "TODO: test objects"
-        
-    def testEvents(self):
-        print "TODO: test events"
-        
     def getTestField(self):
         # TODO: return test field. Re-use this to avoid redundancy. 
         return None
