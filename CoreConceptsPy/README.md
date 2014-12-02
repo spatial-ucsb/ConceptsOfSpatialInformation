@@ -17,7 +17,7 @@ Contents
 Instructions for Unix/Linux platforms
 ----------------------
 
-To run the Unit Tests: `make test`
+To run the Unit Tests: `make test-all`
 
 Dependencies
 ----------------------
