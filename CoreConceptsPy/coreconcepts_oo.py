@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 """
  Abtract: These classes are the specifications of the core concepts, adapted from the Haskell.

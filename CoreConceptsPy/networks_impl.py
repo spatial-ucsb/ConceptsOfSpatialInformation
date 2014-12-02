@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+"""
+TODO: description of module
+
+"""
 __author__ = "Michel Zimmer"
 __copyright__ = "Copyright 2014"
 __credits__ = ["Michel Zimmer", "Andrea Ballatore"]

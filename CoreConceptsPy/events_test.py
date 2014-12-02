@@ -1,4 +1,18 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+TODO: description of module
+
+"""
+__author__ = "Marc Tim Thiemann"
+__copyright__ = "Copyright 2014"
+__credits__ = ["Marc Tim Thiemann", "Andrea Ballatore"]
+__license__ = ""
+__version__ = "0.1"
+__maintainer__ = ""
+__email__ = ""
+__date__ = "December 2014"
+__status__ = "Development"
 
 __author__ = "Marc Tim Thiemann"
 __copyright__ = "Copyright 2014"

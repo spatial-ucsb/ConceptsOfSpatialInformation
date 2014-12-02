@@ -1,8 +1,21 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+TODO: description of module
  
-# UNIT TESTS
-# https://docs.python.org/2/library/unittest.html 
-#
+ General docs for UNIT TESTS:
+ https://docs.python.org/2/library/unittest.html
+
+"""
+__author__ = ""
+__copyright__ = "Copyright 2014"
+__credits__ = ["", "Andrea Ballatore"]
+__license__ = ""
+__version__ = "0.1"
+__maintainer__ = ""
+__email__ = ""
+__date__ = "December 2014"
+__status__ = "Development"
 
 import unittest
 from utils import _init_log, float_eq

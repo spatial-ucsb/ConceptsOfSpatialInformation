@@ -1,8 +1,16 @@
 #!/usr/bin/env python
-
+# -*- coding: utf-8 -*-
 """
 Utils: Various utilities methods.
 """
+__author__ = "Andrea Ballatore"
+__copyright__ = "Copyright 2014"
+__license__ = ""
+__version__ = "0.1"
+__maintainer__ = ""
+__email__ = ""
+__date__ = "December 2014"
+__status__ = "Development"
 
 import logging
 import math

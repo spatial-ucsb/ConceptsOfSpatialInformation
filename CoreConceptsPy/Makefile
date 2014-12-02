@@ -1,6 +1,6 @@
 #
 # Makefile for Core Concepts Python library
-#
+# 
 # ====== VARIABLES ======
 
 # ====== TARGETS ======
