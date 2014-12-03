@@ -60,6 +60,27 @@ class ArrFields(AFields):
         """ @return Domains can be described as intervals, rectangles, corner points, convex hulls or boundaries """
         raise NotImplementedError("domain")
 
+"""
+TODO: refactor class following OO definitions
+
+class GeoTiffField(CcField):
+    def __init__( self, file_path ):
+        self.gField = # Load the file
+    
+    def getValue( self, position ):
+        TODO
+        self.gField
+    
+    def local(self, func):
+        TODO
+        self.gField
+        
+Tests: 
+    gtSolar = GeoTiffField( "data/blabla.gtiff" )
+    v =  gtSolar.getValue( 1,2 )
+    ... 
+"""
+
 class GeoTiffFields(AFields):
     """
     Subclass of Abstract Fields in the GeoTiff format. Based on GDAL.

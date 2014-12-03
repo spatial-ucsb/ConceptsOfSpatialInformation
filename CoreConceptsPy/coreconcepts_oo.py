@@ -54,6 +54,7 @@ class CcField(object):
     """
     
     def __init__(self):
+        """ Define appropriate parameters for construction of the concrete object """
         pass
     
     def getValue( self, position ):
@@ -68,38 +69,46 @@ class CcField(object):
         """ @return Domains can be described as intervals, rectangles, corner points, convex hulls or boundaries """
         raise NotImplementedError("domain")
     
-    def neigh( self, position ):
+    def rectNeigh( self, position, width, height ):
+        """
+        Map algebra: rectangular neighborhood function
+        @return Geometry (a field mask)
+        """
+        raise NotImplementedError("rectNeigh")
+    
+    def neigh( self, position, geom ):
         """
         Map algebra: neighborhood function
-        @return Geometry 
+        @param geom a geometry representing the desired neighborhood
+        @return Geometry (a field mask)
         """
         raise NotImplementedError("neigh")
     
     def zone( self, position ):
         """
         Map algebra: zone function
-        @return Geometry
+        @return Geometry (a field mask)
         """
         raise NotImplementedError("zone")
     
     def local( self, fun ):
         """
         Map algebra's local operations, with a function to compute the new values
-        @return new field
+        @return new CcField field 
         """
         raise NotImplementedError("local")
     
     def focal( self, fun ):
         """
         Map algebra's focal operations, with a kernel function to compute the new values based on the neighborhood of the position
-        @return new field
+        @return new CcField field
         """
         raise NotImplementedError("focal")
     
     def zonal( self, fun ):
         """
         Map algebra's zonal operations, with a function to compute the new values based on zones containing the positions.
-        @return new field
+        @return new CcField field
         """
         raise NotImplementedError("zonal")
 

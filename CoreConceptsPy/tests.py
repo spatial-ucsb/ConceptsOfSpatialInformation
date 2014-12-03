@@ -102,6 +102,7 @@ class CoreConceptsTest(unittest.TestCase):
     
     def testFieldsMapAlgebra(self):
         """ Import DEM of CalPoly campus and test Map Albegra functions"""
+        # TODO: create 10x10 field to test map algebra
         print "Test Map Algebra local function"
         # TODO: apply methods on whole fields, and check for a few values.
         gtiffPath = "data/fields/CalPolyDEM.tif"
