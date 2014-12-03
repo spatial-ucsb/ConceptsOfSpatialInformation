@@ -18,12 +18,12 @@ __status__ = "Development"
 import unittest
 from networks_impl import *
 
-# TODO: add tests for larger networks loading them from files (examples by Werner)  
+# TODO: add tests for larger networks loading them from files (examples by Werner)
 
-class TestNetworksXEmptyNetwork(unittest.TestCase):
-    
+class TestNetworkXEmptyNetwork(unittest.TestCase):
+
     def setUp( self ):
-        self.N = NetworksX()
+        self.N = NetworkX()
 
     def test_nodes( self ):
         self.assertEqual(self.N.G.nodes(), [])
