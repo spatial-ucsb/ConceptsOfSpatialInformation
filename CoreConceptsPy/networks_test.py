@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-TODO: description of module
 
+"""
+ Abstract: These classes are unit tests of the implementations of the core concept 'network', as defined in networks_impl.py
 """
 
 __author__ = "Michel Zimmer"
