@@ -18,7 +18,7 @@ import numpy as np
 import gdal
 from gdalconst import *
 
-def getGtiffOffset ( gtiff, position ):
+def getGtiffOffset( gtiff, position ):
     """ 
     Convert GeoTiff coordinates to matrix offset. Used for getValue and setValue GeoTiffField functions. 
     @param gtiff - the geotiff
@@ -28,15 +28,34 @@ def getGtiffOffset ( gtiff, position ):
         
     transform = gtiff.GetGeoTransform()
     #Convert geo-coords to image space
-    ulx = int(transform [0])
-    uly = int(transform [3])
+    ulx = transform [0]
+    uly = transform [3]
     xQuery = position [0]
     yQuery = position [1]
     pixWidth = transform [1]
     pixHeight = transform [5]
     arrx = int((xQuery - ulx)/pixWidth)
     arry = int((yQuery - uly)/pixHeight)
-    return arrx, arry
+    return arry, arrx
+
+def squareNeigh(array, size, centerPixel):
+    """
+    Kernel neighborhood function for focal map algebra. Reutrns square array of specified size.
+    @param array - array from which to retrieve the neighborhood kernel
+    @param size - size of square in pixels
+    @centerPixel - (i,j) corrdinates of center pixel of kernel in the array
+    """
+
+    if size > 2:
+        ulOffset = int((size - 1) / 2)
+    elif size == 2:
+        ulOffset = 1
+    elif size == 1:
+        ulOffset = 0
+    rows = centerPixel[0] - ulOffset
+    cols = centerPixel[1] - ulOffset
+    neighArray = array[rows:rows + size, cols:cols + size]
+    return neighArray
 
 class ArrFields(AFields):
     """ Implementation of AField with Python arrays. """
@@ -102,12 +121,12 @@ class GeoTiffFields(AFields):
         """
         offset = getGtiffOffset( gtiff, position )
         #Convert image to array
-        array = gtiff.ReadAsArray( offset[0],offset[1], 1,1 )
+        array = gtiff.ReadAsArray( offset[1],offset[0], 1,1 )
         return array
 
     @staticmethod
     #TODO: style: be consistent with "func (" or "func(". "func(" is more common.
-    def setValue ( gtiff, position, value ):
+    def setValue( gtiff, position, value ):
         """
         Updates the value of a pixel at an input position
         @param gtiff the GeoTiff
@@ -119,17 +138,16 @@ class GeoTiffFields(AFields):
         #Convert input value to numpy array
         array = np.array([value], ndmin=2)   #Array has to be 2D in order to write
         band = gtiff.GetRasterBand(1)
-        band.WriteArray( array, offset[0],offset[1] )
+        band.WriteArray( array, offset[1],offset[0] )
       
     @staticmethod
-    def local (gtiff, newGtiffPath, func):
+    def local(gtiff, newGtiffPath, func):
         """
         Assign a new value to each pixel in gtiff based on func. Return a new GeoTiff at newGtiffPath.
         @param gtiff - the GeoTiff 
         @param newGtiffPath - file path for the new GeoTiff
         @param func - the local function to be applied to each value in GeoTiff
         @return array of new GeoTiff values; write new raster to newGtiffPath
-        TODO: update with new specs. return new field. read whole field as array and then apply func on it.
         """
         oldArray = gtiff.ReadAsArray()
         newArray = func(oldArray)
@@ -140,23 +158,32 @@ class GeoTiffFields(AFields):
         outBand.FlushCache()
         return newArray
 
+    
     @staticmethod
-    def focal (gtiff, position, func):
+    def focal(gtiff, newGtiffPath, kernFunc,size,func):
         """
-        Assign a new value to position based on input function using neighboring values
-        (Here we use a 3X3 window, but this is arbitrary)
-        @param gtiff the GeoTiff
-        @param position the coordinate pair of the center of the window, in gtiff's coordinate system
-        @param func the function to be applied to the matrix and return new value for pixel at position
-        @return original matrix for testing; write to gtiff
-        TODO: update with new specs. return new field. read whole field as array and then apply func on it.     
+        Assign a new value to each pixel in gtiff based on focal map algebra. Return a new GeoTiff at newGtiffPath.
+        @param gtiff - the original GeoTiff
+        @param newGtiffPath - the filepath of the output GeoTiff
+        @param kernFunc - the neighborhood function which returns the kernel array
+        @param size - the size of kernel in pixels (this can be expanded to (width, height), or can be built in to kernFunc).
+        @return Write to gtiff; return new array
         """
-        offset = getGtiffOffset( gtiff, position )
-        #Convert image to array
-        oldArray = gtiff.ReadAsArray( offset[0]-1,offset[1]-1, 3,3 )    #get neighborhood window (3X3 matrix)
-        newArray = func(oldArray)
-        newArray = np.array([newArray], ndmin = 2)
-        band = gtiff.GetRasterBand(1)
-        band.WriteArray( newArray, offset[0],offset[1] )
-        return oldArray
+        
+        oldArray = gtiff.ReadAsArray()
+        newArray = oldArray.copy()
+        rows = oldArray.shape[0]
+        cols = oldArray.shape[1]
+        winOffset = int ((size-1)/2)
+        for i in range (winOffset, rows-winOffset):
+            for j in range (winOffset, cols-winOffset):
+                neighArray = kernFunc(oldArray,size,(i,j))
+                newVal = func(neighArray)
+                newArray.itemset((i,j), newVal)
+        driver = gtiff.GetDriver()
+        newRaster = driver.CreateCopy(newGtiffPath, gtiff)
+        outBand = newRaster.GetRasterBand(1)
+        outBand.WriteArray(newArray)
+        outBand.FlushCache()
+        return newArray
 

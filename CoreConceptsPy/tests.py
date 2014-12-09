@@ -119,16 +119,24 @@ class CoreConceptsTest(unittest.TestCase):
        
         
         print "Test Map Algebra focal function"
-        focalCoords = (711745,3910109)
-        oldVal = GeoTiffFields.getValue(dem, focalCoords)
+        newGtiffPath = "data/fields/testFocal.tif"
         def focalFunc(x):
             return x.mean()
-        oldArray = GeoTiffFields.focal(dem, focalCoords, focalFunc)                          #Update pixel value and return old window array
-        self.assertTrue(float_eq(GeoTiffFields.getValue(dem, focalCoords), oldArray.mean())) #Confirm new value is mean of focal window
-        #reset focalCoords to original value of 117.28
-        print "\nresetting value to 117.28\n"
-        GeoTiffFields.setValue(dem, focalCoords, 117.28)
-        self.assertTrue(float_eq(GeoTiffFields.getValue(dem, focalCoords), 117.28))
+        GeoTiffFields.focal(dem, newGtiffPath, squareNeigh, 3, focalFunc)
+        testCoords = (711750.8, 3910105.1)
+        offset = getGtiffOffset (dem, testCoords)
+        print "Offset to center pixel (i,j): ", offset
+        array = dem.ReadAsArray()
+        testNeighArray = squareNeigh(array, 3, offset)
+        print "focalCoord start value: ", GeoTiffFields.getValue(dem, testCoords)
+        print "testNeighArray: ", testNeighArray
+        print "testNeighArray mean: ", testNeighArray.mean()
+        testDEM = gdal.Open(newGtiffPath, GA_Update)
+        testVal = GeoTiffFields.getValue(testDEM,testCoords)
+        print "testVal: ", testVal
+        
+        self.assertTrue(float_eq(testVal, testNeighArray.mean())) #Confirm new value is mean of focal window
+
         
     def getTestField(self):
         # TODO: return test field. Re-use this to avoid redundancy. 
