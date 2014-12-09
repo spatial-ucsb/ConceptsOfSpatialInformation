@@ -78,7 +78,7 @@ class CoreConceptsTest(unittest.TestCase):
         """ Import DEM of CalPoly campus and test functions on upper left coords"""
         
         print "\nTest geotiff fields - getValue on CalPoly DEM\n"
-        gtiffPath = "data/fields/CalPolyDEM.tif"
+        gtiffPath = "data/fields/testField.tif"
         dem = gdal.Open(gtiffPath, GA_Update) #GA_Update gives write access
         ulCoords =(711743.5, 3910110.5) #Coordinates are UTM Zone 10N
         #test getValue for upper left coords
@@ -102,10 +102,9 @@ class CoreConceptsTest(unittest.TestCase):
     
     def testFieldsMapAlgebra(self):
         """ Import DEM of CalPoly campus and test Map Albegra functions"""
-        # TODO: create 10x10 field to test map algebra
+        
         print "Test Map Algebra local function"
-        # TODO: apply methods on whole fields, and check for a few values.
-        gtiffPath = "data/fields/CalPolyDEM.tif"
+        gtiffPath = "data/fields/testField.tif"
         newGtiffPath = "data/fields/testLocal.tif"
         dem = gdal.Open(gtiffPath, GA_Update) #GA_Update gives write access
         ulCoords =(711743.5, 3910110.5) 
