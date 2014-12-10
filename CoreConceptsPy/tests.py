@@ -30,6 +30,7 @@ import random
 
 log = _init_log("tests")
 
+
 class CoreConceptsTest(unittest.TestCase):
     """ Unit tests for module CoreConceptsPy """
     
@@ -78,8 +79,7 @@ class CoreConceptsTest(unittest.TestCase):
         """ Import DEM of CalPoly campus and test functions on upper left coords"""
         
         print "\nTest geotiff fields - getValue on CalPoly DEM\n"
-        gtiffPath = "data/fields/testField.tif"
-        dem = gdal.Open(gtiffPath, GA_Update) #GA_Update gives write access
+        dem = getTestField()
         ulCoords =(711743.5, 3910110.5) #Coordinates are UTM Zone 10N
         #test getValue for upper left coords
         ulVal = GeoTiffFields.getValue(dem, ulCoords)
@@ -103,10 +103,9 @@ class CoreConceptsTest(unittest.TestCase):
     def testFieldsMapAlgebra(self):
         """ Import DEM of CalPoly campus and test Map Albegra functions"""
         
-        print "Test Map Algebra local function"
-        gtiffPath = "data/fields/testField.tif"
+        print "\nTest Map Algebra local function\n"
+        dem = getTestField()
         newGtiffPath = "data/fields/testLocal.tif"
-        dem = gdal.Open(gtiffPath, GA_Update) #GA_Update gives write access
         ulCoords =(711743.5, 3910110.5) 
         def localFunc(x):
             return x/2
@@ -124,22 +123,17 @@ class CoreConceptsTest(unittest.TestCase):
         GeoTiffFields.focal(dem, newGtiffPath, squareNeigh, 3, focalFunc)
         testCoords = (711750.8, 3910105.1)
         offset = getGtiffOffset (dem, testCoords)
-        print "Offset to center pixel (i,j): ", offset
+        print "\nOffset to center pixel (i,j): ", offset
         array = dem.ReadAsArray()
         testNeighArray = squareNeigh(array, 3, offset)
         print "focalCoord start value: ", GeoTiffFields.getValue(dem, testCoords)
-        print "testNeighArray: ", testNeighArray
+        print "testNeighArray:\n", testNeighArray
         print "testNeighArray mean: ", testNeighArray.mean()
         testDEM = gdal.Open(newGtiffPath, GA_Update)
         testVal = GeoTiffFields.getValue(testDEM,testCoords)
         print "testVal: ", testVal
         
         self.assertTrue(float_eq(testVal, testNeighArray.mean())) #Confirm new value is mean of focal window
-
-        
-    def getTestField(self):
-        # TODO: return test field. Re-use this to avoid redundancy. 
-        return None
     
     def testArcShpObjects(self):
         """ Import 2 ArcMap shapefiles and test core concept functions """

@@ -18,6 +18,10 @@ import numpy as np
 import gdal
 from gdalconst import *
 
+def getTestField():
+        gtiffPath = "data/fields/testField.tif" 
+        return gdal.Open(gtiffPath, GA_Update)   
+
 def getGtiffOffset( gtiff, position ):
     """ 
     Convert GeoTiff coordinates to matrix offset. Used for getValue and setValue GeoTiffField functions. 
