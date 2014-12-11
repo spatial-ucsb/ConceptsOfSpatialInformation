@@ -29,7 +29,7 @@ class TestNetworkXEmptyNetwork(unittest.TestCase):
         self.assertEqual(self.N.G.nodes(), [])
 
     def test_edges( self ):
-        self.assertEqual(self.N.G.nodes(), [])
+        self.assertEqual(self.N.G.edges(), [])
 
     def test_addNode( self ):
         """
