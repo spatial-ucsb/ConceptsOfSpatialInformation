@@ -26,10 +26,10 @@ class TestNetworkXEmptyNetwork(unittest.TestCase):
         self.N = NetworkX()
 
     def test_nodes( self ):
-        self.assertEqual(self.N.G.nodes(), [])
+        self.assertEqual(self.N.nodes(), self.N.G.nodes())
 
     def test_edges( self ):
-        self.assertEqual(self.N.G.edges(), [])
+        self.assertEqual(self.N.edges(), self.N.G.edges())
 
     def test_addNode( self ):
         """
