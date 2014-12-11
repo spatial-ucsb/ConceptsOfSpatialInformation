@@ -16,9 +16,8 @@ __date__ = "December 2014"
 __status__ = "Development"
 
 import unittest
+import networkx as nx
 from networks_impl import *
-
-# TODO: add tests for larger networks loading them from files (examples by Werner)
 
 class TestNetworkXEmptyNetwork(unittest.TestCase):
 
@@ -111,6 +110,49 @@ class TestNetworkXEmptyNetwork(unittest.TestCase):
         self.N.G.add_edge(6, 7)
 
         self.assertEquals(self.N.breadthFirst(1, 2), [1, 2, 3, 4, 5, 6])
+
+class TestNetworkXKarateNetwork(unittest.TestCase):
+
+    def setUp( self ):
+        self.N = NetworkX()
+        self.N.G = nx.read_gml('data/networks/karate.gml')
+
+    def test_nodes( self ):
+        self.assertEqual(self.N.nodes(), self.N.G.nodes())
+
+    def test_edges( self ):
+        self.assertEqual(self.N.edges(), self.N.G.edges())
+
+    def test_addNode( self ):
+        self.N.addNode(101)
+        self.N.addNode(102)
+
+        self.assertEqual(self.N.nodes(), self.N.G.nodes())
+        self.assertEqual(self.N.edges(), self.N.G.edges())
+
+    def test_addEdge( self ):
+        self.N.addEdge(101, 102)
+
+        self.assertEqual(self.N.nodes(), self.N.G.nodes())
+        self.assertEqual(self.N.edges(), self.N.G.edges())
+
+    def test_connected( self ):
+        self.N.G.add_node(101)
+
+        self.assertTrue(self.N.connected(1, 20))
+        self.assertFalse(self.N.connected(1, 101))
+
+    def test_shortestPath( self ):
+        self.assertEquals(self.N.shortestPath(1, 24), [1, 32, 33, 24])
+
+    def test_degree( self ):
+        self.assertEquals(self.N.degree(1), 16)
+
+    def test_distance( self ):
+        self.assertEquals(self.N.distance(1, 24), 3)
+
+    def test_breadthFirst( self ):
+        self.assertEquals(self.N.breadthFirst(17, 3), [32, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 17, 18, 20, 22])
 
 if __name__ == '__main__':
     unittest.main()
