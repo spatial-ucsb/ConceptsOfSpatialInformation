@@ -60,10 +60,6 @@ class CcField(object):
     def getValue( self, position ):
         """ @return the value of field at position """
         raise NotImplementedError("getValue")
-    
-    def setValue( self, position, value ):
-        """ @return the position of new value in field """
-        raise NotImplementedError("setValue")
         
     def domain( self, position, value ):
         """ @return Domains can be described as intervals, rectangles, corner points, convex hulls or boundaries """
