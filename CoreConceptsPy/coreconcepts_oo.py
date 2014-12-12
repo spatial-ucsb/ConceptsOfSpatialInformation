@@ -76,14 +76,6 @@ class CcField(object):
         """
         raise NotImplementedError("rectNeigh")
     
-    def neigh( self, position, geom ):
-        """
-        Map algebra: neighborhood function
-        @param geom a geometry representing the desired neighborhood
-        @return Geometry (a field mask)
-        """
-        raise NotImplementedError("neigh")
-    
     def zone( self, position ):
         """
         Map algebra: zone function
