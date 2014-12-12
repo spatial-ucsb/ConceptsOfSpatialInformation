@@ -3,6 +3,8 @@ Core Concepts of Spatial Information
 
 TODO list
 ---------
+- [ ] find examples for each concept
+ 
 - Andrea:
   - [ ] find map algebra libraries?
 - Werner:
