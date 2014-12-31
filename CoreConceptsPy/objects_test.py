@@ -58,3 +58,9 @@ class TestArcShpObject(unittest.TestCase):
         #test getProprty for Poultry Science building name
         roofName = roofObj.property( 'name' )
         self.assertEqual( roofName, "Poultry Science" )
+    
+    def test_identity( self ):
+        shapefile1 = "data/objects/Rooftops.shp"
+        roofObj = ArcShpObject( shapefile1, 0 )
+        self.assertTrue( roofObj.identity( roofObj ) )
+   

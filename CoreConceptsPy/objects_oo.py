@@ -26,14 +26,14 @@ class ArcShpObject(CcObject):
         layer = shpfile.GetLayer(0)
         self.sObj = layer.GetFeature(objIndex)
         
-    def bounds (self):
+    def bounds( self ):
         #Get geometery
         geom = self.sObj.GetGeometryRef()
         env = geom.GetEnvelope()
         #Return bounds in form (MinX, MaxX, MinY, MaxY)
         return env
 
-    def relation (self, obj, relType):
+    def relation( self, obj, relType ):
         #Get geometeries
         assert relType in ['Intersects','Equals','Disjoint','Touches','Crosses','Within','Contains','Overlaps']
         geom1 = self.sObj.GetGeometryRef()
@@ -43,7 +43,7 @@ class ArcShpObject(CcObject):
         else:
             return False
         
-    def property ( self, prop ):
+    def property( self, prop ):
         #Get index of property - note: index 13 is building name
         index = self.sObj.GetFieldIndex(prop)
         propDefn = self.sObj.GetFieldDefnRef(index)
@@ -62,3 +62,10 @@ class ArcShpObject(CcObject):
         else:
             value = self.sObj.GetFieldAsString(index)
         return value
+    
+    def identity( self, obj ):
+        if self.relation( obj, 'Equals' ):
+            return True
+        else:
+            return False
+        
