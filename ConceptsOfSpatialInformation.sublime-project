@@ -1,0 +1,26 @@
+{
+    "build_systems": [
+        {
+            "cmd": ["make", "test-all"],
+            "name": "CC",
+            "selector": "source.py",
+            "working_dir": "${project_path:${folder}}/CoreConceptsPy"
+        }
+    ],
+    "folders":
+    [
+        {
+            "follow_symlinks": true,
+            "path": "."
+        }
+    ],
+    "settings": {
+        "default_encoding": "UTF-8",
+        "default_line_ending": "unix",
+        "ensure_newline_at_eof_on_save": true,
+        "fallback_encoding": "UTF-8",
+        "tab_size": 4,
+        "translate_tabs_to_spaces": true,
+        "trim_trailing_white_space_on_save": true
+    }
+}
