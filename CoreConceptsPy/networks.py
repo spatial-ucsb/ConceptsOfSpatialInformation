@@ -15,11 +15,11 @@ __email__ = ""
 __date__ = "December 2014"
 __status__ = "Development"
 
+from utils import _init_log
 from coreconcepts import CcNetwork
 import networkx as nx
-from utils import _init_log
 
-log = _init_log("networks_impl")
+log = _init_log("networks")
 
 class NetworkX(CcNetwork):
     """

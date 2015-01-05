@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-"""
-TODO: description of module
 
 """
+TODO: description of module
+"""
+
 __author__ = "Eric Ahlgren"
 __copyright__ = "Copyright 2014"
 __credits__ = ["Eric Ahlgren"]
@@ -13,17 +14,20 @@ __email__ = ""
 __date__ = "December 2014"
 __status__ = "Development"
 
-from coreconcepts_oo import CcField
+from utils import _init_log
+from coreconcepts import CcField
 import numpy as np
 import gdal
 from gdalconst import *
 
+log = _init_log("fields")
+
 def getGtiffOffset( gtiff, position ):
-    """ 
-    Convert GeoTiff coordinates to matrix offset. Used for getValue GeoTiffField functions. 
+    """
+    Convert GeoTiff coordinates to matrix offset. Used for getValue GeoTiffField functions.
     @param position - the input geocoordinates
     @return - the i,j pair representing position in the image matrix
-    """        
+    """
     transform = gtiff.GetGeoTransform()
     #Convert geo-coords to image space
     ulx = transform [0]
@@ -39,7 +43,7 @@ def getGtiffOffset( gtiff, position ):
 def getTestField():
     testField = GeoTiffField( "data/fields/testField.tif" )
     return testField
-    
+
 def squareMean3( array, centerPixel ):
     """
     Kernel neighborhood function for focal map algebra. Reutrns mean of a 3x3 square array.
@@ -54,17 +58,17 @@ def squareMean3( array, centerPixel ):
 class GeoTiffField(CcField):
     """
     Subclass of Abstract Fields in the GeoTiff format. Based on GDAL.
-    
-    Map algebra based on (TODO: specify reference. To clarify what we're doing here, it's important to 
+
+    Map algebra based on (TODO: specify reference. To clarify what we're doing here, it's important to
     rely on a GIS textbook.
     e.g. Local operations works on individual raster cells, or pixels.
-        Focal operations work on cells and their neighbors, whereas global operations work on the entire layer. 
+        Focal operations work on cells and their neighbors, whereas global operations work on the entire layer.
         Finally, zonal operations work on areas of cells that share the same value.
     )
     """
     def __init__( self, filepath ):
         self.gField = gdal.Open( filepath, GA_Update )
-        
+
     def getValue( self, position ):
         """
         Returns the value of a pixel at an input position
@@ -75,10 +79,10 @@ class GeoTiffField(CcField):
         #Convert image to array
         array = self.gField.ReadAsArray( offset[1],offset[0], 1,1 )
         return array
-      
+
     def local( self, newGtiffPath, func ):
         """
-        Assign a new value to each pixel in gtiff based on func. Return a new GeoTiff at newGtiffPath. 
+        Assign a new value to each pixel in gtiff based on func. Return a new GeoTiff at newGtiffPath.
         @param newGtiffPath - file path for the new GeoTiff
         @param func - the local function to be applied to each value in GeoTiff
         @return N/A; write new raster to newGtiffPath
@@ -86,12 +90,12 @@ class GeoTiffField(CcField):
         oldArray = self.gField.ReadAsArray()
         newArray = func(oldArray)
         driver = self.gField.GetDriver()
-        
+
         newRaster = driver.CreateCopy(newGtiffPath, self.gField)
         outBand = newRaster.GetRasterBand(1)
         outBand.WriteArray(newArray)
         outBand.FlushCache()
-    
+
     def focal( self, newGtiffPath, kernFunc ):
         """
         Assign a new value to each pixel in gtiff based on focal map algebra. Return a new GeoTiff at newGtiffPath.
@@ -99,7 +103,7 @@ class GeoTiffField(CcField):
         @param kernFunc - the neighborhood function which returns the kernel array
         @return N/A; write new raster to newGtiffPath
         """
-        
+
         oldArray = self.gField.ReadAsArray()
         newArray = oldArray.copy()
         rows = oldArray.shape[0]

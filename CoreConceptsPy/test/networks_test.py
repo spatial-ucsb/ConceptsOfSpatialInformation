@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
- Abstract: These classes are unit tests of the implementations of the core concept 'network', as defined in networks_impl.py
+ Abstract: Unit tests for the implementations of the core concept 'network'
 """
 
 __author__ = "Michel Zimmer"
@@ -16,8 +16,11 @@ __date__ = "December 2014"
 __status__ = "Development"
 
 import unittest
+from CoreConceptsPy.utils import _init_log
+from CoreConceptsPy.networks import *
 import networkx as nx
-from networks_impl import *
+
+log = _init_log("networks_test")
 
 class TestNetworkXEmptyNetwork(unittest.TestCase):
 

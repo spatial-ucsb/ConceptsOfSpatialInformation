@@ -1,9 +1,9 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-TODO: description of module
 
 """
+TODO: description of module
+"""
+
 __author__ = "Eric Ahlgren"
 __copyright__ = "Copyright 2014"
 __credits__ = ["Eric Ahlgren"]
@@ -14,8 +14,11 @@ __email__ = ""
 __date__ = "December 2014"
 __status__ = "Development"
 
-from coreconcepts_oo import CcObject
+from utils import _init_log
+from coreconcepts import CcObject
 import ogr
+
+log = _init_log("objects")
 
 class ArcShpObject(CcObject):
     """
@@ -25,7 +28,7 @@ class ArcShpObject(CcObject):
         shpfile =  ogr.Open(filepath)
         layer = shpfile.GetLayer(0)
         self.sObj = layer.GetFeature(objIndex)
-        
+
     def bounds( self ):
         #Get geometery
         geom = self.sObj.GetGeometryRef()
@@ -42,7 +45,7 @@ class ArcShpObject(CcObject):
             return True
         else:
             return False
-        
+
     def property( self, prop ):
         #Get index of property - note: index 13 is building name
         index = self.sObj.GetFieldIndex(prop)
@@ -62,10 +65,10 @@ class ArcShpObject(CcObject):
         else:
             value = self.sObj.GetFieldAsString(index)
         return value
-    
+
     def identity( self, obj ):
         if self.relation( obj, 'Equals' ):
             return True
         else:
             return False
-        
+
