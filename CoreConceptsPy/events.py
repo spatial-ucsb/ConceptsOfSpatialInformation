@@ -22,9 +22,6 @@ log = _init_log("events")
 class PyEvent(CcEvent):
 
     def __init__(self, startTime, endTime = None):
-        # TODO: endTime default value should be 'None' (unless there's a good reason to set it to 0).
-        # TODO: assert that endTime >= startTime
-
         if endTime != None:
             assert endTime >= startTime
         self.startTime = startTime
