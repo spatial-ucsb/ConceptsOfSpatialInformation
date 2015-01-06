@@ -4,6 +4,12 @@
             "cmd": ["make", "test-all"],
             "name": "CC",
             "selector": "source.py",
+            "variants": [
+                {
+                    "cmd": ["make", "example-all"],
+                    "name": "Run"
+                }
+            ],
             "working_dir": "${project_path:${folder}}/CoreConceptsPy"
         }
     ],
