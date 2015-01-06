@@ -14,9 +14,10 @@ __email__ = ""
 __date__ = "December 2014"
 __status__ = "Development"
 
+import ogr
+
 from utils import _init_log
 from coreconcepts import CcObject
-import ogr
 
 log = _init_log("objects")
 

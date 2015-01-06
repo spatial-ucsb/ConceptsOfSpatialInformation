@@ -14,11 +14,12 @@ __email__ = ""
 __date__ = "December 2014"
 __status__ = "Development"
 
-from utils import _init_log
-from coreconcepts import CcField
 import numpy as np
 import gdal
 from gdalconst import *
+
+from utils import _init_log
+from coreconcepts import CcField
 
 log = _init_log("fields")
 

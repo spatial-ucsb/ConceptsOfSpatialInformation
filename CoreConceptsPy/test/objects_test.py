@@ -17,9 +17,12 @@ __email__ = ""
 __date__ = "December 2014"
 __status__ = "Development"
 
+import sys
 import unittest
-from CoreConceptsPy.utils import _init_log, float_eq
-from CoreConceptsPy.objects import *
+
+sys.path = [ '.', '..' ] + sys.path
+from utils import _init_log
+from objects import *
 
 log = _init_log("objects_test")
 

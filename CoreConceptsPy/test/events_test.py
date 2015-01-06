@@ -18,9 +18,12 @@ __email__ = ""
 __date__ = "December 2014"
 __status__ = "Development"
 
+import sys
 import unittest
-from CoreConceptsPy.utils import _init_log
-from CoreConceptsPy.events import *
+
+sys.path = [ '.', '..' ] + sys.path
+from utils import _init_log
+from events import *
 
 log = _init_log("events_test")
 
