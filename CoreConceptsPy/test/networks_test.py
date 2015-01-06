@@ -15,10 +15,13 @@ __email__ = ""
 __date__ = "December 2014"
 __status__ = "Development"
 
+import sys
 import unittest
-from CoreConceptsPy.utils import _init_log
-from CoreConceptsPy.networks import *
 import networkx as nx
+
+sys.path = [ '.', '..' ] + sys.path
+from utils import _init_log
+from networks import *
 
 log = _init_log("networks_test")
 

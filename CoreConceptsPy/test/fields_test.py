@@ -17,11 +17,14 @@ __email__ = ""
 __date__ = "December 2014"
 __status__ = "Development"
 
+import sys
 import unittest
-from CoreConceptsPy.utils import _init_log, float_eq
-from CoreConceptsPy.fields import *
 import numpy as np
 import random
+
+sys.path = [ '.', '..' ] + sys.path
+from utils import _init_log, float_eq
+from fields import *
 
 log = _init_log("fields_test")
 
