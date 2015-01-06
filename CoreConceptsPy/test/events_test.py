@@ -62,7 +62,7 @@ class TestEventsX(unittest.TestCase):
 	def test_constructor_with_one_argument(self):
 		''' Test constructor for a date event '''
 		self.assertEqual(self.f.startTime, 20100)
-		self.assertEqual(self.f.endTime, 20100)
+		self.assertEqual(self.f.endTime, None)
 
 	def test_within(self):
 		interval = self.e.within()
