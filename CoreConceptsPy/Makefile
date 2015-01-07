@@ -38,7 +38,7 @@ test-all: clean
 	python -m unittest discover -s 'test' -p '*_test.py' -t '..';
 
 example-events: clean
-	@echo "TODO example-events not implemented"
+	python examples/events/example-1.py
 
 example-fields: clean
 	@echo "TODO example-fields not implemented"

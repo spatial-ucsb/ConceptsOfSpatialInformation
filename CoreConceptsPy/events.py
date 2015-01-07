@@ -2,7 +2,8 @@
 """
  Abstract: These classes are implementations of the core concept 'event', as defined in coreconcepts.py
            The class is written in an object-oriented style.
-           An endTime of None means that the endtime of the event is not know and therefore the event is endless.
+           An endTime of None means that the endtime of the event is not known and therefore the event is endless.
+           The class expects a datetime object as start time and end time.
 """
 __author__ = "Marc Tim Thiemann"
 __copyright__ = "Copyright 2014"
@@ -16,14 +17,24 @@ __status__ = "Development"
 
 from utils import _init_log
 from coreconcepts import CcEvent
+import datetime
 
 log = _init_log("events")
 
 class PyEvent(CcEvent):
 
     def __init__(self, startTime, endTime = None):
+
+        if(not isinstance(startTime, datetime.datetime)):
+            raise TypeError('Expected <type \'datetime.datetime\'> for start time, got ' + str(type(startTime)))
+
         if endTime != None:
-            assert endTime >= startTime
+            if(not isinstance(endTime, datetime.datetime)):
+                raise TypeError('Expected <type \'datetime.datetime\'> for end time, got ' + str(type(endTime)))
+
+            if(endTime < startTime):
+                raise ValueError('End time must be equal or later than start time.')
+
         self.startTime = startTime
         self.endTime = endTime
 
@@ -31,8 +42,7 @@ class PyEvent(CcEvent):
         """
         @return a Period
         """
-        end = "Unknown" if self.endTime == None else self.endTime
-        return (self.startTime, end)
+        return (self.startTime, self.endTime)
 
     def when( self ):
         """
