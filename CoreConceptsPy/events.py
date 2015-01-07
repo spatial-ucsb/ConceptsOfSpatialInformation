@@ -23,20 +23,32 @@ log = _init_log("events")
 
 class PyEvent(CcEvent):
 
-    def __init__(self, startTime, endTime = None):
+    def __init__(self, startTime, endTime = None, participants = None):
 
-        if(not isinstance(startTime, datetime.datetime)):
+        if not isinstance(startTime, datetime.datetime):
             raise TypeError('Expected <type \'datetime.datetime\'> for start time, got ' + str(type(startTime)))
 
         if endTime != None:
-            if(not isinstance(endTime, datetime.datetime)):
+            if not isinstance(endTime, datetime.datetime):
                 raise TypeError('Expected <type \'datetime.datetime\'> for end time, got ' + str(type(endTime)))
 
-            if(endTime < startTime):
+            if endTime < startTime:
                 raise ValueError('End time must be equal or later than start time.')
 
         self.startTime = startTime
         self.endTime = endTime
+        self.participants = dfadfjf
+
+        if participants != None:
+            if not isinstance(participants, list):
+                raise TypeError('Expected <type \'list\'> for participants, got ' + str(type(participants)))
+
+            # check if participants are objects, fields or networks
+            for s in participants:
+                if not isinstance(s, (CcObject, CcField, CcNetwork)):
+                    raise TypeError('Expected <type \'CcObject\'>, <type \'CcField\'> or <type \'CcNetwork\'> as participants, got ' + str(type(s)))
+
+        self.participants = participants
 
     def within( self ):
         """
