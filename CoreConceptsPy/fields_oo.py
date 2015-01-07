@@ -15,6 +15,7 @@ __status__ = "Development"
 
 from coreconcepts_oo import CcField
 import numpy as np
+import numpy.ma as ma
 import gdal
 from gdalconst import *
 
@@ -75,6 +76,13 @@ class GeoTiffField(CcField):
         #Convert image to array
         array = self.gField.ReadAsArray( offset[1],offset[0], 1,1 )
         return array
+    
+    def zone( self, position ):
+        v = self.getValue( position )
+        a = self.gField.ReadAsArray()
+        m = ma.masked_not_equal( a, v )
+        m = np.around( m, 2 )
+        return m
       
     def local( self, newGtiffPath, func ):
         """
@@ -112,4 +120,16 @@ class GeoTiffField(CcField):
         newRaster = driver.CreateCopy(newGtiffPath, self.gField)
         outBand = newRaster.GetRasterBand(1)
         outBand.WriteArray(newArray)
+        outBand.FlushCache()
+        
+    def zonal( self, newGtiffPath, position, func ):
+        maskArray = self.zone( position )
+        band = self.gField.GetRasterBand(1)
+        ndVal = band.GetNoDataValue()
+        newArray = func( maskArray )
+        fillArray = ma.filled( newArray, fill_value = ndVal )
+        driver = self.gField.GetDriver()
+        newRaster = driver.CreateCopy(newGtiffPath, self.gField)
+        outBand = newRaster.GetRasterBand(1)
+        outBand.WriteArray(fillArray)
         outBand.FlushCache()

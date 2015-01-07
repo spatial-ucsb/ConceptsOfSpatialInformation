@@ -66,7 +66,16 @@ class TestGeoTiffField(unittest.TestCase):
         testNeighArray = squareMean3( array, offset )
         testDem = GeoTiffField( newGtiffPath )
         testVal = testDem.getValue( testCoords )
-        self.assertTrue( float_eq( testVal, testNeighArray ) ) #Confirm new value is mean of focal window   
+        self.assertTrue( float_eq( testVal, testNeighArray ) ) #Confirm new value is mean of focal window
+        
+    def test_zonal( self ):
+        
+        dem = getTestField()
+        newGtiffPath = "data/fields/testZonal.tif"
+        testCoords = ( 711750.8, 3910105.1 )
+        def zonalFunc( x ):
+            return x*2
+        dem.zonal( newGtiffPath, testCoords, zonalFunc )
     
 if __name__ == '__main__':
     unittest.main()
