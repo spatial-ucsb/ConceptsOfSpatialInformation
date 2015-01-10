@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 """
  Module abstract goes here.
@@ -15,26 +15,24 @@ __date__ = "August 2014"
 __status__ = "Development"
 
 from utils import _init_log
+from coreconcepts import CcLocation
 
-log = _init_log("locate_impl")
+log = _init_log("location")
 
-class ExLoc(ALocate):
-    """ 
+class ExLoc(CcLocation):
+    """
     IGNORE THIS CLASS FOR THE MOMENT.
     A toy implementation of ALocate.
     """
-    
-    @staticmethod
+
     def isAt( figure, ground ):
         # TODO: implementation with some geometric computation
         return True
-    
-    @staticmethod
+
     def isIn( figure, ground ):
         # TODO: implementation with some geometric computation
         return True
-    
-    @staticmethod
+
     def isPart( figure, ground ):
         # TODO: implementation with some geometric computation
         return False

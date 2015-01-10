@@ -1,10 +1,8 @@
-#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 """
- Abtract: These classes are the specifications of the core concepts, adapted from Haskell.
-          The classes are written in a functional style.
-          
-          TODO: Andrea: redesign based on new specs.
+ Abtract: These classes are the specifications of the core concepts, adapted from the Haskell.
+          The classes are written in an object-oriented style.
 """
 
 __author__ = "Werner Kuhn and Andrea Ballatore"
@@ -21,139 +19,137 @@ from utils import _init_log
 
 log = _init_log("coreconcepts")
 
-class ALocate(object):
+class CCLocation(object):
     """
-    IGNORE THIS CLASS FOR THE MOMENT. 
+    IGNORE THIS CLASS FOR THE MOMENT.
     Class defining abstract location relations
     """
-    
-    @staticmethod
+
     def isAt( figure, ground ):
         """
         @return Bool
         """
         raise NotImplementedError("isAt")
-    
-    @staticmethod
+
     def isIn( figure, ground ):
         """
         @return Bool
         """
         raise NotImplementedError("isIn")
-    
-    @staticmethod
+
     def isPart( figure, ground ):
         """
         @return Bool
         """
         raise NotImplementedError("isPart")
-    
-class AFields(object):
-    """ Class defining abstract fields """
-    
-    @staticmethod
-    def getValue( field, position ):
+
+class CcField(object):
+    """
+    Class defining abstract field.
+    Based on Field.hs
+    """
+
+    def __init__(self):
+        """ Define appropriate parameters for construction of the concrete object """
+        pass
+
+    def getValue( self, position ):
         """ @return the value of field at position """
         raise NotImplementedError("getValue")
-    
-    @staticmethod
-    def setValue( field, position, value ):
-        """ @return the position of new value in field """
-        raise NotImplementedError("setValue")
-        
-    @staticmethod
-    def domain( field, position, value ):
+
+    def domain( self, position, value ):
         """ @return Domains can be described as intervals, rectangles, corner points, convex hulls or boundaries """
         raise NotImplementedError("domain")
-    
-    @staticmethod
-    def neigh( field, position ):
+
+    def rectNeigh( self, position, width, height ):
         """
-        Map algebra: neighborhood function
-        @return Geometry 
+        Map algebra: rectangular neighborhood function
+        @return Geometry (a field mask)
         """
-        raise NotImplementedError("neigh")
-    
-    @staticmethod
-    def zone( field, position ):
+        raise NotImplementedError("rectNeigh")
+
+    def zone( self, position ):
         """
         Map algebra: zone function
-        @return Geometry
+        @return Geometry (a field mask)
         """
-        raise NotImplementedError("neigh")
-    
-    @staticmethod
-    def local( field, fun ):
+        raise NotImplementedError("zone")
+
+    def local( self, fun ):
         """
         Map algebra's local operations, with a function to compute the new values
-        @return new field
+        @return new CcField field
         """
         raise NotImplementedError("local")
-    
-    @staticmethod
-    def focal( field, fun ):
+
+    def focal( self, fun ):
         """
         Map algebra's focal operations, with a kernel function to compute the new values based on the neighborhood of the position
-        @return new field
+        @return new CcField field
         """
         raise NotImplementedError("focal")
-    
-    @staticmethod
-    def zonal( field, fun ):
+
+    def zonal( self, fun ):
         """
         Map algebra's zonal operations, with a function to compute the new values based on zones containing the positions.
-        @return new field
+        @return new CcField field
         """
         raise NotImplementedError("zonal")
 
-class AObjects(object):
-    """ Abstract class for core concept 'object' """
-    #TODO: update with new specs 
-    @staticmethod
-    def getBounds( obj ):
-        raise NotImplementedError("getBounds")
-    
-    @staticmethod
-    def hasRelation( objA, objB, relType ):
-        """ @return Boolean True if objA and objB are in a relationship of type relType
+class CcObject(object):
+    """
+    Abstract class for core concept 'object'
+    Based on Object.hs
+    """
+
+    def bounds( self ):
+        raise NotImplementedError("bounds")
+
+    def relation( self, obj, relType ):
+        """ @return Boolean True if self and obj are in a relationship of type relType
                     False otherwise
         """
-        raise NotImplementedError("hasRelation")
-    
-    @staticmethod
-    def getProperty( obj, prop ):
+        raise NotImplementedError("relation")
+
+    def property( self, prop ):
         """
-        @param obj the object
-        @param prop the property name 
+        @param prop the property name
         @return value of property in obj
         """
-        raise NotImplementedError("getProperty")
-    
+        raise NotImplementedError("property")
+
+    def identity( self, obj ):
+        """
+        @param an object
+        @return Boolean True if self and obj are identical
+        """
+        raise NotImplementedError("identity")
+
 class CcNetwork(object):
     """
-    Abstract class for core concept 'network' 
+    Abstract class for core concept 'network'
     Based on Network.hs
     """
-    
+
     def __init__(self):
         pass
 
     def nodes( self ):
         """ @return a copy of the graph nodes in a list """
         raise NotImplementedError("nodes")
-    
+
     def edges( self ):
         """ @return list of edges """
         raise NotImplementedError("edges")
-    
+
     def addNode( self, n ):
         """ Add a single node n """
         raise NotImplementedError("addNode")
-    
+
     def addEdge( self, u, v ):
         """ Add an edge between u and v """
         raise NotImplementedError("addEdge")
-    
+
     def connected( self, u, v ):
         """ @return whether node v can be reached from node u """
         raise NotImplementedError("connected")
@@ -161,7 +157,7 @@ class CcNetwork(object):
     def shortestPath( self, source, target ):
         """ @return shortest path in the graph """
         raise NotImplementedError("shortestPath")
-    
+
     def degree( self, n ):
         """ @return number of the nodes connected to the node n """
         raise NotImplementedError("degree")
@@ -169,70 +165,67 @@ class CcNetwork(object):
     def distance( self, source, target ):
         """ @return the length of the shortest path from the source to the target """
         raise NotImplementedError("distance")
-    
+
     def breadthFirst( self, node, distance ):
         """ @return all nodes within the distance from node in this network """
         raise NotImplementedError("breadthFirst")
-    
-class AEvents(object):
-    """ Abstract class for core concept 'event'. Based on Event.hs """
-    
-    @staticmethod
-    def within( ev ):
+
+class CcEvent(object):
+    """
+    Abstract class for core concept 'event'.
+    Based on Event.hs
+    """
+
+    # suggestion:
+    # 2. parameter (required): start time
+    # 3. parameter (optional): end time
+    def __init__(self):
+        pass
+
+    def within( self ):
         """
-        @ev an event
-        @return a Period 
+        @return a Period
         """
         raise NotImplementedError("within")
-    
-    @staticmethod
-    def when( ev ):
+
+    # suggestion:
+    # @return a date not a period, as Werners Haskell concepts say. If the event consists of an interval, return the start time.
+    def when( self ):
         """
-        @ev an event
-        @return a Period 
+        @return a Period
         """
         raise NotImplementedError("when")
-    
-    @staticmethod
-    def during( ev, otherEv ):
+
+    def during( self, event ):
         """
-        @ev an event
-        @ev otherEvent another event
+        @param event an event
         @return boolean
         """
         raise NotImplementedError("during")
-    
-    @staticmethod
-    def before( ev, otherEv ):
+
+    def before( self, event ):
         """
-        @ev an event
-        @ev otherEvent another event
-        @return boolean
+        @param event an event
+        @return Boolean
         """
         raise NotImplementedError("before")
-    
-    @staticmethod
-    def after( ev, otherEv ):
+
+    def after( self, event ):
         """
-        @ev an event
-        @ev otherEvent another event
-        @return boolean
+        @param event an event
+        @return Boolean
         """
         raise NotImplementedError("after")
-    
-    @staticmethod
-    def overlap( ev, otherEv ):
+
+    def overlap( self, event ):
         """
-        @ev an event
-        @ev otherEvent another event
-        @return boolean
+        @param event an event
+        @return Boolean
         """
         raise NotImplementedError("overlap")
-    
-class Event(object):
-    """ Simple event class. TODO: implement"""
-    pass
 
+# suggestion: We may not need an extra period class, because tuples in python would be suitable for periods.
 class Period(object):
     """ Simple period class. TODO: implement"""
-    pass
+    def __init__(self):
+        pass

@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-TODO: description of module
- 
- General docs for UNIT TESTS:
- https://docs.python.org/2/library/unittest.html
+
+# TODO: don't use print (use log instead)
 
 """
+TODO: description of module
+"""
+
 __author__ = "Eric Ahlgren"
 __copyright__ = "Copyright 2014"
 __credits__ = ["Eric Ahlgren"]
@@ -17,35 +17,36 @@ __email__ = ""
 __date__ = "December 2014"
 __status__ = "Development"
 
+import sys
 import unittest
-from utils import _init_log, float_eq
 import numpy as np
-from fields_oo import *
-from coreconcepts_oo import CcField
-import random 
+import random
 
-log = _init_log("tests")
+sys.path = [ '.', '..' ] + sys.path
+from utils import _init_log, float_eq
+from fields import *
 
+log = _init_log("fields_test")
 
 class TestGeoTiffField(unittest.TestCase):
-    
+
     def test_getValue( self ):
         """ Import DEM of CalPoly campus and test getValue method on upper left coords"""
-        
+
         print "\nTest geotiff fields - getValue on CalPoly DEM\n"
         dem = getTestField()
         ulCoords = ( 711743.5, 3910110.5 ) #Coordinates are UTM Zone 10N
         #test getValue for upper left coords
         ulVal = dem.getValue( ulCoords )
         self.assertTrue( float_eq( ulVal, 117.36 ) )
-    
+
     def test_local( self ):
         """ Import DEM of CalPoly campus and test Map Albegra local function"""
-        
+
         print "\nTest Map Algebra local function\n"
         dem = getTestField()
-        newGtiffPath = "data/fields/testLocal.tif"
-        ulCoords =( 711743.5, 3910110.5 ) 
+        newGtiffPath = "../data/fields/testLocal.tif"
+        ulCoords =( 711743.5, 3910110.5 )
         def localFunc( x ):
             return x/2
         dem.local( newGtiffPath, localFunc )
@@ -53,16 +54,16 @@ class TestGeoTiffField(unittest.TestCase):
         oldVal = dem.getValue( ulCoords )
         testVal = testDem.getValue( ulCoords )
         self.assertTrue( float_eq( oldVal, testVal*2 ) )
-       
+
     def test_focal( self ):
-        """ Import DEM of CalPoly campus and test Map Albegra focal function"""   
+        """ Import DEM of CalPoly campus and test Map Albegra focal function"""
         print "Test Map Algebra focal function"
         dem = getTestField()
-        newGtiffPath = "data/fields/testFocal.tif"
+        newGtiffPath = "../data/fields/testFocal.tif"
         dem.focal( newGtiffPath, squareMean3 )
         testCoords = ( 711750.8, 3910105.1 )
         offset = getGtiffOffset ( dem.gField, testCoords )
-        array = gdal.Open( "data/fields/testField.tif" ).ReadAsArray()
+        array = gdal.Open( "../data/fields/testField.tif" ).ReadAsArray()
         testNeighArray = squareMean3( array, offset )
         testDem = GeoTiffField( newGtiffPath )
         testVal = testDem.getValue( testCoords )
@@ -70,12 +71,10 @@ class TestGeoTiffField(unittest.TestCase):
         
     def test_zonal( self ):
         
-        dem = getTestField()
-        newGtiffPath = "data/fields/testZonal.tif"
+        zoneRast = GeoTiffField("../data/fields/zone.tif")
+        newGtiffPath = "../data/fields/testZonal.tif"
         testCoords = ( 711750.8, 3910105.1 )
-        def zonalFunc( x ):
-            return x*2
-        dem.zonal( newGtiffPath, testCoords, zonalFunc )
+        zoneRast.zonal( newGtiffPath, exampZonalFunc )
     
 if __name__ == '__main__':
     unittest.main()
