@@ -47,7 +47,7 @@ e = next(d)
 for f in d:
     assert N.connected(f, c) == True
     e = f
-print " All the members are connected in a way."
+print " All the members are connected."
 
 
 print "\nSo as a friend of a friend of a friend and so on everyone is connected to everybody else. But what's the highest number of people needed to create a connection between two members?"
