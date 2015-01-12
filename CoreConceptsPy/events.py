@@ -23,20 +23,32 @@ log = _init_log("events")
 
 class PyEvent(CcEvent):
 
-    def __init__(self, startTime, endTime = None, participants = None):
+    def __init__(self, period, properties):
+        """
+        @param period a tuple of datetime objects
+        @param properties a dictionary of key-value pairs
+        """
 
-        if not isinstance(startTime, datetime.datetime):
-            raise TypeError('Expected <type \'datetime.datetime\'> for start time, got ' + str(type(startTime)))
+        if isinstance(period, tuple):
+            if len(period) != 2:
+                raise RuntimeError('Tuple must be of length 2, length is ' + str(len(period)))
+            elif not isinstance(period[0], datetime.datetime):
+                raise TypeError('Expected <type \'datetime.datetime\'> as start time, got ' + str(type(period[0])))
+            elif not (isinstance(period[1], datetime.datetime) or period[1] == None):
+                raise TypeError('Expected <type \'datetime.datetime\'> or \'None\' as end time, got ' + str(type(period[1])))
+            elif period[1] != None and period[1] < period[0]:
+                raise ValueError('End time must be equal or later than start time')
 
-        if endTime != None:
-            if not isinstance(endTime, datetime.datetime):
-                raise TypeError('Expected <type \'datetime.datetime\'> for end time, got ' + str(type(endTime)))
+        self.startTime = period[0]
+        self.endTime = period[1]
 
-            if endTime < startTime:
-                raise ValueError('End time must be equal or later than start time.')
+        if not (isinstance(properties, dict)):
+            raise TypeError('Expected <type \'dict\'> for properties, got ' + str(type(properties)))
 
-        self.startTime = startTime
-        self.endTime = endTime
+        if not properties:
+            raise RuntimeError('Properties dictionary can not be empty.')
+
+        self.properties = properties
 
     def within( self ):
         """
@@ -50,29 +62,34 @@ class PyEvent(CcEvent):
         """
         return self.startTime;
 
-    def during( self, eventOrStartTime, endTime = None ):
+    def during( self, eventOrPeriod ):
         """
-        @param event an event
+        @param eventOrPeriod an event or a time period
         @return boolean
         """
 
-        # Check if types are correct
-        if endTime != None:
-            if not isinstance(eventOrStartTime, datetime.datetime):
-                raise ValueError('Expected <type \'datetime.datetime\'> for eventOrStartTime, because endTime was passed, got ' + str(type(eventOrStartTime)))
-            elif not isinstance(endTime, datetime.datetime):
-                raise ValueError('Expected <type \'datetime.datetime\'> for endTime, got ' + str(type(endTime)))
-        elif not isinstance(eventOrStartTime, CcEvent):
-            raise ValueError('Expected <type \'CcEvent\'> for eventOrStartTime, because endTime was not passed, got ' + str(type(eventOrStartTime)))
+        # Check if parameter is correct
+        if isinstance(eventOrPeriod, tuple):
+            if len(eventOrPeriod) != 2:
+                raise RuntimeError('Tuple must be of length 2, length is ' + str(len(eventOrPeriod)))
+            elif not isinstance(eventOrPeriod[0], datetime.datetime):
+                raise TypeError('Expected <type \'datetime.datetime\'> as start time, got ' + str(type(eventOrPeriod[0])))
+            elif not isinstance(eventOrPeriod[1], datetime.datetime):
+                raise TypeError('Expected <type \'datetime.datetime\'> as end time, got ' + str(type(eventOrPeriod[1])))
+            elif eventOrPeriod[1] < eventOrPeriod[0]:
+                raise ValueError('End time must be equal or later than start time')
+        elif not isinstance(eventOrPeriod, CcEvent):
+            raise TypeError('Expected <type \'CcEvent\'> or <type \'Tuple\'>, got ' + str(type(eventOrPeriod)))
 
-        if endTime == None:
-            return self.startTime >= eventOrStartTime.startTime and (eventOrStartTime.endTime == None or (self.endTime != None and self.endTime <= eventOrStartTime.endTime))
+        if not isinstance(eventOrPeriod, tuple):
+            event = eventOrPeriod
+            return self.startTime >= event.startTime and (event.endTime == None or (self.endTime != None and self.endTime <= event.endTime))
         else:
-            return self.startTime >= eventOrStartTime and (self.endTime != None and self.endTime <= endTime)
+            return self.startTime >= eventOrPeriod[0] and (self.endTime != None and self.endTime <= eventOrPeriod[1])
 
     def before( self, eventOrDatetime ):
         """
-        @param event an event
+        @param eventOrDatetime an event or a datetime object
         @return Boolean
         """
 
@@ -81,39 +98,63 @@ class PyEvent(CcEvent):
         elif isinstance(eventOrDatetime, CcEvent):
             return self.endTime != None and self.endTime < eventOrDatetime.startTime
         else:
-            raise ValueError('Expected <type \'CcEvent\'> or <type \'datetime.datetime> as parameter, got ' + str(type(eventOrDatetime)))
+            raise TypeError('Expected <type \'CcEvent\'> or <type \'datetime.datetime> as parameter, got ' + str(type(eventOrDatetime)))
 
     def after( self, eventOrDatetime ):
         """
-        @param event an event
+        @param eventOrDatetime an event or a datetime object
         @return Boolean
         """
 
         if isinstance(eventOrDatetime, datetime.datetime):
-            return self.startTime > eventOrDatetime.endTime
+            return self.startTime > eventOrDatetime
         elif isinstance(eventOrDatetime, CcEvent):
             return eventOrDatetime.endTime != None and self.startTime > eventOrDatetime.endTime
         else:
-            raise ValueError('Expected <type \'CcEvent\'> or <type \'datetime.datetime> as parameter, got ' + str(type(eventOrDatetime)))
+            raise TypeError('Expected <type \'CcEvent\'> or <type \'datetime.datetime> as parameter, got ' + str(type(eventOrDatetime)))
 
-    def overlap( self, eventOrStartTime, endTime = None ):
+    def overlap( self, eventOrPeriod ):
         """
-        @param event an event
+        @param eventOrPeriod an event or a time period
         @return Boolean
         """
 
-        # Check if types are correct
-        if endTime != None:
-            if not isinstance(eventOrStartTime, datetime.datetime):
-                raise ValueError('Expected <type \'datetime.datetime\'> for eventOrStartTime, because endTime was passed, got ' + str(type(eventOrStartTime)))
-            elif not isinstance(endTime, datetime.datetime):
-                raise ValueError('Expected <type \'datetime.datetime\'> for endTime, got ' + str(type(endTime)))
-        elif not isinstance(eventOrStartTime, CcEvent):
-            raise ValueError('Expected <type \'CcEvent\'> for eventOrStartTime, because endTime was not passed, got ' + str(type(eventOrStartTime)))
+        # Check if parameter is correct
+        if isinstance(eventOrPeriod, tuple):
+            if len(eventOrPeriod) != 2:
+                raise RuntimeError('Tuple must be of length 2, length is ' + str(len(eventOrPeriod)))
+            elif not isinstance(eventOrPeriod[0], datetime.datetime):
+                raise TypeError('Expected <type \'datetime.datetime\'> as start time, got ' + str(type(eventOrPeriod[0])))
+            elif not isinstance(eventOrPeriod[1], datetime.datetime):
+                raise TypeError('Expected <type \'datetime.datetime\'> as end time, got ' + str(type(eventOrPeriod[1])))
+            elif eventOrPeriod[1] < eventOrPeriod[0]:
+                raise ValueError('End time must be equal or later than start time')
+        elif not isinstance(eventOrPeriod, CcEvent):
+            raise TypeError('Expected <type \'CcEvent\'> or <type \'Tuple\'>, got ' + str(type(eventOrPeriod)))
 
-        if endTime == None:
-            event = eventOrStartTime
+        if not isinstance(eventOrPeriod, tuple):
+            event = eventOrPeriod
             return (self.startTime < event.startTime and self.endTime != None and (event.endTime == None or self.endTime < event.endTime) and self.endTime >= event.startTime) or (self.startTime > event.startTime and event.endTime != None and self.startTime <= event.endTime and (self.endTime == None or self.endTime > event.endTime))
         else:
-            startTime = eventOrStartTime
+            startTime = eventOrPeriod[0]
+            endTime = eventOrPeriod[1]
             return (self.startTime < startTime and self.endTime != None and self.endTime < endTime and self.endTime >= startTime) or (self.startTime > startTime and self.startTime <= endTime and self.endTime > endTime)
+
+    def get( self, key ):
+        """
+        @param key a key of the event's properties
+        @return value
+        """
+        try:
+            return self.properties[key]
+        except KeyError:
+            print "Event does not have property '" + key + "'"
+            return None
+
+    def set( self, key, value ):
+        """
+        @param key a key of the event's properties
+        @param value the value for that key
+        """
+
+        self.properties[key] = value

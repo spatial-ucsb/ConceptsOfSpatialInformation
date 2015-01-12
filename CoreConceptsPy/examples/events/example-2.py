@@ -4,6 +4,7 @@
 """
 Example 2:
 Earthquake events
+
 Use Cases:
 - get the locations of all earthquakes with a magnitude of 4 or higher
 - get all earthquakes which origin is ... m or deeper
