@@ -31,7 +31,7 @@ N = NetworkX()
 N._G = nx.read_gml('examples/networks/data/karate.gml')
 
 
-print "\nPeople how don't maintain a friendship inside the karate club:"
+print "\nPeople who don't maintain a friendship inside the karate club:"
 a = []
 for b in N.nodes():
     if N.degree(b) == 0:
