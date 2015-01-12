@@ -16,7 +16,6 @@ __date__ = "December 2014"
 __status__ = "Development"
 
 import sys
-import unittest
 import itertools
 import networkx as nx
 
