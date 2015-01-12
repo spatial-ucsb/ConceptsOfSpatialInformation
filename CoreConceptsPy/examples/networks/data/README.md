@@ -49,3 +49,4 @@ Other examples
 --------------
 - U.S. Tiger files for roads: ftp://ftp2.census.gov/geo/tiger/TIGER2014/ROADS
 - Large collection of GML data, free for scientific use: http://www-personal.umich.edu/~mejn/netdata/
+- https://wiki.gephi.org/index.php/Datasets
