@@ -3,7 +3,11 @@
 
 """
 Example 2:
-Get all the locations of earthquake events with a magnitude of 6 or higher for December 2014.
+Earthquake events
+Use Cases:
+- get the locations of all earthquakes with a magnitude of 4 or higher
+- get all earthquakes which origin is ... m or deeper
+- get all earthquakes from 12/01/2014 - 12/7/2014
 
 Provided data:
 CSV file with all global earthquake events for December 2014.
