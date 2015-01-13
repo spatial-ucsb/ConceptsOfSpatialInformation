@@ -43,6 +43,20 @@ print " non"
 print "\nHow many friendships are there?\n %d" % len(N.edges())
 
 
+print "\nAnd who maintains the highest number of friendships?"
+l = []
+m = -1
+for n in iter(N.nodes()):
+    o = len(N.breadthFirst(n, 1))
+    if o > m:
+        l = []
+        m = o
+    if o >= m:
+        l.append(n)
+for p in l:
+    print " %d: %s" % (p, N.breadthFirst(p, 1))
+
+
 print "\nWe can look for a seperated group by checking if one member is connected to everybody else."
 c = N.nodes()[0]
 d = iter(N.nodes())
