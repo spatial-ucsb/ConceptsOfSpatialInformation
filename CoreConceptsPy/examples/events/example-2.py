@@ -78,7 +78,7 @@ snowEvents = []
 
 for e in events:
     if 'Snow' in e.get('type'):
-        e.append(snowEvents)
+        snowEvents.append(e)
 
 for e in snowEvents:
-    print 'Location: ' + e.get('latitude') +', ' + e.get('longitude') + ' , Time: ' str(e.when())
+    print 'Time: ' + str(e.when()) + ', Location: ' + e.get('latitude') +', ' + e.get('longitude')

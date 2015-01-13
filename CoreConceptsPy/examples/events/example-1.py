@@ -10,7 +10,6 @@ Use Cases:
 - get all earthquakes which origin is 100 m or deeper
 - get all earthquakes from 12/01/2014 00:00:00 - 12/6/2014 23:59:59
 - get all earthquakes in Alaska
-- get the duration of a certain earthquake using its id
 
 Provided data:
 CSV file with all global earthquake events for December 2014.
