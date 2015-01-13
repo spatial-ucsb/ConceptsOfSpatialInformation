@@ -40,6 +40,9 @@ assert len(a) == 0
 print " non"
 
 
+print "\nHow many friendships are there?\n %d" % len(N.edges())
+
+
 print "\nWe can look for a seperated group by checking if one member is connected to everybody else."
 c = N.nodes()[0]
 d = iter(N.nodes())
