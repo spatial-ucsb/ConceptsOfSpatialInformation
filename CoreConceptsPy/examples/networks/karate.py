@@ -54,7 +54,9 @@ for n in iter(N.nodes()):
     if o >= m:
         l.append(n)
 for p in l:
-    print " %d: %s" % (p, N.breadthFirst(p, 1))
+    q = N.breadthFirst(p, 1)
+    q.remove(p)
+    print " %d: %s" % (p, q)
 
 
 print "\nWe can look for a seperated group by checking if one member is connected to everybody else."
