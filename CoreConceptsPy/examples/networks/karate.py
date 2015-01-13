@@ -63,4 +63,4 @@ for i in itertools.combinations(N.nodes(), 2):
 assert h > -1
 print "It's %d and it's between these connections:" % (h-1)
 for k in g:
-    print N.shortestPath(k[0], k[1])
+    print " %s" % N.shortestPath(k[0], k[1])
