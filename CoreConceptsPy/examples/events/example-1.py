@@ -86,7 +86,7 @@ print 'Get all earthquakes in Alaska during December 2014'
 
 earthquakesInAlaska = []
 for e in events:
-    if("Alaska" in e.get('place')):
+    if "Alaska" in e.get('place'):
         earthquakesInAlaska.append(e)
 
 

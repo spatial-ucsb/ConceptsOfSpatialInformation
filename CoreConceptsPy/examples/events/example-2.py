@@ -3,11 +3,16 @@
 
 """
 Example 2:
+US weather data from 1 January 2015
 
 Use Cases:
+- get all weather events before 12am
+- when did it snow on 1 January?
+- get all weather events after 6 pm
+
 
 Provided data:
-
+text file. each row includes: datetime, latitude, longitude, weather type
 """
 
 __author__ = "Marc Tim Thiemann"
@@ -29,3 +34,51 @@ import dateutil.parser
 from datetime import *
 
 log = _init_log("example-2")
+
+file = open('data/weather-data.txt', 'r')
+
+events = []
+
+for line in file:
+    fields = line.split(' ')
+
+    properties = {
+        'number': fields[0][:-1],
+        'latitude': fields[3][:-1],
+        'longitude': fields[4],
+        'type': ' '.join(fields[5:len(fields)])
+    }
+
+    dt = dateutil.parser.parse(fields[1] + ' ' + fields[2], fuzzy = True, ignoretz = True)
+
+    events.append(PyEvent((dt, dt), properties))
+
+
+print 'Get all weather events before 12am'
+
+forenoonEvents = []
+
+for e in events:
+    if e.before(datetime(2015, 1, 1, 12, 0, 0)):
+        forenoonEvents.append(e)
+
+
+print 'Get all weather events after 6pm'
+
+eveningEvents = []
+
+for e in events:
+    if e.after(datetime(2015, 1, 1, 18, 0, 0)):
+        eveningEvents.append(e)
+
+
+print 'When and where did it snow on 1 January 2015?'
+
+snowEvents = []
+
+for e in events:
+    if 'Snow' in e.get('type'):
+        e.append(snowEvents)
+
+for e in snowEvents:
+    print 'Location: ' + e.get('latitude') +', ' + e.get('longitude') + ' , Time: ' str(e.when())
