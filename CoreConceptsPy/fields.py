@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 """
-TODO: description of module
+ Abstract: These classes are implementations of the core concept 'field', as defined in coreconcepts.py
+           The class is written in an object-oriented style.
 """
 
 __author__ = "Eric Ahlgren"
@@ -25,11 +26,11 @@ from coreconcepts import CcField
 log = _init_log("fields")
 
 def getGtiffOffset( gtiff, position ):
-    """
-    Convert GeoTiff coordinates to matrix offset. Used for getValue GeoTiffField functions.
-    @param position - the input geocoordinates
-    @return - the i,j pair representing position in the image matrix
-    """
+    """ 
+    Convert GeoTiff coordinates to matrix offset. Used for getValue GeoTiffField method. 
+    @param position - the input geocoordinates in coordinate system of gtiff
+    @return - the i,j pair representing input position in the image matrix
+    """        
     transform = gtiff.GetGeoTransform()
     #Convert geo-coords to image space
     ulx = transform [0]
@@ -41,44 +42,6 @@ def getGtiffOffset( gtiff, position ):
     arrx = int((xQuery - ulx)/pixWidth)
     arry = int((yQuery - uly)/pixHeight)
     return arry, arrx
-
-def getTestField():
-    testField = GeoTiffField( "../data/fields/testField.tif" )
-    return testField
-
-def squareMean3( array, centerPixel ):
-    """
-    Kernel neighborhood function for focal map algebra. Reutrns mean of a 3x3 square array.
-    @param array - array from which to retrieve the neighborhood kernel
-    @param centerPixel - (i,j) corrdinates of center pixel of kernel in the array
-    @return - mean of 3x3 square neighborhood around centerPixel
-    """
-    rows = centerPixel[0] - 1
-    cols = centerPixel[1] - 1
-    neighArray = array[rows:rows + 3, cols:cols + 3]
-    return neighArray.mean()
-
-def meanZonalFunc( array, position ):
-    """
-    Example zonal function. Returns mean zonal values based on zone layer "zone.tif," which contains
-    2 zones derived from the 50x50 CalPolyDEM test field. A value of 0 represents elevation below 118m and
-    a value of 1 represents elevation greater than or equal to 118 m (see README.md).
-    @param array - array on which to perform zonal operation
-    @param position - (i,j) coordinates for zonal operation (retrieve zonal geometry and write new value)
-    @return - mean value of masked input array derived from zonal geometry of "zone.tif" at input position
-    """
-    zoneRast = GeoTiffField("../data/fields/zone.tif")
-    zoneArr = zoneRast.gField.ReadAsArray()
-    band = zoneRast.gField.GetRasterBand(1)
-    ndVal = band.GetNoDataValue()
-    rows = zoneArr.shape[0]
-    cols = zoneArr.shape[1]
-    maskArray = zoneRast.zone( (position[0], position[1]) )
-    mask = ma.getmask(maskArray)
-    newMaskArr = ma.masked_array(array, mask)
-    meanVal = newMaskArr.mean()
-    return meanVal
-    
 
 class GeoTiffField(CcField):
     """
@@ -101,8 +64,7 @@ class GeoTiffField(CcField):
         @return the raw value of the pixel at input position in self
         """
         offset = getGtiffOffset( self.gField, position )
-        #Convert image to array
-        array = self.gField.ReadAsArray( offset[1],offset[0], 1,1 )
+        array = self.gField.ReadAsArray( offset[1],offset[0], 1,1 ) #Convert image to NumPy array
         return array
     
     def zone( self, position ):
@@ -113,7 +75,7 @@ class GeoTiffField(CcField):
         """
         array = self.gField.ReadAsArray()
         val = array[position[0], position[1]]
-        maskArray = ma.masked_not_equal( array, val )
+        maskArray = ma.masked_not_equal( array, val )  #All values not equal to zone value of input are masked
         return maskArray
 
     def local( self, newGtiffPath, func ):

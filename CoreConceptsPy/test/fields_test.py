@@ -4,7 +4,7 @@
 # TODO: don't use print (use log instead)
 
 """
-TODO: description of module
+Abstract: Unit tests for the implementations of the core concept 'field'
 """
 
 __author__ = "Eric Ahlgren"
@@ -27,6 +27,43 @@ from utils import _init_log, float_eq
 from fields import *
 
 log = _init_log("fields_test")
+
+def getTestField():
+    testField = GeoTiffField( "../data/fields/testField.tif" )
+    return testField
+
+def squareMean3( array, centerPixel ):
+    """
+    Kernel neighborhood function for focal map algebra. Reutrns mean of a 3x3 square array.
+    @param array - array from which to retrieve the neighborhood kernel
+    @param centerPixel - (i,j) corrdinates of center pixel of kernel in the array
+    @return - mean of 3x3 square neighborhood around centerPixel
+    """
+    rows = centerPixel[0] - 1
+    cols = centerPixel[1] - 1
+    neighArray = array[rows:rows + 3, cols:cols + 3]
+    return neighArray.mean()
+
+def meanZonalFunc( array, position ):
+    """
+    Example zonal function. Returns mean zonal values based on zone layer "zone.tif," which contains
+    2 zones derived from the 50x50 CalPolyDEM test field. A value of 0 represents elevation below 118m and
+    a value of 1 represents elevation greater than or equal to 118 m (see README.md).
+    @param array - array on which to perform zonal operation
+    @param position - (i,j) coordinates for zonal operation (retrieve zonal geometry and write new value)
+    @return - mean value of masked input array derived from zonal geometry of "zone.tif" at input position
+    """
+    zoneRast = GeoTiffField("../data/fields/zone.tif")
+    zoneArr = zoneRast.gField.ReadAsArray()
+    band = zoneRast.gField.GetRasterBand(1)
+    ndVal = band.GetNoDataValue()
+    rows = zoneArr.shape[0]
+    cols = zoneArr.shape[1]
+    maskArray = zoneRast.zone( (position[0], position[1]) )
+    mask = ma.getmask(maskArray)
+    newMaskArr = ma.masked_array(array, mask)
+    meanVal = newMaskArr.mean()
+    return meanVal
 
 class TestGeoTiffField(unittest.TestCase):
 

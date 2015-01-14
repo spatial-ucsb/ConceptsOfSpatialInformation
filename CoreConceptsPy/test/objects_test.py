@@ -4,12 +4,12 @@
 # TODO: don't use print (use log instead)
 
 """
-TODO: description of module
+ Abstract: Unit tests for the implementations of the core concept 'object'
 """
 
 __author__ = "Eric Ahlgren"
 __copyright__ = "Copyright 2014"
-__credits__ = ["Eric Ahlgren"]
+__credits__ = ["Eric Ahlgren", "Andrea Ballatore"]
 __license__ = ""
 __version__ = "0.1"
 __maintainer__ = ""
@@ -30,8 +30,8 @@ class TestArcShpObject(unittest.TestCase):
 
     def test_bounds( self ):
         #Get objects from shapefiles
-        shapefile1 = "data/objects/Rooftops.shp"
-        shapefile2 = "data/objects/ViablePVArea.shp"
+        shapefile1 = "../data/objects/Rooftops.shp"
+        shapefile2 = "../data/objects/ViablePVArea.shp"
         roofObj = ArcShpObject( shapefile1, 0 )
         pvObj = ArcShpObject( shapefile2, 236 )
         #test getBounds on roof object - Poultry Science building
@@ -44,8 +44,8 @@ class TestArcShpObject(unittest.TestCase):
 
     def test_relation( self ):
         #Get objects from shapefiles
-        shapefile1 = "data/objects/Rooftops.shp"
-        shapefile2 = "data/objects/ViablePVArea.shp"
+        shapefile1 = "../data/objects/Rooftops.shp"
+        shapefile2 = "../data/objects/ViablePVArea.shp"
         roofObj = ArcShpObject( shapefile1, 0 )
         pvObj = ArcShpObject( shapefile2, 236 )
         #test hasRelation for PV object within roof object
@@ -54,14 +54,14 @@ class TestArcShpObject(unittest.TestCase):
 
     def test_property( self ):
         #Get objects from shapefiles
-        shapefile1 = "data/objects/Rooftops.shp"
+        shapefile1 = "../data/objects/Rooftops.shp"
         roofObj = ArcShpObject( shapefile1, 0 )
         #test getProprty for Poultry Science building name
         roofName = roofObj.property( 'name' )
         self.assertEqual( roofName, "Poultry Science" )
 
     def test_identity( self ):
-        shapefile1 = "data/objects/Rooftops.shp"
+        shapefile1 = "../data/objects/Rooftops.shp"
         roofObj = ArcShpObject( shapefile1, 0 )
         self.assertTrue( roofObj.identity( roofObj ) )
 

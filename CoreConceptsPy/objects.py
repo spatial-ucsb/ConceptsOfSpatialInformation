@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
 """
-TODO: description of module
+ Abstract: These classes are implementations of the core concept 'object', as defined in coreconcepts.py
+           The class is written in an object-oriented style.
 """
 
 __author__ = "Eric Ahlgren"
 __copyright__ = "Copyright 2014"
-__credits__ = ["Eric Ahlgren"]
+__credits__ = ["Eric Ahlgren", "Andrea Ballatore"]
 __license__ = ""
 __version__ = "0.1"
 __maintainer__ = ""
