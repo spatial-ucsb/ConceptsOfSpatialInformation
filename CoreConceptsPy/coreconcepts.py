@@ -146,7 +146,7 @@ class CcNetwork(object):
         """ Add a single node n """
         raise NotImplementedError("addNode")
 
-    def addEdge( self, u, v ):
+    def addEdge( self, edge ):
         """ Add an edge between u and v """
         raise NotImplementedError("addEdge")
 
