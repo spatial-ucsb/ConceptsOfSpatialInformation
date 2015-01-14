@@ -78,7 +78,11 @@ class TestGeoTiffField(unittest.TestCase):
         self.assertTrue( float_eq( ulVal, 117.36 ) )
 
     def test_local( self ):
-        """ Import DEM of CalPoly campus and test Map Albegra local function"""
+        """ 
+        Import DEM of CalPoly campus and test Map Albegra local function.
+        
+        Tested is a simple unary local operation, in which the value at each location is divided by 2 (lquot).
+        """
 
         print "\nTest Map Algebra local function\n"
         dem = getTestField()
@@ -93,7 +97,12 @@ class TestGeoTiffField(unittest.TestCase):
         self.assertTrue( float_eq( oldVal, testVal*2 ) )
 
     def test_focal( self ):
-        """ Import DEM of CalPoly campus and test Map Albegra focal function"""
+        """ 
+        Import DEM of CalPoly campus and test Map Albegra focal function.
+        
+        Tested is a simple unary focal operation with a 3x3 square neighborhood and a mean focal function (fmean).
+        
+        """
         print "Test Map Algebra focal function"
         dem = getTestField()
         newGtiffPath = "../data/fields/testFocal.tif"
@@ -110,12 +119,16 @@ class TestGeoTiffField(unittest.TestCase):
     def test_zonal( self ):
         """
         Import DEM of CalPoly campus and test Map Algebra zonal function.
+        
+        Tested is a simple unary zonal operation, in which each location is assigned a new value based on the 
+        mean values for two zones derived from elevation (zmean).
+        
         Returns mean zonal values based on zone layer "zone.tif," which contains
         2 zones derived from the 50x50 CalPolyDEM test field. A value of 0 represents elevation below 118m and
         a value of 1 represents elevation greater than or equal to 118 m (see README.md).
         
         Zonal mean values are calculated and written to "testZonal.tif," then compared with values derived from
-        ArcMap (contained in "zonaltable").
+        ArcMap (contained in "zonaltable.dbf").
         """
         
         newGtiffPath = "../data/fields/testZonal.tif"
