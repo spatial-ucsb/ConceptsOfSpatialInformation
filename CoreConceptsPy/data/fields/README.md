@@ -1,5 +1,8 @@
 Core Concepts of Spatial Information - Fields Data
 ----------------------
+testField.tif - a 50x50 pixel subset of the CalPolyDEM.tif GeoTiff described below
+zone.tif - a binary zone raster with the same extent as testField. A value of 1 represents elevation greater than or equal to 118 m.
+CalPolyDEM.tif - a Digital Elevation Model of the CalPoly campus (see details below).
 
 GeoTiff used for PV site-suitability analysis for the CalPoly San Luis Obispo campus. Acquired from OpenTopography, January 2014.
 

@@ -6,7 +6,7 @@ TODO: description of module
 
 __author__ = "Eric Ahlgren"
 __copyright__ = "Copyright 2014"
-__credits__ = ["Eric Ahlgren"]
+__credits__ = ["Eric Ahlgren", "Andrea Ballatore"]
 __license__ = ""
 __version__ = "0.1"
 __maintainer__ = ""
@@ -50,20 +50,34 @@ def squareMean3( array, centerPixel ):
     """
     Kernel neighborhood function for focal map algebra. Reutrns mean of a 3x3 square array.
     @param array - array from which to retrieve the neighborhood kernel
-    @centerPixel - (i,j) corrdinates of center pixel of kernel in the array
+    @param centerPixel - (i,j) corrdinates of center pixel of kernel in the array
+    @return - mean of 3x3 square neighborhood around centerPixel
     """
     rows = centerPixel[0] - 1
     cols = centerPixel[1] - 1
     neighArray = array[rows:rows + 3, cols:cols + 3]
     return neighArray.mean()
 
-def exampZonalFunc( zoneVal ):
-    if zoneVal == 0:
-        return -999
-    elif zoneVal == 1:
-        return 100
-    else:
-        pass
+def meanZonalFunc( array, position ):
+    """
+    Example zonal function. Returns mean zonal values based on zone layer "zone.tif," which contains
+    2 zones derived from the 50x50 CalPolyDEM test field. A value of 0 represents elevation below 118m and
+    a value of 1 represents elevation greater than or equal to 118 m (see README.md).
+    @param array - array on which to perform zonal operation
+    @param position - (i,j) coordinates for zonal operation (retrieve zonal geometry and write new value)
+    @return - mean value of masked input array derived from zonal geometry of "zone.tif" at input position
+    """
+    zoneRast = GeoTiffField("../data/fields/zone.tif")
+    zoneArr = zoneRast.gField.ReadAsArray()
+    band = zoneRast.gField.GetRasterBand(1)
+    ndVal = band.GetNoDataValue()
+    rows = zoneArr.shape[0]
+    cols = zoneArr.shape[1]
+    maskArray = zoneRast.zone( (position[0], position[1]) )
+    mask = ma.getmask(maskArray)
+    newMaskArr = ma.masked_array(array, mask)
+    meanVal = newMaskArr.mean()
+    return meanVal
     
 
 class GeoTiffField(CcField):
@@ -83,8 +97,8 @@ class GeoTiffField(CcField):
     def getValue( self, position ):
         """
         Returns the value of a pixel at an input position
-        @param position the coordinate pair in gtiff's coordinate system
-        @return the raw value of the pixel at position in gtiff
+        @param position the coordinate pair in self's coordinate system
+        @return the raw value of the pixel at input position in self
         """
         offset = getGtiffOffset( self.gField, position )
         #Convert image to array
@@ -92,11 +106,15 @@ class GeoTiffField(CcField):
         return array
     
     def zone( self, position ):
-        v = self.getValue( position )
-        a = self.gField.ReadAsArray()
-        m = ma.masked_not_equal( a, v )
-        m = np.around( m, 2 )
-        return m
+        """
+        Return a masked array representing the zone for the input position
+        @param position - i,j coordinates from which to derive zone
+        @return - NumPy masked array representing the geometry of the zone for pixel at input position
+        """
+        array = self.gField.ReadAsArray()
+        val = array[position[0], position[1]]
+        maskArray = ma.masked_not_equal( array, val )
+        return maskArray
 
     def local( self, newGtiffPath, func ):
         """
@@ -110,12 +128,13 @@ class GeoTiffField(CcField):
         driver = self.gField.GetDriver()
         newRaster = driver.CreateCopy(newGtiffPath, self.gField)
         outBand = newRaster.GetRasterBand(1)
+        newArray = np.around(newArray.astype(np.double), 3)
         outBand.WriteArray(newArray)
         outBand.FlushCache()
 
     def focal( self, newGtiffPath, kernFunc ):
         """
-        Assign a new value to each pixel in gtiff based on focal map algebra. Return a new GeoTiff at newGtiffPath.
+        Assign a new value to each pixel in self based on focal map algebra. Return a new GeoTiff at filepath newGtiffPath.
         @param newGtiffPath - the filepath of the output GeoTiff
         @param kernFunc - the neighborhood function which returns the kernel array
         @return N/A; write new raster to newGtiffPath
@@ -129,33 +148,34 @@ class GeoTiffField(CcField):
         for i in range (1, rows-1):
             for j in range (1, cols-1):
                 newVal = kernFunc(oldArray,(i,j))
+                newVal = np.round(newVal, 3)
                 newArray.itemset((i,j), newVal)
         driver = self.gField.GetDriver()
         newRaster = driver.CreateCopy(newGtiffPath, self.gField)
         outBand = newRaster.GetRasterBand(1)
+        newArray = np.around(newArray.astype(np.double), 3)
         outBand.WriteArray(newArray)
         outBand.FlushCache()
         
     def zonal( self, newGtiffPath, zoneFunc ):
+        """
+        Assign a new value to self based on zonal map algebra. Return a new GeoTiff at filepath newGtiffPath.
+        @param newGtiffPath - the filepath of the output GeoTiff
+        @param zoneFunc - the zonal function, which returns a new value for each pixel based on zonal operation
+        @return N/A; write new raster to newGtiffPath
+        """
         
-        zoneArray = self.gField.ReadAsArray()
-        newArray = zoneArray.copy()
-        rows = zoneArray.shape[0]
-        cols = zoneArray.shape[1]
+        oldArray = self.gField.ReadAsArray()
+        newArray = oldArray.copy()
+        rows = oldArray.shape[0]
+        cols = oldArray.shape[1]
         for i in range (0, rows):
             for j in range (0, cols):
-                zoneVal = zoneArray[i,j]
-                newVal = zoneFunc(zoneVal)
+                newVal = zoneFunc(oldArray, (i,j))
                 newArray.itemset((i,j), newVal)
-                
-                
-#         maskArray = self.zone( position )
-#         band = self.gField.GetRasterBand(1)
-#         ndVal = band.GetNoDataValue()
-#         newArray = func( maskArray )
-#         fillArray = ma.filled( newArray, fill_value = ndVal )
         driver = self.gField.GetDriver()
         newRaster = driver.CreateCopy(newGtiffPath, self.gField)
         outBand = newRaster.GetRasterBand(1)
+        newArray = np.around(newArray.astype(np.double), 3)
         outBand.WriteArray(newArray)
         outBand.FlushCache()

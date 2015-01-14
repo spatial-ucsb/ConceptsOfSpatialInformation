@@ -9,7 +9,7 @@ TODO: description of module
 
 __author__ = "Eric Ahlgren"
 __copyright__ = "Copyright 2014"
-__credits__ = ["Eric Ahlgren"]
+__credits__ = ["Eric Ahlgren", "Andrea Ballatore"]
 __license__ = ""
 __version__ = "0.1"
 __maintainer__ = ""
@@ -65,16 +65,38 @@ class TestGeoTiffField(unittest.TestCase):
         offset = getGtiffOffset ( dem.gField, testCoords )
         array = gdal.Open( "../data/fields/testField.tif" ).ReadAsArray()
         testNeighArray = squareMean3( array, offset )
+        testNeighArray = np.round(testNeighArray, 3)
         testDem = GeoTiffField( newGtiffPath )
         testVal = testDem.getValue( testCoords )
         self.assertTrue( float_eq( testVal, testNeighArray ) ) #Confirm new value is mean of focal window
         
     def test_zonal( self ):
+        """
+        Import DEM of CalPoly campus and test Map Algebra zonal function.
+        Returns mean zonal values based on zone layer "zone.tif," which contains
+        2 zones derived from the 50x50 CalPolyDEM test field. A value of 0 represents elevation below 118m and
+        a value of 1 represents elevation greater than or equal to 118 m (see README.md).
         
-        zoneRast = GeoTiffField("../data/fields/zone.tif")
+        Zonal mean values are calculated and written to "testZonal.tif," then compared with values derived from
+        ArcMap (contained in "zonaltable").
+        """
+        
         newGtiffPath = "../data/fields/testZonal.tif"
-        testCoords = ( 711750.8, 3910105.1 )
-        zoneRast.zonal( newGtiffPath, exampZonalFunc )
+        dem = getTestField()
+        dem.zonal( newGtiffPath, meanZonalFunc )
+        
+        zonePath = "../data/fields/zone.tif"
+        zoneRast = GeoTiffField(zonePath)
+        newRast = GeoTiffField(newGtiffPath)
+        testCoord1 = ( 711750.8, 3910105.1 )
+        zoneVal = zoneRast.getValue(testCoord1)
+        newVal = newRast.getValue(testCoord1)
+        self.assertTrue(zoneVal == 0 and newVal == 116.836)
+        
+        testCoord2 = ( 711748, 3910085 )
+        zoneVal = zoneRast.getValue(testCoord2)
+        newVal = newRast.getValue(testCoord2)
+        self.assertTrue(zoneVal == 1 and newVal == 120.557)
     
 if __name__ == '__main__':
     unittest.main()
