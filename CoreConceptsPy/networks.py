@@ -30,13 +30,13 @@ class NetworkX(CcNetwork):
     def __init__( self ):
         self._G = nx.Graph()
 
-    def nodes( self ):
+    def nodes( self, data = False ):
         """ @return a copy of the graph nodes in a list """
-        return self._G.nodes()
+        return self._G.nodes(data = data)
 
-    def edges( self ):
+    def edges( self, data = False ):
         """ @return list of edges """
-        return self._G.edges()
+        return self._G.edges(data = data)
 
     def addNode( self, n ):
         """ Add a single node n """

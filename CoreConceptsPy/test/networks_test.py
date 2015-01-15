@@ -51,8 +51,8 @@ class TestNetworkXEmptyNetwork(unittest.TestCase):
         """
         self.N.addEdge(1, 2)
 
-        self.assertEqual(self.N.nodes(), [1, 2])
-        self.assertEqual(self.N.edges(), [(1, 2)])
+        self.assertEqual(self.N.nodes(True), [(1, {}), (2, {})])
+        self.assertEqual(self.N.edges(True), [(1, 2, {})])
 
     def test_connected( self ):
         """

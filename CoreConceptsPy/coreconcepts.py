@@ -134,11 +134,11 @@ class CcNetwork(object):
     def __init__(self):
         pass
 
-    def nodes( self ):
+    def nodes( self, data = False ):
         """ @return a copy of the graph nodes in a list """
         raise NotImplementedError("nodes")
 
-    def edges( self ):
+    def edges( self, data = False ):
         """ @return list of edges """
         raise NotImplementedError("edges")
 
