@@ -42,9 +42,9 @@ class NetworkX(CcNetwork):
         """ Add a single node n """
         self._G.add_node(n)
 
-    def addEdge( self, u, v ):
-        """ Add an edge between u and v """
-        self._G.add_edge(u, v)
+    def addEdge( self, u, v, **attr ):
+        """ Add an edge with the attributes attr between u and v """
+        self._G.add_edge(u, v, attr)
 
     def connected( self, u, v ):
         """ @return whether node v can be reached from node u """
@@ -54,9 +54,12 @@ class NetworkX(CcNetwork):
         except nx.NetworkXNoPath:
             return False
 
-    def shortestPath( self, source, target ):
+    def shortestPath( self, source, target, weight = None ):
         """ @return shortest path in the graph """
-        return nx.shortest_path(self._G, source, target)
+        if weight == None:
+            return nx.shortest_path(self._G, source, target)
+        else:
+            return nx.shortest_path(self._G, source, target, weight = weight)
 
     def degree( self, n ):
         """ @return number of the nodes connected to the node n """
