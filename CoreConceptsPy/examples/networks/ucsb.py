@@ -16,6 +16,7 @@ __date__ = "December 2014"
 __status__ = "Development"
 
 import sys
+import itertools
 import networkx as nx
 
 sys.path = [ '.', '../..' ] + sys.path
@@ -26,12 +27,23 @@ log = _init_log("ucsb")
 
 
 N = NetworkX()
-N._G = nx.read_shp('examples/networks/data/ucsb.shp')
-# print nx.get_node_attributes(N._G, 0)
-# print nx.get_node_attributes(N._G, N.nodes()[0])
-# print nx.get_node_attributes(N._G, 3)
-# print nx.get_node_attributes(N._G, N.nodes()[3])
+# N._G = nx.read_shp('examples/networks/data/ucsb.shp')
+N.addEdge(1, 2, length = 5)
+N.addEdge(1, 3)
+N.addEdge(3, 2)
 
+print N.edges(True)[0][2]['length']
+
+a = None
+b = None
+for i in itertools.combinations(N.nodes(), 2):
+    if N.connected(i[0], i[1]):
+        if N.shortestPath(i[0], i[1]) != N.shortestPath(i[0], i[1], weight = 'length'):
+            a = i[0]
+            b = i[1]
+            break
+print a
+print b
 
 # QUICK DISPLAY
 # import matplotlib.pyplot as plt
