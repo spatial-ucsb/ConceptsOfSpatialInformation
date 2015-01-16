@@ -28,11 +28,9 @@ log = _init_log("ucsb")
 
 N = NetworkX()
 # N._G = nx.read_shp('examples/networks/data/ucsb.shp')
-N.addEdge(1, 2, length = 5)
-N.addEdge(1, 3)
-N.addEdge(3, 2)
-
-print N.edges(True)[0][2]['length']
+N.addEdge((1, 1), (3, 1), length = 4)
+N.addEdge((1, 1), (2, 3), length = 2)
+N.addEdge((2, 3), (3, 1))
 
 a = None
 b = None
@@ -42,11 +40,33 @@ for i in itertools.combinations(N.nodes(), 2):
             a = i[0]
             b = i[1]
             break
-print a
-print b
+if a is not None and b is not None:
+    print 'Unweighted: %s' % (N.shortestPath(a, b))
+    print 'Weighted:   %s' % (N.shortestPath(a, b, weight = 'length'))
+else:
+    print 'No pair of nodes was found that results in two different paths for weighted and unweighted shortest path finding'
+
+
 
 # QUICK DISPLAY
-# import matplotlib.pyplot as plt
-# pos=nx.spring_layout(N._G)
-# nx.draw(N._G)
-# plt.show()
+import matplotlib.pyplot as plt
+
+pos = {}
+for n in N.nodes():
+    pos[n] = n
+nx.draw(N._G, pos)
+
+node_labels = {}
+for i in N.nodes():
+    node_labels[i] = i
+nx.draw_networkx_labels(N._G, pos, node_labels)
+
+edge_labels = {}
+for i in N.edges(True):
+    x = i[2]
+    if 'length' not in x:
+        x['length'] = 1
+    edge_labels[(i[0], i[1])] = x['length']
+nx.draw_networkx_edge_labels(N._G, pos, edge_labels)
+
+plt.show()
