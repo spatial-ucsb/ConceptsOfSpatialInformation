@@ -51,8 +51,8 @@ class TestNetworkXEmptyNetwork(unittest.TestCase):
         """
         self.N.addEdge(1, 2)
 
-        self.assertEqual(self.N.nodes(), [1, 2])
-        self.assertEqual(self.N.edges(), [(1, 2)])
+        self.assertEqual(self.N.nodes(True), [(1, {}), (2, {})])
+        self.assertEqual(self.N.edges(True), [(1, 2, {})])
 
     def test_connected( self ):
         """
@@ -77,6 +77,19 @@ class TestNetworkXEmptyNetwork(unittest.TestCase):
         self.N.addEdge(5, 1)
 
         self.assertEquals(self.N.shortestPath(1, 4), [1, 5, 4])
+
+    def test_shortestWeightedEdgesPath( self ):
+        """
+           1 = 3
+           |   |
+           2 - +
+        """
+        self.N.addEdge(1, 2, weight = 1)
+        self.N.addEdge(2, 3)
+        self.N.addEdge(1, 3, weight = 4)
+
+        self.assertEquals(self.N.shortestPath(1, 3), [1, 3])
+        self.assertEquals(self.N.shortestPath(1, 3, 'weight'), [1, 2, 3])
 
     def test_degree( self ):
         """
