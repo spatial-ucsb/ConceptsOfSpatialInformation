@@ -134,11 +134,11 @@ class CcNetwork(object):
     def __init__(self):
         pass
 
-    def nodes( self ):
+    def nodes( self, data = False ):
         """ @return a copy of the graph nodes in a list """
         raise NotImplementedError("nodes")
 
-    def edges( self ):
+    def edges( self, data = False ):
         """ @return list of edges """
         raise NotImplementedError("edges")
 
@@ -146,15 +146,15 @@ class CcNetwork(object):
         """ Add a single node n """
         raise NotImplementedError("addNode")
 
-    def addEdge( self, edge ):
-        """ Add an edge between u and v """
+    def addEdge( self, u, v, **attr ):
+        """ Add an edge with the attributes attr between u and v """
         raise NotImplementedError("addEdge")
 
     def connected( self, u, v ):
         """ @return whether node v can be reached from node u """
         raise NotImplementedError("connected")
 
-    def shortestPath( self, source, target ):
+    def shortestPath( self, source, target, weight = None ):
         """ @return shortest path in the graph """
         raise NotImplementedError("shortestPath")
 
