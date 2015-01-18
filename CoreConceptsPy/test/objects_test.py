@@ -18,6 +18,7 @@ __date__ = "December 2014"
 __status__ = "Development"
 
 import sys
+import os
 import unittest
 
 sys.path = [ '.', '..' ] + sys.path
@@ -30,8 +31,8 @@ class TestArcShpObject(unittest.TestCase):
 
     def test_bounds( self ):
         #Get objects from shapefiles
-        shapefile1 = "../data/objects/Rooftops.shp"
-        shapefile2 = "../data/objects/ViablePVArea.shp"
+        shapefile1 = os.path.relpath("..\data\objects\Rooftops.shp")
+        shapefile2 = os.path.relpath("..\data\objects\ViablePVArea.shp")
         roofObj = ArcShpObject( shapefile1, 0 )
         pvObj = ArcShpObject( shapefile2, 236 )
         #test getBounds on roof object - Poultry Science building
@@ -44,8 +45,8 @@ class TestArcShpObject(unittest.TestCase):
 
     def test_relation( self ):
         #Get objects from shapefiles
-        shapefile1 = "../data/objects/Rooftops.shp"
-        shapefile2 = "../data/objects/ViablePVArea.shp"
+        shapefile1 = os.path.relpath("..\data\objects\Rooftops.shp")
+        shapefile2 = os.path.relpath("..\data\objects\ViablePVArea.shp")
         roofObj = ArcShpObject( shapefile1, 0 )
         pvObj = ArcShpObject( shapefile2, 236 )
         #test hasRelation for PV object within roof object
@@ -54,14 +55,14 @@ class TestArcShpObject(unittest.TestCase):
 
     def test_property( self ):
         #Get objects from shapefiles
-        shapefile1 = "../data/objects/Rooftops.shp"
+        shapefile1 = os.path.relpath("..\data\objects\Rooftops.shp")
         roofObj = ArcShpObject( shapefile1, 0 )
         #test getProprty for Poultry Science building name
         roofName = roofObj.property( 'name' )
         self.assertEqual( roofName, "Poultry Science" )
 
     def test_identity( self ):
-        shapefile1 = "../data/objects/Rooftops.shp"
+        shapefile1 = os.path.relpath("..\data\objects\Rooftops.shp")
         roofObj = ArcShpObject( shapefile1, 0 )
         self.assertTrue( roofObj.identity( roofObj ) )
 
