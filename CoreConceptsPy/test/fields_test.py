@@ -30,7 +30,7 @@ from fields import *
 log = _init_log("fields_test")
 
 def getTestField():
-    testField = GeoTiffField( (os.path.relpath("../data/fields/testField.tif")) )
+    testField = GeoTiffField( os.path.join("..","data","fields","testField.tif") )
     return testField
 
 def squareMean3( array, centerPixel ):
@@ -54,7 +54,7 @@ def meanZonalFunc( array, position ):
     @param position - (i,j) coordinates for zonal operation (retrieve zonal geometry and write new value)
     @return - mean value of masked input array derived from zonal geometry of "zone.tif" at input position
     """
-    zoneRast = GeoTiffField((os.path.relpath("../data/fields/zone.tif")) )
+    zoneRast = GeoTiffField(os.path.join("..","data","fields","zone.tif") )
     zoneArr = zoneRast.gField.ReadAsArray()
     band = zoneRast.gField.GetRasterBand(1)
     ndVal = band.GetNoDataValue()
@@ -87,7 +87,7 @@ class TestGeoTiffField(unittest.TestCase):
 
         print "\nTest Map Algebra local function\n"
         dem = getTestField()
-        newGtiffPath = ((os.path.relpath("../data/fields/testLocal.tif")) )
+        newGtiffPath = os.path.join("..","data","fields","testLocal.tif")
         ulCoords =( 711743.5, 3910110.5 )
         def localFunc( x ):
             return x/2
@@ -106,11 +106,11 @@ class TestGeoTiffField(unittest.TestCase):
         """
         print "Test Map Algebra focal function"
         dem = getTestField()
-        newGtiffPath = (os.path.relpath("../data/fields/testFocal.tif"))
+        newGtiffPath = os.path.join("..","data","fields","testFocal.tif")
         dem.focal( newGtiffPath, squareMean3 )
         testCoords = ( 711750.8, 3910105.1 )
         offset = getGtiffOffset ( dem.gField, testCoords )
-        array = gdal.Open( (os.path.relpath("../data/fields/testField.tif")) ).ReadAsArray()
+        array = gdal.Open( os.path.join("..","data","fields","testField.tif") ).ReadAsArray()
         testNeighArray = squareMean3( array, offset )
         testNeighArray = np.round(testNeighArray, 3)
         testDem = GeoTiffField( newGtiffPath )
@@ -132,11 +132,11 @@ class TestGeoTiffField(unittest.TestCase):
         ArcMap (contained in "zonaltable.dbf").
         """
         
-        newGtiffPath = (os.path.relpath("../data/fields/testZonal.tif"))
+        newGtiffPath = os.path.join("..","data","fields","testZonal.tif")
         dem = getTestField()
         dem.zonal( newGtiffPath, meanZonalFunc )
         
-        zonePath = (os.path.relpath("../data/fields/zone.tif"))
+        zonePath = os.path.join("..","data","fields","zone.tif")
         zoneRast = GeoTiffField(zonePath)
         newRast = GeoTiffField(newGtiffPath)
         testCoord1 = ( 711750.8, 3910105.1 )
