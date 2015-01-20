@@ -39,6 +39,10 @@ test-all: clean
 
 example-events: clean
 	python examples/events/example-1.py
+	python examples/events/example-2.py
+	python examples/events/example-3.py
+	python examples/events/example-4.py
+	python examples/events/example-5.py
 
 example-fields: clean
 	@echo "TODO example-fields not implemented"
