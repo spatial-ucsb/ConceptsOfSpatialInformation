@@ -27,7 +27,7 @@ log = _init_log("ucsb")
 
 
 N = NetworkX()
-# N._G = nx.read_shp('examples/networks/data/ucsb.shp')
+# N._G = nx.read_shp('../data/networks/ucsb.shp')
 N.addEdge((1, 1), (3, 1), length = 4)
 N.addEdge((1, 1), (2, 3), length = 2)
 N.addEdge((2, 3), (3, 1))

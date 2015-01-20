@@ -6,6 +6,8 @@
 **/*.sublime-workspace
 
 **/Thumbs.db
-CoreConceptsPy/data/fields/testLocal.tif
+data/fields/testLocal.tif
+data/fields/testFocal.tif
+data/fields/testZonal.tif
 
 .settings/org.eclipse.core.resources.prefs

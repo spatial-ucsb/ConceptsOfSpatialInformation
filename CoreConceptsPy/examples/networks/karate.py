@@ -28,7 +28,7 @@ log = _init_log("karate")
 
 print "Analysis of the network of friendships between the 34 members of a karate club at a US university, as described by Wayne Zachary in 1977."
 N = NetworkX()
-N._G = nx.read_gml('examples/networks/data/karate.gml')
+N._G = nx.read_gml('../data/networks/karate.gml')
 
 
 print "\nPeople who don't maintain a friendship inside the karate club:"
