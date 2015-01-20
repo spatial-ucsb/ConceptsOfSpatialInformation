@@ -44,9 +44,13 @@ def example(selector = None):
                 subprocess.call('python examples/' + cc + '/' + f, shell = True)
 
 if __name__ == '__main__':
-    if len(sys.argv) >= 2:
+    if os.path.dirname(os.path.abspath(__file__)) != os.getcwd():
+        print 'This script should be run from inside of ' + os.path.dirname(os.path.abspath(__file__))
+    elif len(sys.argv) >= 2:
         clean()
-        if sys.argv[1] == 'test-events':
+        if sys.argv[1] == 'clean':
+            pass
+        elif sys.argv[1] == 'test-events':
             test('events')
         elif sys.argv[1] == 'test-fields':
             test('fields')
