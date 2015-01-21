@@ -9,5 +9,6 @@
 data/fields/testLocal.tif
 data/fields/testFocal.tif
 data/fields/testZonal.tif
+data/networks/ucsb_generated
 
 .settings/org.eclipse.core.resources.prefs
