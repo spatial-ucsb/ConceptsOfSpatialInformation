@@ -27,7 +27,7 @@ from datetime import datetime
 
 log = _init_log("events_test")
 
-class TestEventsX(unittest.TestCase):
+class TestEvents(unittest.TestCase):
 
 	def setUp(self):
 
@@ -76,20 +76,8 @@ class TestEventsX(unittest.TestCase):
 		self.assertEqual(self.f.startTime, datetime(2015, 1, 7, 11, 48, 15))
 		self.assertEqual(self.f.endTime, None)
 
-	def test_constructor_error_wrong_startTime_type(self):
-		self.assertRaises(TypeError, PyEvent, (1134, datetime(2015, 1, 7, 10, 48, 16)), self.properties)
-
-	def test_constructor_error_wrong_endTime_type(self):
-		self.assertRaises(TypeError, PyEvent, (datetime(2015, 1, 7, 10, 48, 16), 'sdkfjdsf'), self.properties)
-
 	def test_constructor_error_endTime_earlier_than_startTime(self):
-		self.assertRaises(ValueError, PyEvent, (datetime(2015, 1, 7, 10, 48, 16), datetime(2015, 1, 7, 10, 48, 4)), self.properties)
-
-	def test_constructor_error_wrong_properties_type(self):
-		self.assertRaises(TypeError, PyEvent, (datetime(2015, 1, 7, 10, 48, 16), datetime(2015, 1, 7, 10, 48, 20)), 'adfkajdf')
-
-	def test_constructor_error_empty_properties_dictionary(self):
-		self.assertRaises(RuntimeError, PyEvent, (datetime(2015, 1, 7, 10, 48, 16), datetime(2015, 1, 7, 10, 48, 20)), {})
+		self.assertRaises(AssertionError, PyEvent, (datetime(2015, 1, 7, 10, 48, 16), datetime(2015, 1, 7, 10, 48, 4)), self.properties)
 
 	''' END: constructor '''
 
@@ -168,20 +156,8 @@ class TestEventsX(unittest.TestCase):
 		''' Error case: Event q starts before Event e and ends after Event e '''
 		self.assertFalse(self.q.during(self.e))
 
-	def test_during_wrong_number_of_tuple_elements(self):
-		self.assertRaises(RuntimeError, self.q.during, (self.startTime, self.endTime, self.endTime))
-
-	def test_during_wrong_start_time_type(self):
-		self.assertRaises(TypeError, self.q.during, ('adfkjdfkdf', self.endTime))
-
-	def test_during_wrong_end_time_type(self):
-		self.assertRaises(TypeError, self.q.during, (self.startTime, 'adfkjdfkdf'))
-
 	def test_during_endTime_earlier_than_startTime(self):
-		self.assertRaises(ValueError, self.q.during, (self.startTime, self.endTime2))
-
-	def test_during_wrong_type(self):
-		self.assertRaises(TypeError, self.q.during, 'sdfkjasdfk')
+		self.assertRaises(AssertionError, self.q.during, (self.startTime, self.endTime2))
 
 
 	''' END: during '''
@@ -221,9 +197,6 @@ class TestEventsX(unittest.TestCase):
 		''' Error case: Event l ends after the beginning of Event e '''
 		self.assertFalse(self.l.before(self.e))
 
-	def test_before_type_error(self):
-		self.assertRaises(TypeError, self.l.before, 'sdfkjasdf')
-
 	''' END: before '''
 
 
@@ -260,9 +233,6 @@ class TestEventsX(unittest.TestCase):
 	def test_after_error_2_with_event(self):
 		''' Error case: Event k starts before the end of Event e '''
 		self.assertFalse(self.k.after(self.e))
-
-	def test_after_type_error(self):
-		self.assertRaises(TypeError, self.k.after, 'sdfkjasdf')
 
 	''' END: after '''
 
@@ -334,20 +304,8 @@ class TestEventsX(unittest.TestCase):
 		''' Error case 4: Event j has the same start time and end time as Event e '''
 		self.assertFalse(self.j.overlap(self.e))
 
-	def test_overlap_wrong_number_of_tuple_elements(self):
-		self.assertRaises(RuntimeError, self.j.overlap, (self.startTime, self.endTime, self.endTime))
-
-	def test_overlap_wrong_start_time_type(self):
-		self.assertRaises(TypeError, self.j.overlap, ('adfkjdfkdf', self.endTime))
-
-	def test_overlap_wrong_end_time_type(self):
-		self.assertRaises(TypeError, self.j.overlap, (self.startTime, 'adfkjdfkdf'))
-
 	def test_overlap_endTime_earlier_than_startTime(self):
-		self.assertRaises(ValueError, self.j.overlap, (self.startTime, self.endTime2))
-
-	def test_overlap_wrong_type(self):
-		self.assertRaises(TypeError, self.j.overlap, 'sdfkjasdfk')
+		self.assertRaises(AssertionError, self.j.overlap, (self.startTime, self.endTime2))
 
 	''' END: overlap '''
 
