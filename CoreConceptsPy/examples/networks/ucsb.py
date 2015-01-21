@@ -29,35 +29,26 @@ log = _init_log("ucsb")
 ################################################################################
 #                             FAKE WEIGHTED NETWORK                            #
 ################################################################################
-print "\nPathfinding in a faked network"
+print "\nShortest paths found in the fake network:"
 N = NetworkX()
 
-# lower row
-N.addEdge(1, 2, length=1)
-N.addEdge(2, 3, length=5)
-# mid row
-N.addEdge(4, 5, length=1)
-N.addEdge(5, 6, length=5)
-N.addEdge(6, 7, length=5)
-N.addEdge(7, 8, length=1)
-# upper row
-N.addEdge(9, 10, length=5)
-N.addEdge(10, 11, length=1)
-# mid - lower row
-N.addEdge(4, 1, length=5)
-N.addEdge(5, 1, length=1)
-N.addEdge(6, 2, length=1)
-N.addEdge(7, 3, length=5)
-N.addEdge(8, 3, length=5)
-# mid - upper row
-N.addEdge(4, 9, length=5)
-N.addEdge(5, 9, length=5)
-N.addEdge(6, 10, length=1)
-N.addEdge(7, 11, length=1)
-N.addEdge(8, 11, length=5)
+# horizontal
+N.addEdge(1, 2, length = 5)
+N.addEdge(3, 4, length = 5)
+N.addEdge(4, 5, length = 4)
+N.addEdge(6, 7, length = 9)
+# vertical
+N.addEdge(1, 3, length = 1)
+N.addEdge(1, 4, length = 3)
+N.addEdge(2, 4, length = 5)
+N.addEdge(2, 5, length = 2)
+N.addEdge(6, 3, length = 8)
+N.addEdge(6, 4)
+N.addEdge(7, 4)
+N.addEdge(7, 5, length = 2)
 
-a = 4
-b = 8
+a = 3
+b = 5
 
 unweighted = N.shortestPath(a, b)
 weighted = N.shortestPath(a, b, weight = 'length')
@@ -68,21 +59,26 @@ print 'Weighted:   %s' % (weighted)
 
 # QUICK DISPLAY
 import matplotlib.pyplot as plt
+plt.figure().canvas.set_window_title('FAKE NETWORK')
 
 pos = {
     1: (2, 1),
-    2: (3, 1),
-    3: (4, 1),
-    4: (1, 2),
-    5: (2, 2),
-    6: (3, 2),
-    7: (4, 2),
-    8: (5, 2),
-    9: (2, 3),
-    10: (3, 3),
-    11: (4, 3)
+    2: (4, 1),
+    3: (1, 2),
+    4: (3, 2),
+    5: (5, 2),
+    6: (2, 3),
+    7: (4, 3)
 }
-nx.draw(N._G, pos)
+edge_color = ['black'] * len(N.edges())
+for i in range(len(N.edges())):
+    for j in range(len(unweighted)-1):
+        if unweighted[j] == N.edges()[i][0] and unweighted[j+1] == N.edges()[i][1] or unweighted[j] == N.edges()[i][1] and unweighted[j+1] == N.edges()[i][0]:
+            edge_color[i] = 'red'
+    for j in range(len(weighted)-1):
+        if weighted[j] == N.edges()[i][0] and weighted[j+1] == N.edges()[i][1] or weighted[j] == N.edges()[i][1] and weighted[j+1] == N.edges()[i][0]:
+            edge_color[i] = 'blue'
+nx.draw(N._G, pos, edge_color=edge_color)
 
 node_labels = {}
 for i in N.nodes():
