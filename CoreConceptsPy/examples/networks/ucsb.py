@@ -33,27 +33,27 @@ print "\nPathfinding in a faked network"
 N = NetworkX()
 
 # lower row
-N.addEdge(1, 2, length=5)
+N.addEdge(1, 2, length=1)
 N.addEdge(2, 3, length=5)
 # mid row
-N.addEdge(4, 5, length=5)
+N.addEdge(4, 5, length=1)
 N.addEdge(5, 6, length=5)
 N.addEdge(6, 7, length=5)
-N.addEdge(7, 8, length=5)
+N.addEdge(7, 8, length=1)
 # upper row
 N.addEdge(9, 10, length=5)
-N.addEdge(10, 11, length=5)
+N.addEdge(10, 11, length=1)
 # mid - lower row
 N.addEdge(4, 1, length=5)
-N.addEdge(5, 1, length=5)
-N.addEdge(6, 2, length=5)
+N.addEdge(5, 1, length=1)
+N.addEdge(6, 2, length=1)
 N.addEdge(7, 3, length=5)
 N.addEdge(8, 3, length=5)
 # mid - upper row
 N.addEdge(4, 9, length=5)
 N.addEdge(5, 9, length=5)
-N.addEdge(6, 10, length=5)
-N.addEdge(7, 11, length=5)
+N.addEdge(6, 10, length=1)
+N.addEdge(7, 11, length=1)
 N.addEdge(8, 11, length=5)
 
 a = 4
