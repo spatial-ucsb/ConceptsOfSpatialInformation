@@ -38,9 +38,9 @@ class NetworkX(CcNetwork):
         """ @return list of edges """
         return self._G.edges(data = data)
 
-    def addNode( self, n ):
-        """ Add a single node n """
-        self._G.add_node(n)
+    def addNode( self, n, **attr ):
+        """ Add node n with the attributes attr """
+        self._G.add_node(n, attr)
 
     def addEdge( self, u, v, **attr ):
         """ Add an edge with the attributes attr between u and v """

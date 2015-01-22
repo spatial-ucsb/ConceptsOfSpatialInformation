@@ -142,8 +142,8 @@ class CcNetwork(object):
         """ @return list of edges """
         raise NotImplementedError("edges")
 
-    def addNode( self, n ):
-        """ Add a single node n """
+    def addNode( self, n, **attr ):
+        """ Add node n with the attributes attr """
         raise NotImplementedError("addNode")
 
     def addEdge( self, u, v, **attr ):
