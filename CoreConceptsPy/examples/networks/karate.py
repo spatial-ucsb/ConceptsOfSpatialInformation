@@ -83,3 +83,12 @@ assert h > -1
 print "It's %d and it's between these connections:" % (h-1)
 for k in g:
     print " %s" % N.shortestPath(k[0], k[1])
+
+# QUICK DISPLAY
+# import matplotlib.pyplot as plt
+# pos=nx.spring_layout(N._G)
+# nx.draw_networkx_nodes(N._G,pos)
+# nx.draw_networkx_edges(N._G,pos)
+# nx.draw_networkx_labels(N._G,pos,dict(N._G.nodes()[i:i+2] for i in range(0, len(N._G.nodes()), 2)))
+# plt.axis('off')
+# plt.show()

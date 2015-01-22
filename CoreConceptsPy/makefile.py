@@ -18,6 +18,7 @@ examples = {
     'locations': [],
     'networks': [
         'karate.py',
+        'fake_weighted_network.py',
         'ucsb.py'
     ],
     'objects': []

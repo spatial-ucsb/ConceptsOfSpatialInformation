@@ -51,10 +51,9 @@ example-locations: clean
 	@echo "TODO example-locations not implemented"
 
 example-networks: clean
-	@echo "\nPython: examples/networks/karate.py\n==================================="
-	@python examples/networks/karate.py
-	@echo "\nPython: examples/networks/ucsb.py\n================================="
-	@python examples/networks/ucsb.py
+	python examples/networks/karate.py
+	python examples/networks/fake_weighted_network.py
+	python examples/networks/ucsb.py
 
 example-objects: clean
 	@echo "TODO example-objects not implemented"
