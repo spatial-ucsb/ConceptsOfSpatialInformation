@@ -7,9 +7,9 @@ Introduction to Linked Data
 * Querying linked data with SPARQL: http://www.cambridgesemantics.com/semantic-university/sparql-by-example 
 * DBpedia: http://dbpedia.org/About
 * Linked Data Cloud: http://linkeddata.org
-
+* Virtuoso Triple Store: http://virtuoso.openlinksw.com
 
 Haskell
 
-* TODO
-* 
+* Shapefiles: http://hackage.haskell.org/package/shapefile
+* FGL graph library: https://hackage.haskell.org/package/fgl
