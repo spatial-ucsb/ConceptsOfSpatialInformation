@@ -29,24 +29,24 @@ log = _init_log("ucsb")
 print "\nShortest paths in the ucsb street network"
 N = NetworkX()
 
-coordinates_ids = {}
+node_ids = {}
 for edge in nx.read_shp('../data/networks/ucsb.shp').edges(data = True):
     sourceId = 0
     sourceCoordinates = edge[0]
-    if sourceCoordinates in coordinates_ids:
-        sourceId = coordinates_ids[sourceCoordinates]
+    if sourceCoordinates in node_ids:
+        sourceId = node_ids[sourceCoordinates]
     else:
         sourceId = len(N.nodes()) + 1
         N.addNode(sourceId, coordinates = sourceCoordinates)
-        coordinates_ids[sourceCoordinates] = sourceId
+        node_ids[sourceCoordinates] = sourceId
     targetId = 0
     targetCoordinates = edge[1]
-    if targetCoordinates in coordinates_ids:
-        targetId = coordinates_ids[targetCoordinates]
+    if targetCoordinates in node_ids:
+        targetId = node_ids[targetCoordinates]
     else:
         targetId = len(N.nodes()) + 1
         N.addNode(targetId, coordinates = targetCoordinates)
-        coordinates_ids[targetCoordinates] = targetId
+        node_ids[targetCoordinates] = targetId
     N.addEdge(sourceId, targetId, length = edge[2]['length'])
 
 a = 22
