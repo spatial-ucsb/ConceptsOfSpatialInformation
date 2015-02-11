@@ -8,6 +8,7 @@ Introduction to Linked Data
 * DBpedia: http://dbpedia.org/About
 * Linked Data Cloud: http://linkeddata.org
 * Virtuoso Triple Store: http://virtuoso.openlinksw.com
+* GeoRDF vocabulary: http://www.w3.org/wiki/GeoRDF
 * Explore existing models, e.g.: http://wiki.csiro.au/display/SIRF/FeatureTypeCatalog
 
 Haskell
