@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+
+<!-- Entities Declaration -->
+<!DOCTYPE rdf:RDF [
+    <!ENTITY rdf 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'>
+    <!ENTITY rdfs 'http://www.w3.org/2000/01/rdf-schema#'>
+    <!ENTITY xsd 'http://www.w3.org/2001/XMLSchema#'>
+    <!ENTITY ev 'http://localhost:8890/event#'>
+]>
+
+<!-- Namespaces Declaration-->
+<rdf:RDF
+    xmlns:rdf="&rdf;"
+    xmlns:rdfs="&rdfs;"
+    xmlns:xsd="&xsd;"
+    xmlns:ev="&ev;">
+
+<rdf:Description rdf:about="http://www.core-concepts.com/events/afternoon">
+  <rdf:type rdf:resource="&ev;Event" />
+  <rdfs:label>Afternoon</rdfs:label>
+  <rdfs:comment>The time between noon and evening.</rdfs:comment>
+  <ev:startTime rdf:datatype="&xsd;dateTime">2015-02-09T12:00:00</ev:startTime>
+  <ev:endTime rdf:datatype="&xsd;dateTime">2015-02-09T17:59:59</ev:endTime>
+  <ev:before rdf:resource="http://www.core-concepts.com/events/evening" />
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.core-concepts.com/events/evening">
+  <rdf:type rdf:resource="&ev;Event" />
+  <rdfs:label>Evening</rdfs:label>
+  <rdfs:comment>The time between afternoon and night.</rdfs:comment>
+  <ev:startTime rdf:datatype="&xsd;dateTime">2015-02-09T18:00:00</ev:startTime>
+  <ev:endTime rdf:datatype="&xsd;dateTime">2015-02-09T23:59:59</ev:endTime>
+  <ev:after rdf:resource="http://www.core-concepts.com/events/afternoon" />
+  <ev:before rdf:resource="http://www.core-concepts.com/events/night" />
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.core-concepts.com/events/night">
+  <rdf:type rdf:resource="&ev;Event" />
+  <rdfs:label>Night</rdfs:label>
+  <rdfs:comment>The time between evening and morning.</rdfs:comment>
+  <ev:startTime rdf:datatype="&xsd;dateTime">2015-02-10T00:00:00</ev:startTime>
+  <ev:endTime rdf:datatype="&xsd;dateTime">2015-02-10T05:59:59</ev:endTime>
+</rdf:Description>
+
+</rdf:RDF>
