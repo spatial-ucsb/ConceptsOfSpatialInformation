@@ -10,6 +10,7 @@ Introduction to Linked Data
 * Virtuoso Triple Store: http://virtuoso.openlinksw.com
 * GeoRDF vocabulary: http://www.w3.org/wiki/GeoRDF
 * Explore existing models, e.g.: http://wiki.csiro.au/display/SIRF/FeatureTypeCatalog
+* RDF in Python: https://github.com/RDFLib
 
 Haskell
 
