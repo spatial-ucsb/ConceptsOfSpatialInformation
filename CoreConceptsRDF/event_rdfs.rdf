@@ -15,6 +15,22 @@
 
 <!-- Class for Event -->
 <rdfs:Class rdf:ID="Event" />
+<rdfs:Class rdf:ID="Attribute" />
+
+<rdf:Property rdf:ID="hasAttribute">
+    <rdfs:domain rdf:resource="#Event" />
+    <rdfs:range rdf:resource="#Attribute" />
+</rdf:Property>
+
+<rdf:Property rdf:ID="hasKey">
+    <rdfs:domain rdf:resource="#Attribute" />
+    <rdfs:range rdf:resource="&xsd;Literal" />
+</rdf:Property>
+
+<rdf:Property rdf:ID="hasValue">
+    <rdfs:domain rdf:resource="#Attribute" />
+    <rdfs:range rdf:resource="&xsd;Literal" />
+</rdf:Property>
 
 <rdf:Property rdf:ID="startTime">
     <rdfs:domain rdf:resource="#Event" />
