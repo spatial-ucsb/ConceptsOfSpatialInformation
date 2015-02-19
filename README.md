@@ -10,6 +10,7 @@ than that of GIS commands and data formats, yet meaningful within and across
 application domains. The paper describes the underlying theory of spatial 
 information and shows its evolving formal specification. An embedding in Python
 exemplifies access to commonly available implementations of spatial computations.
+For details, see references (Kuhn 2012; Kuhn & Ballatore 2015).
 
 *Keywords:* spatial computing; domain-specific languages; geographic information science 
 
@@ -43,4 +44,4 @@ References
 
 Kuhn, W. & Ballatore, A. (2015). *Designing a Language for Spatial Computing.* AGILE 2015, Lisbon, Portugal [in press] 
 
-Kuhn, W. (2012). *Core concepts of spatial information for transdisciplinary research.* International Journal of Geographical Information Science, 26(12), 2267-2276.
+Kuhn, W. (2012). *Core concepts of spatial information for transdisciplinary research.* International Journal of Geographical Information Science, 26(12), 2267-2276. [PDF](http://ifgi.uni-muenster.de/~kuhn/research/publications/pdfs/refereed%20journals/IJGIS%202012.pdf)
