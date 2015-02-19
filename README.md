@@ -30,8 +30,11 @@ Contents
 
 `CoreConceptsPy`: A Python implementation of the core concepts.
 
-Contributing
+`CoreConceptsRDF`: An RDF(S) implementation of the core concepts.
+
+Notes for contributors 
 ----------------------
+
 [CONTRIBUTING.md](CONTRIBUTING.md)
 
 
