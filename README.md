@@ -16,11 +16,11 @@ For details, see references (Kuhn 2012; Kuhn & Ballatore 2015).
 
 Members & contributors:
 
-* Prof. **Werner Kuhn**   [home](http://geog.ucsb.edu/~kuhn)
-* Dr. **Andrea Ballatore**   [home](http://sites.google.com/site/andreaballatore)
+* Prof. **Werner Kuhn**   ([home](http://geog.ucsb.edu/~kuhn))
+* Dr. **Andrea Ballatore**   ([home](http://sites.google.com/site/andreaballatore))
 * Eric Ahlgren
 * Marc Thiemann
-* Michel Zimmer  [home](https://www.mzimmer.net)
+* Michel Zimmer  ([home](https://www.mzimmer.net))
 * Nhi Chung
 * Ben Schock
 
