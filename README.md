@@ -28,6 +28,6 @@ Contributing
 References
 ----------------------
 
-Kuhn, W. & Ballatore, A. (2015). Designing a Language for Spatial Computing. AGILE 2015, Lisbon, Portugal [in press] 
+Kuhn, W. & Ballatore, A. (2015). *Designing a Language for Spatial Computing.* AGILE 2015, Lisbon, Portugal [in press] 
 
-Kuhn, W. (2012). Core concepts of spatial information for transdisciplinary research. International Journal of Geographical Information Science, 26(12), 2267-2276.
+Kuhn, W. (2012). *Core concepts of spatial information for transdisciplinary research.* International Journal of Geographical Information Science, 26(12), 2267-2276.
