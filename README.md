@@ -15,11 +15,11 @@ exemplifies access to commonly available implementations of spatial computations
 
 Members & contributors:
 
-* Prof. Werner Kuhn  <http://www.geog.ucsb.edu/people/faculty/werner-kuhn.html>
-* Dr. Andrea Ballatore  <http://sites.google.com/site/andreaballatore>
+* Prof. **Werner Kuhn**   <http://geog.ucsb.edu/~kuhn>
+* Dr. **Andrea Ballatore**   <http://sites.google.com/site/andreaballatore>
 * Eric Ahlgren
 * Marc Thiemann
-* Michel Zimmer <https://www.mzimmer.net/>
+* Michel Zimmer   <https://www.mzimmer.net>
 * Nhi Chung
 * Ben Schock
 
