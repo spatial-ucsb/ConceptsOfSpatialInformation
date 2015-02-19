@@ -1,7 +1,17 @@
 Core Concepts of Spatial Information
 =============================================
 
-Abstract: TODO
+*Abstract:* This repository contains the specifications and resources towards a language for spatial computing.
+The goal of this work is to provide a high-level language for spatial computing that is executable 
+on existing commercial and open source spatial computing platforms, 
+particularly Geographic Information Systems (GIS). 
+The key idea of the approach is to target an abstraction level higher 
+than that of GIS commands and data formats, yet meaningful within and across
+application domains. The paper describes the underlying theory of spatial 
+information and shows its evolving formal specification. An embedding in Python
+exemplifies access to commonly available implementations of spatial computations.
+
+*Keywords:* spatial computing; domain-specific languages; geographic information science 
 
 Members & contributors:
 
