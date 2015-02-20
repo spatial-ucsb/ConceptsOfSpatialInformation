@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+   xmlns:dbpprop="http://dbpedia.org/property/"
+   xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+   xmlns:lode="http://linkedevents.org/ontology/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+>
+  <rdf:Description rdf:nodeID="Nae09c46090904086b8519ebada89b2cd">
+    <lode:atPlace>24km NNW of Tieton, Washington</lode:atPlace>
+    <dbpprop:magnitude rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1.45</dbpprop:magnitude>
+    <lode:atTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2014-12-31T23:54:33.900000</lode:atTime>
+    <rdf:type rdf:resource="http://myearthquakes.com/Earthquake"/>
+    <geo:lat rdf:datatype="http://www.w3.org/2001/XMLSchema#float">46.9093333</geo:lat>
+    <geo:long rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-120.8703333</geo:long>
+  </rdf:Description>
+</rdf:RDF>
