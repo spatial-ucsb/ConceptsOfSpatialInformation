@@ -12,10 +12,7 @@ __email__ = ""
 __date__ = "February 2015"
 __status__ = "Development"
 
-import sys
-sys.path.insert(1,'../../../../CoreConceptsPy')
 
-from coreconcepts import CcEvent
 from rdflib import Graph, BNode, Namespace, RDF, XSD, Literal, URIRef
 import os.path
 
