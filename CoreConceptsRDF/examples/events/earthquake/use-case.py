@@ -35,6 +35,7 @@ sys.path.insert(1, '../../../CoreConceptsRDF')
 import dateutil.parser
 from datetime import *
 from earthquake import *
+from RDFCreator import *
 import csv
 
 f = open('../../../../data/events/earthquake-data.csv')
@@ -52,11 +53,11 @@ for row in csv_f:
 
     earthquakes.append(Earthquake(properties))
 
-print len(earthquakes)
+# create output with RDF class
+rdf = RDFCreator()
+rdf.create(earthquakes[1:], 'xml', 'test', 'http://myearthquakes.com/earthquakes/')
 
-earthquakes[1].toRDF('xml', 'test')
-
-
-
-
-
+'''
+# create output with toRDF method
+for x in range(1, len(earthquakes)):
+    earthquakes[x].toRDF('xml', 'test', 'http://myearthquakes.com/earthquakes/') '''
