@@ -16,7 +16,8 @@ import sys
 sys.path.insert(1,'../../../../CoreConceptsPy')
 
 from coreconcepts import CcEvent
-from rdflib import Graph, BNode, Namespace, RDF, XSD, Literal
+from rdflib import Graph, BNode, Namespace, RDF, XSD, Literal, URIRef
+import os.path
 
 class Earthquake(CcEvent):
 
@@ -27,12 +28,26 @@ class Earthquake(CcEvent):
         self.place = properties['place']
         self.atTime = properties['atTime']
 
-    def toRDF(self, format, filename = None):
+    def toRDF(self, format, filename = None, eqNamespace = None):
         '''
         @param format The output format. Supported formats: ‘xml’, ‘n3’, ‘turtle’, ‘nt’, ‘pretty-xml’, trix’
         @param filename The filename for the output file
         '''
+
+        extension = format
+        if format == "xml":
+            extension = "rdf"
+        elif format == "turtle":
+            extension = "ttl"
+        elif format == "pretty-xml":
+            extension = "xml"
+
+        filenameAndExtension = filename + '.' + extension
+
         g = Graph()
+
+        if filename is not None and os.path.isfile(filenameAndExtension):
+            g.parse(filenameAndExtension, format=format)
 
         # define and bind namespaces
 
@@ -52,7 +67,13 @@ class Earthquake(CcEvent):
         eq = Namespace("http://myearthquakes.com/")
         g.bind('eq', eq)
 
-        earthquake = BNode()
+        earthquake = ""
+        if eqNamespace is not None:
+            randomId = os.urandom(16).encode('hex')
+            earthquake = URIRef(eqNamespace + randomId)
+        else:
+            earthquake = BNode()
+
         g.add( (earthquake, RDF.type, eq.Earthquake) )
         g.add( (earthquake, geo.lat, Literal(self.latitude, datatype=XSD.float) ) )
         g.add( (earthquake, geo.long, Literal(self.longitude, datatype=XSD.float) ) )
@@ -60,15 +81,7 @@ class Earthquake(CcEvent):
         g.add( (earthquake, lode.atPlace, Literal(self.place) ) )
         g.add( (earthquake, lode.atTime, Literal(self.atTime.isoformat(), datatype=XSD.dateTime) ) )
 
-        extension = format
-        if format == "xml":
-            extension = "rdf"
-        elif format == "turtle":
-            extension = "ttl"
-        elif format == "pretty-xml":
-            extension = "xml"
-
         if filename is None:
             print g.serialize(format=format)
         else:
-            g.serialize(destination = filename + '.' + extension, format=format)
+            g.serialize(destination = filenameAndExtension, format=format)
