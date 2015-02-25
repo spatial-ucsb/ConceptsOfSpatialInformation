@@ -3,6 +3,7 @@
 
 """
 Turn earthquake RDF objects into earthquake python objects
+TODO: more comments here
 """
 
 __author__ = "Marc Tim Thiemann"

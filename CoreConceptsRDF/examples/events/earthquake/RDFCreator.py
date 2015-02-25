@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
  Abstract: Creates RDF for core concept objects.
+ TODO: more comments here
 """
 __author__ = "Marc Tim Thiemann"
 __copyright__ = "Copyright 2015"

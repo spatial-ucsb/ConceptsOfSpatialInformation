@@ -1,5 +1,7 @@
 This file contains example SPARQL queries for the earthquake class
 
+TODO: more comments here. You could do this in markdown code.
+
 Get all earthquakes with a magnitude of 2.5 or higher:
 
 PREFIX eq: <http://myearthquakes.com/>

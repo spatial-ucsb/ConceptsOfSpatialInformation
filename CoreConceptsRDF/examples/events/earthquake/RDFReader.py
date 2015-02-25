@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
  Abstract: Turns earthquake objects from RDF into python objects.
+ TODO: more comments here
 """
 __author__ = "Marc Tim Thiemann"
 __copyright__ = "Copyright 2015"

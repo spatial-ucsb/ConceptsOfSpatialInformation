@@ -20,7 +20,8 @@ from rdflib import Graph, BNode, Namespace, RDF, XSD, Literal, URIRef
 import os.path
 
 class Earthquake(CcEvent):
-
+    """ TODO: comment class """
+    
     def __init__(self, properties):
         self.latitude = properties['latitude']
         self.longitude = properties['longitude']
