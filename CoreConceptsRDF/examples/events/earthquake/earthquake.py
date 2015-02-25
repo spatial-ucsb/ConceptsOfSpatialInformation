@@ -20,8 +20,8 @@ from rdflib import Graph, BNode, Namespace, RDF, XSD, Literal, URIRef
 import os.path
 
 class Earthquake(CcEvent):
-    """ TODO: comment class """
-    
+    """ This earthquake class models earthquakes. Each earthquake has a latitude, longitude, magnitude, place and a time. """
+
     def __init__(self, properties):
         self.latitude = properties['latitude']
         self.longitude = properties['longitude']
