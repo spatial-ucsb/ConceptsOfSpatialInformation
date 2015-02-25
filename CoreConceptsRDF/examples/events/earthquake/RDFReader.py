@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """
  Abstract: Turns earthquake objects from RDF into python objects.
- TODO: more comments here
+ Using RDFlib it parses a RDF file and turns each Earthquake RDF object in that file to a Python Earthquake objects.
+ The Python Earthquake objects will be returned as an array.
 """
 __author__ = "Marc Tim Thiemann"
 __copyright__ = "Copyright 2015"
