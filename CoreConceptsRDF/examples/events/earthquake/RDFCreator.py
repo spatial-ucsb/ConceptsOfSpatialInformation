@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """
  Abstract: Creates RDF for core concept objects.
- TODO: more comments here
+ Gets an Array of Python Earthquake objects and turns them to RDF output using RDFlib.
+ The RDF can either be outputted or written to a file.
 """
 __author__ = "Marc Tim Thiemann"
 __copyright__ = "Copyright 2015"
