@@ -3,7 +3,8 @@
 
 """
 Turn earthquake RDF objects into earthquake python objects
-TODO: more comments here
+Reads RDF earthquake objects from a file that contains earthquakes of December 2014 and turns them into Earthquake python objects.
+Prints the first 3 Python earthquakes in the list to test if the Earthquake objects are valid.
 """
 
 __author__ = "Marc Tim Thiemann"
