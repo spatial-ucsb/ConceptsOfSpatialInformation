@@ -19,10 +19,10 @@ from utils import _init_log
 
 log = _init_log("coreconcepts")
 
-class CCLocation(object):
+class CcLocation(object):
     """
-    IGNORE THIS CLASS FOR THE MOMENT.
     Class defining abstract location relations
+    Note: Unused for the moment.
     """
 
     def isAt( figure, ground ):
