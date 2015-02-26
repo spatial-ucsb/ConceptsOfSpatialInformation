@@ -20,7 +20,7 @@ __status__ = "Development"
 from earthquake import *
 from EarthquakeRdfReader import *
 
-rdf = RDFReader()
+rdf = EarthquakeRdfReader('bindings.json')
 earthquakes = rdf.read('../../../../CoreConceptsRdf/examples/events/earthquake/test.rdf', format="xml")
 
 for x in range(0,3):
