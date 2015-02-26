@@ -21,7 +21,7 @@ import sys
 sys.path.insert(1,'../../../CoreConceptsPy')
 sys.path.insert(1, '../../../CoreConceptsRDF')
 from earthquake import *
-from RDFReader import *
+from EarthquakeRdfReader import *
 
 rdf = RDFReader()
 earthquakes = rdf.read('test.rdf', format="xml")

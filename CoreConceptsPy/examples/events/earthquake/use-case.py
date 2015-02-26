@@ -29,13 +29,10 @@ __email__ = ""
 __date__ = "February 2015"
 __status__ = "Development"
 
-import sys
-sys.path.insert(1,'../../../CoreConceptsPy')
-sys.path.insert(1, '../../../CoreConceptsRDF')
 import dateutil.parser
 from datetime import *
 from earthquake import *
-from RDFCreator import *
+from EarthquakeRdfCreator import *
 import csv
 
 f = open('../../../../data/events/earthquake-data.csv')
@@ -55,7 +52,7 @@ for row in csv_f:
 
 # create output with RDF class
 rdf = RDFCreator()
-rdf.create(earthquakes[1:], 'xml', 'test', 'http://myearthquakes.com/earthquakes/')
+rdf.create(earthquakes[1:], 'xml', '../../../../CoreConceptsRdf/examples/events/earthquake/test', 'http://myearthquakes.com/earthquakes/')
 
 '''
 # create output with toRDF method
