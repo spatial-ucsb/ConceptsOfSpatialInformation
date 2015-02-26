@@ -17,14 +17,11 @@ __email__ = ""
 __date__ = "February 2015"
 __status__ = "Development"
 
-import sys
-sys.path.insert(1,'../../../CoreConceptsPy')
-sys.path.insert(1, '../../../CoreConceptsRDF')
 from earthquake import *
 from EarthquakeRdfReader import *
 
 rdf = RDFReader()
-earthquakes = rdf.read('test.rdf', format="xml")
+earthquakes = rdf.read('../../../../CoreConceptsRdf/examples/events/earthquake/test.rdf', format="xml")
 
 for x in range(0,3):
     print earthquakes[x].latitude
