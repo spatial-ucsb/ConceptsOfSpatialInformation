@@ -27,9 +27,9 @@ class RDFCreator():
         self.geo = Namespace("http://www.w3.org/2003/01/geo/wgs84_pos#")
         self.g.bind('geo', self.geo)
 
-        # magnitude
-        self.dbpprop = Namespace("http://dbpedia.org/property/")
-        self.g.bind('dbpprop', self.dbpprop)
+        #magnitude
+        self.qudt = Namespace("http://qudt.org/schema/qudt#")
+        self.g.bind('qudt', self.qudt)
 
         # atPlace, atTime
         self.lode = Namespace("http://linkedevents.org/ontology/")
@@ -70,7 +70,7 @@ class RDFCreator():
         self.g.add( (eq, RDF.type, self.eq.Earthquake) )
         self.g.add( (eq, self.geo.lat, Literal(earthquake.latitude, datatype=XSD.float) ) )
         self.g.add( (eq, self.geo.long, Literal(earthquake.longitude, datatype=XSD.float) ) )
-        self.g.add( (eq, self.dbpprop.magnitude, Literal(earthquake.magnitude, datatype=XSD.float) ) )
+        self.g.add( (eq, self.qudt.vectorMagnitude, Literal(earthquake.magnitude, datatype=XSD.float) ) )
         self.g.add( (eq, self.lode.atPlace, Literal(earthquake.place) ) )
         self.g.add( (eq, self.lode.atTime, Literal(earthquake.atTime.isoformat(), datatype=XSD.dateTime) ) )
 

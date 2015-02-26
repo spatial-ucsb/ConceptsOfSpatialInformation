@@ -23,7 +23,7 @@ class RDFReader():
         self.g = Graph()
 
         self.geo = Namespace("http://www.w3.org/2003/01/geo/wgs84_pos#")
-        self.dbpprop = Namespace("http://dbpedia.org/property/")
+        self.qudt = Namespace("http://qudt.org/schema/qudt#")
         self.lode = Namespace("http://linkedevents.org/ontology/")
         self.eq = Namespace("http://myearthquakes.com/")
 
@@ -53,7 +53,7 @@ class RDFReader():
             'longitude': self.g.value(subject, self.geo.long),
             'place': self.g.value(subject, self.lode.atPlace),
             'atTime': self.g.value(subject, self.lode.atTime),
-            'mag': self.g.value(subject, self.dbpprop.magnitude),
+            'mag': self.g.value(subject, self.qudt.vectorMaagnitude),
         }
 
         return Earthquake(properties)
