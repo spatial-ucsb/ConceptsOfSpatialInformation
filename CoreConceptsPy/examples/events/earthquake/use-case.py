@@ -33,6 +33,7 @@ import dateutil.parser
 from datetime import *
 from earthquake import *
 from EarthquakeRdfCreator import *
+from EarthquakeRdfCreator2 import *
 import csv
 
 f = open('../../../../data/events/earthquake-data.csv')
@@ -50,17 +51,20 @@ for row in csv_f:
 
     earthquakes.append(Earthquake(properties))
 
-# create output with RDF class
-bindings = {
-    'geo': 'http://www.w3.org/2003/01/geo/wgs84_pos#',
-    'qudt': 'http://qudt.org/schema/qudt#',
-    'lode': 'http://linkedevents.org/ontology/',
-    'eq': 'http://myearthquakes.com/'
-}
-rdf = EarthquakeRdfCreator('bindings.json')
-rdf.create(earthquakes[1:], 'xml', '../../../../CoreConceptsRdf/examples/events/earthquake/test', 'http://myearthquakes.com/earthquakes/')
+earthquakes = earthquakes[1:]
 
-'''
-# create output with toRDF method
-for x in range(1, len(earthquakes)):
-    earthquakes[x].toRDF('xml', 'test', 'http://myearthquakes.com/earthquakes/') '''
+# use initial EarthquakeRdfCreator that does not inherit from RdfCreator
+"""
+rdf = EarthquakeRdfCreator2('bindings.json')
+rdf.create(earthquakes, 'xml', '../../../../CoreConceptsRdf/examples/events/earthquake/test', 'http://myearthquakes.com/earthquakes/')
+"""
+
+#use EarthquakeRdfCreator that inherits from RdfCreator
+rdf = EarthquakeRdfCreator('bindings.json')
+
+for e in earthquakes:
+    earthquakeid = os.urandom(16).encode('hex')
+    uri = "http://myearthquakes.com/earthquakes/" + earthquakeid
+    rdf.add(uri, e)
+
+rdf.serialize('xml', '../../../../CoreConceptsRdf/examples/events/earthquake/test')

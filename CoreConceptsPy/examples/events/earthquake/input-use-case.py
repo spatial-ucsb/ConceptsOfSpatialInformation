@@ -19,6 +19,13 @@ __status__ = "Development"
 
 from earthquake import *
 from EarthquakeRdfReader import *
+from EarthquakeRdfReader2 import *
+
+#EarthquakeRdfReader2 does not inherit from RdfReader
+"""
+rdf = EarthquakeRdfReader2('bindings.json')
+earthquakes = rdf.read('../../../../CoreConceptsRdf/examples/events/earthquake/test.rdf', format="xml")
+"""
 
 rdf = EarthquakeRdfReader('bindings.json')
 earthquakes = rdf.read('../../../../CoreConceptsRdf/examples/events/earthquake/test.rdf', format="xml")
