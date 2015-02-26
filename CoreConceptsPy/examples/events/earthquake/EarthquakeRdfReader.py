@@ -16,16 +16,14 @@ __status__ = "Development"
 
 from rdflib import Graph, Namespace, RDF
 from earthquake import *
+import json
 
-class RDFReader():
+class EarthquakeRdfReader():
 
-    def __init__(self):
+    def __init__(self, bindings = None):
         self.g = Graph()
 
-        self.geo = Namespace("http://www.w3.org/2003/01/geo/wgs84_pos#")
-        self.qudt = Namespace("http://qudt.org/schema/qudt#")
-        self.lode = Namespace("http://linkedevents.org/ontology/")
-        self.eq = Namespace("http://myearthquakes.com/")
+        self.setNamespaces(bindings)
 
     def read(self, destination, format):
         """
@@ -53,7 +51,14 @@ class RDFReader():
             'longitude': self.g.value(subject, self.geo.long),
             'place': self.g.value(subject, self.lode.atPlace),
             'atTime': self.g.value(subject, self.lode.atTime),
-            'mag': self.g.value(subject, self.qudt.vectorMaagnitude),
+            'mag': self.g.value(subject, self.qudt.vectorMagnitude),
         }
 
         return Earthquake(properties)
+
+    def setNamespaces(self, bindings):
+        json_data = open(bindings).read()
+        data = json.loads(json_data)
+
+        for obj in data['bindings']:
+            setattr(self, obj['prefix'], Namespace(obj['namespace']))

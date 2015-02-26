@@ -17,27 +17,15 @@ __status__ = "Development"
 
 from rdflib import Graph, BNode, Namespace, RDF, XSD, Literal, URIRef
 import os.path
+import json
 
-class RDFCreator():
+class EarthquakeRdfCreator():
 
-    def __init__(self):
+    def __init__(self, bindings = None):
         self.g = Graph()
 
-        #lat, long
-        self.geo = Namespace("http://www.w3.org/2003/01/geo/wgs84_pos#")
-        self.g.bind('geo', self.geo)
-
-        #magnitude
-        self.qudt = Namespace("http://qudt.org/schema/qudt#")
-        self.g.bind('qudt', self.qudt)
-
-        # atPlace, atTime
-        self.lode = Namespace("http://linkedevents.org/ontology/")
-        self.g.bind('lode', self.lode)
-
-        # earthquake class
-        self.eq = Namespace("http://myearthquakes.com/")
-        self.g.bind('eq', self.eq)
+        if bindings is not None:
+            self.bindNamespaces(bindings)
 
     def create(self, ccobjects, format, filename = None, eqNamespace = None):
         """
@@ -87,3 +75,16 @@ class RDFCreator():
             return "xml"
         else:
             return format
+
+    def bindNamespaces(self, bindings):
+        """
+        Binds namespaces to the graph
+        @param bindings Path to the json configuration file
+        """
+
+        json_data = open(bindings).read()
+        data = json.loads(json_data)
+
+        for obj in data['bindings']:
+            setattr(self, obj['prefix'], Namespace(obj['namespace']))
+            self.g.bind(obj['prefix'], getattr(self, obj['prefix']))
