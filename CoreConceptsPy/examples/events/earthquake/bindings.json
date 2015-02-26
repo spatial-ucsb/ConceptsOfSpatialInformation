@@ -1,0 +1,20 @@
+{
+    "bindings": [
+        {
+            "prefix": "geo",
+            "namespace": "http://www.w3.org/2003/01/geo/wgs84_pos#"
+        },
+        {
+            "prefix": "qudt",
+            "namespace": "http://qudt.org/schema/qudt#"
+        },
+        {
+            "prefix": "lode",
+            "namespace": "http://linkedevents.org/ontology/"
+        },
+        {
+            "prefix": "eq",
+            "namespace": "http://myearthquakes.com/"
+        }
+    ]
+}
