@@ -1,7 +1,15 @@
 Core Concepts of Spatial Information - Python
 =============================================
 
-Abstract: TODO
+Abstract: A Python implementation of the core concepts.
+
+The implementation is devided into abstract definitions (`coreconcepts.py`),
+implementation of one core concept per file (`events.py`, `fields.py`, `locations.py`, `networks.py` and `objects.py`)
+and unit tests (`test/`) and additionally into examples (`examples/`) to showcase the different possibilities of the core concepts.
+
+See the [Readme](../README.md) in the parent directory for more information about the core concepts.
+
+Right now the implementation is in a proof of concept state and should not be considered stable for a production environment.
 
 Contents
 ----------------------
