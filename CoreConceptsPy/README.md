@@ -7,12 +7,16 @@ Contents
 ----------------------
 
 * `coreconcepts.py`: Abstract concepts.
-* `events_impl.py`: Implementations of events.
-* `networks_impl.py`: Implementations of networks.
-* `tests.py`: Unit tests.
+* `events.py`: Implementations of events.
+* `examples/`: Usage examples of implementations.
+* `fields.py`: Implementations of fields.
+* `locations.py`: Implementations of locations.
+* `Makefile`: Common commands for unix platforms.
+* `makefile.py`: Common commands for non-unix platforms.
+* `networks.py`: Implementations of networks.
+* `objects.py`: Implementations of objects.
+* `test/`: Unit tests.
 * `utils.py`: Utilities.
-* `data/`: Test datasets
-* `Makefile`: Common commands for unix platforms
 
 Instructions for Unix/Linux platforms
 ----------------------
