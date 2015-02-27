@@ -10,9 +10,7 @@ examples = {
     'events': [
         'example-1.py',
         'example-2.py',
-        'example-3.py',
-        'example-4.py',
-        'example-5.py'
+        'example-3.py'
     ],
     'fields': [],
     'locations': [],
@@ -56,7 +54,7 @@ if __name__ == '__main__':
         elif sys.argv[1] == 'test-fields':
             test('fields')
         elif sys.argv[1] == 'test-locations':
-            test('locations')
+            print "No examples and no tests for locations yet."
         elif sys.argv[1] == 'test-networks':
             test('networks')
         elif sys.argv[1] == 'test-objects':
@@ -66,13 +64,13 @@ if __name__ == '__main__':
         elif sys.argv[1] == 'example-events':
             example('events')
         elif sys.argv[1] == 'example-fields':
-            pass
+            print "No examples for fields yet. Have a look at the tests."
         elif sys.argv[1] == 'example-locations':
-            pass
+            print "No examples and no tests for locations yet."
         elif sys.argv[1] == 'example-networks':
             example('networks')
         elif sys.argv[1] == 'example-objects':
-            pass
+            print "No examples for objects yet. Have a look at the tests."
         elif sys.argv[1] == 'example-all':
             example()
         else:
