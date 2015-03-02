@@ -74,16 +74,25 @@ class PyEvent(CcEvent):
             return self.startTime >= compareTo[0] and (self.endTime != None and self.endTime <= compareTo[1])
 
 
-    def before( self, eventOrDatetime ):
+    def before( self, compareTo, compareAll = False ):
         """
-        @param eventOrDatetime an event or a datetime object
+        Check if an event is before
+        - another event
+        - another datetime
+        - any event or datetime in a list
+        - all events or time periods in a list
+        @param compareTo an event, a datetime or a list of events and/or datetimes
+        @param compareAll False: If a list is passed in the compareTo paramater, the method checks if the event is at least before one element in that list.
+                          True: If a list is passed in the compareTo parameter, the method checks if the event is before all elements in that list.
         @return Boolean
         """
 
-        if isinstance(eventOrDatetime, datetime.datetime):
-            return self.endTime != None and self.endTime < eventOrDatetime
+        if isinstance(compareTo, datetime.datetime):
+            return self.endTime != None and self.endTime < compareTo
+        elif isinstance(compareTo, CcEvent):
+            return self.endTime != None and self.endTime < compareTo.startTime
         else:
-            return self.endTime != None and self.endTime < eventOrDatetime.startTime
+            return self.compare(compareTo, compareAll)
 
     def after( self, eventOrDatetime ):
         """
