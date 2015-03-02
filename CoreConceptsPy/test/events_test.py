@@ -52,9 +52,11 @@ class TestEvents(unittest.TestCase):
 		# Events for before tests
 		self.r = PyEvent((datetime(2015, 1, 4, 10, 40, 15), datetime(2015, 1, 6, 10, 43, 11)), self.properties) # normal case
 		self.s = PyEvent((datetime(2015, 1, 4, 10, 40, 15), datetime(2015, 1, 7, 10, 48, 14)), self.properties) # edge case
-		self.x = PyEvent((datetime(2015, 1, 4, 10, 40, 10), datetime(2015, 1, 7, 10, 40, 13)), self.properties) # edge case
-		self.y = PyEvent((datetime(2015, 1, 4, 10, 39, 15), datetime(2015, 1, 7, 10, 39, 40)), self.properties) # edge case
-		self.z = PyEvent((datetime(2015, 1, 4, 10, 37, 15), datetime(2015, 1, 7, 10, 38, 14)), self.properties) # edge case
+
+		self.x = PyEvent((datetime(2015, 1, 4, 10, 40, 10), datetime(2015, 1, 4, 10, 40, 13)), self.properties)
+		self.y = PyEvent((datetime(2015, 1, 4, 10, 39, 15), datetime(2015, 1, 4, 10, 39, 40)), self.properties)
+		self.z = PyEvent((datetime(2015, 1, 4, 10, 37, 15), datetime(2015, 1, 4, 10, 38, 14)), self.properties)
+		self.a2 = PyEvent((datetime(2015, 1, 4, 10, 38, 15), datetime(2015, 1, 4, 10, 38, 23)), self.properties)
 
 		# Events for after tests
 		self.t = PyEvent((datetime(2015, 1, 7, 10, 48, 40), datetime(2015, 1, 7, 10, 48, 50)), self.properties) # normal case
@@ -74,10 +76,11 @@ class TestEvents(unittest.TestCase):
 		self.list2 = [self.g, self.i, self.r, self.s] # w is during one of these events
 		self.list3 = [self.i, self.r, self.s] # w is during none of these events
 
-		#Lists for before tests
-		self.list4 = [self.g, self.h, self.i, self.j, self.v, self.w] # r is before all of these events
-		self.list5 = [self.g, self.x, self.y, self.z] # r is before one of these events
-		self.list6 = [self.x, self.y, self.z] # r is before none of these events
+		#Lists for before/after tests
+		self.list4 = [self.g, self.h, self.i, self.j, self.v, self.w] # x is before all of these events / after none of these events
+		self.list5 = [self.g, self.y, self.z, self.a2] # x is before one of these events
+		self.list6 = [self.y, self.z, self.a2] # x is before none of these events / after all of these events
+		self.list7 = [self.y, self.g, self.h, self.i] # x is after one of these events
 
 	''' BEGINNING: constructor '''
 
@@ -295,6 +298,30 @@ class TestEvents(unittest.TestCase):
 	def test_after_error_2_with_event(self):
 		''' Error case: Event k starts before the end of Event e '''
 		self.assertFalse(self.k.after(self.e))
+
+	def test_after_list_compare_all_false_1(self):
+		''' Event is after one element in the list '''
+		self.assertTrue(self.r.after(self.list7))
+
+	def test_after_list_compare_all_false_2(self):
+		''' Event is after no element in the list '''
+		self.assertFalse(self.r.after(self.list4))
+
+	def test_after_list_compare_all_false_3(self):
+		''' Event is after all elements in the list '''
+		self.assertTrue(self.r.after(self.list6))
+
+	def test_after_list_compare_all_true_1(self):
+		''' Event is after one element in the list '''
+		self.assertFalse(self.r.after(self.list7, compareAll = True))
+
+	def test_after_list_compare_all_true_2(self):
+		''' Event is after no element in the list '''
+		self.assertFalse(self.r.after(self.list4, compareAll = True))
+
+	def test_after_list_compare_all_true_3(self):
+		''' Event is after all elements in the list '''
+		self.assertTrue(self.r.after(self.list6, compareAll = True))
 
 	''' END: after '''
 

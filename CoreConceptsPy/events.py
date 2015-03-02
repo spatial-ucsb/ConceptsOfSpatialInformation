@@ -18,6 +18,7 @@ __status__ = "Development"
 from utils import _init_log
 from coreconcepts import CcEvent
 import datetime
+import inspect
 
 log = _init_log("events")
 
@@ -94,16 +95,25 @@ class PyEvent(CcEvent):
         else:
             return self.compare(compareTo, compareAll)
 
-    def after( self, eventOrDatetime ):
+    def after( self, compareTo, compareAll = False ):
         """
-        @param eventOrDatetime an event or a datetime object
+        Check if an event is after
+        - another event
+        - another datetime
+        - any event or datetime in a list
+        - all events or time periods in a list
+        @param compareTo an event, a datetime or a list of events and/or datetimes
+        @param compareAll False: If a list is passed in the compareTo paramater, the method checks if the event is at least after one element in that list.
+                          True: If a list is passed in the compareTo parameter, the method checks if the event is after all elements in that list.
         @return Boolean
         """
 
-        if isinstance(eventOrDatetime, datetime.datetime):
-            return self.startTime > eventOrDatetime
+        if isinstance(compareTo, datetime.datetime):
+            return self.startTime > compareTo
+        elif isinstance(compareTo, CcEvent):
+            return compareTo.endTime != None and self.startTime > compareTo.endTime
         else:
-            return eventOrDatetime.endTime != None and self.startTime > eventOrDatetime.endTime
+            return self.compare(compareTo, compareAll)
 
     def overlap( self, eventOrPeriod ):
         """
