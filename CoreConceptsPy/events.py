@@ -164,6 +164,7 @@ class PyEvent(CcEvent):
         The time-related function passes the list of tuples/events and the compareAll value to this function.
         @param comparisonList A list of events, time periods (tuples) and/or datetimes
         @param compareAll Determines if at least one element in the list fulfills the time relation or all elements in the list have to fulfill the time relation
+        @return boolean
         """
 
         methodToCall = getattr(self, inspect.stack()[1][3])
@@ -182,6 +183,7 @@ class PyEvent(CcEvent):
     @staticmethod
     def intersect(list1, list2):
         """
+        Checks for 2 lists of events, if at least one event is intersecting with another event
         @param list1 List of events
         @param list2 List of events
         """
