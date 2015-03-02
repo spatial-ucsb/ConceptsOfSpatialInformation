@@ -76,11 +76,16 @@ class TestEvents(unittest.TestCase):
 		self.list2 = [self.g, self.i, self.r, self.s] # w is during one of these events
 		self.list3 = [self.i, self.r, self.s] # w is during none of these events
 
-		#Lists for before/after tests
+		# Lists for before/after tests
 		self.list4 = [self.g, self.h, self.i, self.j, self.v, self.w] # x is before all of these events / after none of these events
 		self.list5 = [self.g, self.y, self.z, self.a2] # x is before one of these events
 		self.list6 = [self.y, self.z, self.a2] # x is before none of these events / after all of these events
 		self.list7 = [self.y, self.g, self.h, self.i] # x is after one of these events
+
+		# Lists for overlap tests
+		self.list8 = [self.k, self.l, self.m, self.n] # e overlaps with all of these events
+		self.list9 = [self.k, self.o, self.p, self.q] # e overlaps with one of these events
+		self.list10 = [self.o, self.p, self.q] # e overlaps with none of these events
 
 	''' BEGINNING: constructor '''
 
@@ -395,6 +400,30 @@ class TestEvents(unittest.TestCase):
 
 	def test_overlap_endTime_earlier_than_startTime(self):
 		self.assertRaises(AssertionError, self.j.overlap, (self.startTime, self.endTime2))
+
+	def test_overlap_list_compare_all_false_1(self):
+		''' Event is overlapping with one element in the list '''
+		self.assertTrue(self.e.overlap(self.list9))
+
+	def test_overlap_list_compare_all_false_2(self):
+		''' Event is not overlapping with any element in the list '''
+		self.assertFalse(self.e.overlap(self.list10))
+
+	def test_overlap_list_compare_all_false_3(self):
+		''' Event is overlapping with all elements in the list '''
+		self.assertTrue(self.e.overlap(self.list8))
+
+	def test_overlap_list_compare_all_true_1(self):
+		''' Event is overlapping with one element in the list '''
+		self.assertFalse(self.e.overlap(self.list9, compareAll = True))
+
+	def test_overlap_list_compare_all_true_2(self):
+		''' Event is not overlapping with any element in the list '''
+		self.assertFalse(self.e.overlap(self.list10, compareAll = True))
+
+	def test_overlap_list_compare_all_true_3(self):
+		''' Event is overlapping with all elements in the list '''
+		self.assertTrue(self.e.overlap(self.list8, compareAll = True))
 
 	''' END: overlap '''
 

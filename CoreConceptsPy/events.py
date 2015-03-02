@@ -81,7 +81,7 @@ class PyEvent(CcEvent):
         - another event
         - another datetime
         - any event or datetime in a list
-        - all events or time periods in a list
+        - all events or datetimes in a list
         @param compareTo an event, a datetime or a list of events and/or datetimes
         @param compareAll False: If a list is passed in the compareTo paramater, the method checks if the event is at least before one element in that list.
                           True: If a list is passed in the compareTo parameter, the method checks if the event is before all elements in that list.
@@ -101,7 +101,7 @@ class PyEvent(CcEvent):
         - another event
         - another datetime
         - any event or datetime in a list
-        - all events or time periods in a list
+        - all events or datetimes in a list
         @param compareTo an event, a datetime or a list of events and/or datetimes
         @param compareAll False: If a list is passed in the compareTo paramater, the method checks if the event is at least after one element in that list.
                           True: If a list is passed in the compareTo parameter, the method checks if the event is after all elements in that list.
@@ -115,20 +115,29 @@ class PyEvent(CcEvent):
         else:
             return self.compare(compareTo, compareAll)
 
-    def overlap( self, eventOrPeriod ):
+    def overlap( self, compareTo, compareAll = False ):
         """
-        @param eventOrPeriod an event or a time period
+        Check if an event is overlapping with
+        - another event
+        - another time period
+        - any event or time period in a list
+        - all events or time periods in a list
+        @param compareTo an event, a time period or a list of events and/or time periods
+        @param compareAll False: If a list is passed in the compareTo paramater, the method checks if the event is at least overlapping with one element in that list.
+                          True: If a list is passed in the compareTo parameter, the method checks if the event is overlapping with every element in that list.
         @return Boolean
         """
 
-        if not isinstance(eventOrPeriod, tuple):
-            event = eventOrPeriod
+        if isinstance(compareTo, CcEvent):
+            event = compareTo
             return (self.startTime < event.startTime and self.endTime != None and (event.endTime == None or self.endTime < event.endTime) and self.endTime >= event.startTime) or (self.startTime > event.startTime and event.endTime != None and self.startTime <= event.endTime and (self.endTime == None or self.endTime > event.endTime))
-        else:
-            startTime = eventOrPeriod[0]
-            endTime = eventOrPeriod[1]
+        elif isinstance(compareTo, tuple):
+            startTime = compareTo[0]
+            endTime = compareTo[1]
             assert endTime >= startTime
             return (self.startTime < startTime and self.endTime != None and self.endTime < endTime and self.endTime >= startTime) or (self.startTime > startTime and self.startTime <= endTime and self.endTime > endTime)
+        else:
+            return self.compare(compareTo, compareAll)
 
     def get( self, key ):
         """
