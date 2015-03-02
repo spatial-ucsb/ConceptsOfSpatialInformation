@@ -1,6 +1,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TypeSynonymInstances #-}
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE FunctionalDependencies #-}
 
 -- core concept: network
 -- core question: are two nodes connected? what is the shortest path between them?
@@ -12,7 +13,7 @@ module Network where
 
 -- the class of all network types
 -- both nodes and edges can be labeled
-class NETWORK network node edge where
+class NETWORK network node edge | network -> node, network -> edge where
 	nodes :: network -> [node]
 	edges :: network -> [edge]
 	addNode :: network -> node -> network
