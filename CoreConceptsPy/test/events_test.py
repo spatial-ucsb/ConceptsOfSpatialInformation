@@ -162,6 +162,29 @@ class TestEvents(unittest.TestCase):
 
 	''' END: during '''
 
+	def test_during_list_compare_all_false_1(self):
+		''' One element is during the event '''
+		self.assertTrue(self.w.during(self.list2))
+
+	def test_during_list_compare_all_false_2(self):
+		''' No element is during the event '''
+		self.assertFalse(self.w.during(self.list3))
+
+	def test_during_list_compare_all_false_3(self):
+		''' All elements are during the event '''
+		self.assertTrue(self.w.during(self.list1))
+
+	def test_during_list_compare_all_true_1(self):
+		''' One element is during the event '''
+		self.assertFalse(self.w.during(self.list2, compareAll = True))
+
+	def test_during_list_compare_all_true_2(self):
+		''' No element is during the event '''
+		self.assertFalse(self.w.during(self.list3, compareAll = True))
+
+	def test_during_list_compare_all_true_3(self):
+		''' All elements are during the event '''
+		self.assertTrue(self.w.during(self.list1, compareAll = True))
 
 	''' BEGINNING: before '''
 
