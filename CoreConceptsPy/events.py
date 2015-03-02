@@ -119,3 +119,18 @@ class PyEvent(CcEvent):
         """
 
         self.properties[key] = value
+
+    @staticmethod
+    def intersect(list1, list2):
+        """
+        @param list1 List of events
+        @param list2 List of events
+        """
+        for l in list1:
+            for m in list2:
+                isIntersecting = (l.startTime <= m.startTime < l.endTime) or (m.startTime <= l.startTime < m.endTime)
+                if isIntersecting:
+                    return True
+        return False
+
+
