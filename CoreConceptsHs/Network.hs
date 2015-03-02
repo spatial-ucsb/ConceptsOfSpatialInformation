@@ -14,7 +14,7 @@ import Object
 
 -- the class of all network types
 -- both nodes and edges can be labeled
-class OBJECT node => NETWORK network node link where
+class OBJECT node => NETWORK network node edge where
 	nodes :: network -> [node]
 	edges :: network -> [edge]
 	addNode :: network -> node -> network
