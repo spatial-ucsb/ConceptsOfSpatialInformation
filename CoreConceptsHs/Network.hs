@@ -1,4 +1,4 @@
-{-# LANGUAGE MultiParamTypeClasses #-} 
+{-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TypeSynonymInstances #-}
 {-# LANGUAGE FlexibleInstances #-}
 
@@ -18,13 +18,12 @@ class OBJECT node => NETWORK network node link where
 	nodes :: network -> [node]
 	edges :: network -> [edge]
 	addNode :: network -> node -> network
-	addEdge :: network -> edge -> network -- link existing nodes 
+	addEdge :: network -> edge -> network -- link existing nodes
 	degree :: network -> node -> Int -- number of edges to other nodes
 	connected :: network -> node -> node -> Bool -- can the second node be reached from the first?
-	shortestPath :: network -> node -> node -> [edge] 
+	shortestPath :: network -> node -> node -> [edge]
 	distance :: network -> node -> node -> Int -- length of the shortest path as number of nodes
 	breadthFirst :: network -> node -> Int -> [node]  -- all nodes at distance Int from a node
 
 -- Graph representation in FGL
 -- also, use FGL to determine core queries
-
