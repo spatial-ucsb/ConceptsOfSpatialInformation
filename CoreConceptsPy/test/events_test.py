@@ -316,5 +316,11 @@ class TestEvents(unittest.TestCase):
 		self.e.set('university', 'ucsb')
 		self.assertEqual(self.e.get('university'), 'ucsb')
 
+	def test_intersect_without_intersection(self):
+		self.assertFalse(PyEvent.intersect([self.g, self.r], [self.t, self.u]))
+
+	def test_intersect_with_intersection(self):
+		self.assertTrue(PyEvent.intersect([self.g, self.r, self.t, self.u], [self.s, self.k]))
+
 if __name__ == '__main__':
 	unittest.main()
