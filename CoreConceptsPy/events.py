@@ -51,18 +51,37 @@ class PyEvent(CcEvent):
         """
         return self.startTime;
 
-    def during( self, eventOrPeriod ):
+    def during( self, compareTo, compareAll = False ):
         """
-        @param eventOrPeriod an event or a time period
+        Check if an event is during
+        - another event
+        - another time period
+        - any event or time period in a list
+        - all events or time periods in a list
+        @param compareTo an event, a time period (tuple) or a list of events and/or time periods (tuples)
+        @param compareAll False: If a list is passed in the compareTo paramater, the method checks if the event is at least during one element in that list.
+                          True: If a list is passed in the compareTo parameter, the method checks if the event is during all elements in that list.
         @return boolean
         """
 
-        if not isinstance(eventOrPeriod, tuple):
-            event = eventOrPeriod
+        if isinstance(compareTo, CcEvent):
+            event = compareTo
             return self.startTime >= event.startTime and (event.endTime == None or (self.endTime != None and self.endTime <= event.endTime))
+        elif isinstance(compareTo, list):
+            for el in compareTo:
+                isDuring = self.during(el)
+                if not compareAll:
+                    if isDuring:
+                        return True
+
+                if compareAll:
+                    if not isDuring:
+                        return False
+            return isDuring
         else:
-            assert eventOrPeriod[1] >= eventOrPeriod[0]
-            return self.startTime >= eventOrPeriod[0] and (self.endTime != None and self.endTime <= eventOrPeriod[1])
+            assert compareTo[1] >= compareTo[0]
+            return self.startTime >= compareTo[0] and (self.endTime != None and self.endTime <= compareTo[1])
+
 
     def before( self, eventOrDatetime ):
         """
