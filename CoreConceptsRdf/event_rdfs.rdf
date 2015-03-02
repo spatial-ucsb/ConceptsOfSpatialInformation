@@ -15,6 +15,7 @@
 
 <!-- Class for Event -->
 <rdfs:Class rdf:ID="Event" />
+<rdfs:Class rdf:ID="RepetitiveEvent" />
 <rdfs:Class rdf:ID="Attribute" />
 
 <rdf:Property rdf:ID="hasAttribute">
