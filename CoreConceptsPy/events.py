@@ -68,16 +68,7 @@ class PyEvent(CcEvent):
             event = compareTo
             return self.startTime >= event.startTime and (event.endTime == None or (self.endTime != None and self.endTime <= event.endTime))
         elif isinstance(compareTo, list):
-            for el in compareTo:
-                isDuring = self.during(el)
-                if not compareAll:
-                    if isDuring:
-                        return True
-
-                if compareAll:
-                    if not isDuring:
-                        return False
-            return isDuring
+            return self.compare(compareTo, compareAll)
         else:
             assert compareTo[1] >= compareTo[0]
             return self.startTime >= compareTo[0] and (self.endTime != None and self.endTime <= compareTo[1])
@@ -138,6 +129,27 @@ class PyEvent(CcEvent):
         """
 
         self.properties[key] = value
+
+    def compare(self, comparisonList, compareAll):
+        """
+        Performs the comparison, if a list of tuples/events is passed to a time-related function (before, after, during, overlap).
+        The time-related function passes the list of tuples/events and the compareAll value to this function.
+        @param comparisonList A list of events, time periods (tuples) and/or datetimes
+        @param compareAll Determines if at least one element in the list fulfills the time relation or all elements in the list have to fulfill the time relation
+        """
+
+        methodToCall = getattr(self, inspect.stack()[1][3])
+
+        for el in comparisonList:
+            result = methodToCall(el)
+            if not compareAll:
+                if result:
+                    return True
+
+            if compareAll:
+                if not result:
+                    return False
+        return result
 
     @staticmethod
     def intersect(list1, list2):
