@@ -53,3 +53,6 @@ instance NETWORK CCGraph (LNode CCNode) (LEdge CCEdge) where
 
 emptyCCGraph :: CCGraph
 emptyCCGraph = empty
+
+mkGraph :: Graph gr => [LNode a] -> [LEdge b] -> gr a b
+mkGraph = Data.Graph.Inductive.Graph.mkGraph
