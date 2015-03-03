@@ -34,7 +34,7 @@ instance NETWORK CCGraph (LNode CCNode) (LEdge CCEdge) where
 	addNode network node = insNode node network
 	addEdge network edge = insEdge edge network
 	degree network node = deg network (fst node)
-	connected network a b = 0 /= length (shortestPath network a b :: [LEdge CCEdge])
+	connected network a b = 0 /= distance network a b
 	shortestPath network a b = map label edges
 		where
 			label :: Edge -> LEdge CCEdge
