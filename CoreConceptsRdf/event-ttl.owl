@@ -1,0 +1,82 @@
+@base <http://www.core-concepts.com/event/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix owl2: <http://www.w3.org/2006/12/owl2#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+<http://www.core-concepts.com/event/> a owl:Ontology ;
+    owl:versionInfo "v 1 2015/03/03" ;
+    dc:title "Core Concepts - Event Ontology" ;
+    dc:description "An ontology written for the event core concept in Turtle Syntax" .
+
+:Event a owl:Class .
+:RepetitiveEvent a owl:Class .
+:Attribute a owl:Class ;
+        rdfs:subClassOf
+        [a owl:Restriction ;
+            owl:onProperty :key ;
+            owl:cardinality 1],
+        [a owl:Restriction ;
+            owl:onProperty :value ;
+            owl:cardinality 1] .
+
+:hasAttribute a owl:ObjectProperty ;
+        rdfs:domain :Event ;
+        rdfs:range :Attribute .
+
+:key a owl:DatatypeProperty ;
+        rdfs:domain :Attribute ;
+        rdfs:range xsd:Literal .
+
+:value a owl:DatatypeProperty ;
+        rdfs:domain :Attribute ;
+        rdfs:range xsd:Literal .
+
+:startTime a owl:DatatypeProperty ,
+            owl:FunctionalProperty ;
+        rdfs:domain :Event ;
+        rdfs:range xsd:dateTime .
+
+:endTime a owl:DatatypeProperty ,
+            owl:FunctionalProperty ;
+        rdfs:domain :Event ;
+        rdfs:range [
+            a rdfs:Datatype ;
+            owl:onDatatype xsd:dateTime ;
+            owl:withRestrictions ( [xsd:minInclusive :startTime] )
+        ] .
+
+:before a owl:ObjectProperty ,
+            owl:TransitiveProperty ,
+            owl2:AsymmetricProperty ,
+            owl2:IrreflexiveProperty ;
+        owl:inverseOf :after ;
+        rdfs:domain :Event ;
+        rdfs:range :Event .
+
+:after a owl:ObjectProperty ,
+            owl:TransitiveProperty ,
+            owl2:AsymmetricProperty ,
+            owl2:IrreflexiveProperty ;
+        rdfs:domain :Event ;
+        rdfs:range :Event .
+
+:during a owl:ObjectProperty ,
+            owl:TransitiveProperty ,
+            owl2:ReflexiveProperty ;
+        rdfs:domain :Event ;
+        rdfs:range :Event .
+
+:temporalOverlap a owl:ObjectProperty ,
+            owl:SymmetricProperty ,
+            owl2:IrreflexiveProperty ;
+        rdfs:domain :Event ;
+        rdfs:range :Event .
+
+:temporalIntersection a owl:ObjectProperty ,
+            owl:SymmetricProperty ,
+            owl2:IrreflexiveProperty ;
+        rdfs:domain :Event ;
+        rdfs:range :Event .
