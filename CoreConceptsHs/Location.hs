@@ -18,19 +18,19 @@ module Location where
 
 -- the class of all locating relations
 class LOCATED figure ground where
-	isAt :: figure -> ground -> Bool
-	isIn :: figure -> ground -> Bool
+	isAt :: figure -> ground -> Maybe Bool
+	isIn :: figure -> ground -> Maybe Bool
 	-- add more spatial relations as needed
 
 -- the class of all positioned entities
 -- putting the point constraint into the method avoids a second type parameter
 class POSITIONED figure where
-	position :: POINT point => figure -> point -- a point positioning the figure
+	position :: POINT point => figure -> Maybe point -- a point positioning the figure
 
 -- the class of all bounded entities
 -- putting the extent constraint into the method avoids a second type parameter
 class BOUNDED figure where
-	bounds :: EXTENT shape => figure -> shape -- an extent bounding the figure
+	bounds :: EXTENT shape => figure -> Maybe shape -- an extent bounding the figure
 
 -- the class of all geometries
 -- all geometries need coordinate reference systems, but making it explicit creates too much overhead
