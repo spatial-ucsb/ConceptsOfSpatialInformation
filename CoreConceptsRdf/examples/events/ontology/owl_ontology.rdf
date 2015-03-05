@@ -19,12 +19,12 @@
     xmlns:owl2="&owl2;"
     xmlns:ev="&ev;">
 
+<!-- Beginning: RDF statements for before transitive tests -->
+
 <rdf:Description rdf:about="http://www.core-concepts.com/events/baseball">
   <rdf:type rdf:resource="&ev;Event" />
   <rdfs:label>Baseball</rdfs:label>
   <rdfs:comment>A baseball game</rdfs:comment>
-  <ev:startTime rdf:datatype="&xsd;dateTime">2015-02-09T12:00:00</ev:startTime>
-  <ev:endTime rdf:datatype="&xsd;dateTime">2015-02-09T14:00:00</ev:endTime>
   <ev:before rdf:resource="http://www.core-concepts.com/events/soccer" />
 </rdf:Description>
 
@@ -32,8 +32,6 @@
   <rdf:type rdf:resource="&ev;Event" />
   <rdfs:label>Soccer</rdfs:label>
   <rdfs:comment>A soccer game</rdfs:comment>
-  <ev:startTime rdf:datatype="&xsd;dateTime">2015-02-09T16:00:00</ev:startTime>
-  <ev:endTime rdf:datatype="&xsd;dateTime">2015-02-09T18:00:00</ev:endTime>
   <ev:before rdf:resource="http://www.core-concepts.com/events/basketball" />
 </rdf:Description>
 
@@ -41,8 +39,107 @@
   <rdf:type rdf:resource="&ev;Event" />
   <rdfs:label>Basketball</rdfs:label>
   <rdfs:comment>A basketball game</rdfs:comment>
-  <ev:startTime rdf:datatype="&xsd;dateTime">2015-02-09T20:00:00</ev:startTime>
-  <ev:endTime rdf:datatype="&xsd;dateTime">2015-02-09T22:00:00</ev:endTime>
 </rdf:Description>
+
+<!-- End: RDF statements for before transitive tests -->
+
+<!-- Beginning: RDF statements for after transitive tests -->
+
+<rdf:Description rdf:about="http://www.core-concepts.com/events/hockey">
+  <rdf:type rdf:resource="&ev;Event" />
+  <rdfs:label>Hockey</rdfs:label>
+  <rdfs:comment>A hockey game</rdfs:comment>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.core-concepts.com/events/climbing">
+  <rdf:type rdf:resource="&ev;Event" />
+  <rdfs:label>Climbing</rdfs:label>
+  <rdfs:comment>A climbing tour</rdfs:comment>
+  <ev:after rdf:resource="http://www.core-concepts.com/events/hockey" />
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.core-concepts.com/events/tennis">
+  <rdf:type rdf:resource="&ev;Event" />
+  <rdfs:label>Tennis</rdfs:label>
+  <rdfs:comment>A tennis game</rdfs:comment>
+  <ev:after rdf:resource="http://www.core-concepts.com/events/climbing" />
+</rdf:Description>
+
+<!-- End: RDF statements for after transitive tests -->
+
+<!-- Beginning: RDF statements for during transitive tests -->
+
+<rdf:Description rdf:about="http://www.core-concepts.com/events/football">
+  <rdf:type rdf:resource="&ev;Event" />
+  <rdfs:label>Football</rdfs:label>
+  <rdfs:comment>A football game</rdfs:comment>
+  <ev:during rdf:resource="http://www.core-concepts.com/events/ultimate-frisbee" />
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.core-concepts.com/events/ultimate-frisbee">
+  <rdf:type rdf:resource="&ev;Event" />
+  <rdfs:label>Ultimate Frisbee</rdfs:label>
+  <rdfs:comment>An ultimate Frisbee tournament</rdfs:comment>
+  <ev:during rdf:resource="http://www.core-concepts.com/events/golf" />
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.core-concepts.com/events/golf">
+  <rdf:type rdf:resource="&ev;Event" />
+  <rdfs:label>Golf</rdfs:label>
+  <rdfs:comment>A golf tournament</rdfs:comment>
+</rdf:Description>
+
+<!-- End: RDF statements for during transitive tests -->
+
+
+<!-- Beginning: RDF statements for temporalOverlap symmetric tests -->
+
+<rdf:Description rdf:about="http://www.core-concepts.com/events/ski-tournament">
+  <rdf:type rdf:resource="&ev;Event" />
+  <rdfs:label>Ski tournament</rdfs:label>
+  <rdfs:comment>A ski tournament</rdfs:comment>
+  <ev:temporalOverlap rdf:resource="http://www.core-concepts.com/events/snowboarding-tournament" />
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.core-concepts.com/events/snowboarding-tournament">
+  <rdf:type rdf:resource="&ev;Event" />
+  <rdfs:label>Snowboarding tournament</rdfs:label>
+  <rdfs:comment>A snowboarding tournament</rdfs:comment>
+</rdf:Description>
+
+<!-- End: RDF statements for temporalOverlap symmetric tests -->
+
+<!-- Beginning: RDF statements for temporalIntersection symmetric tests -->
+
+<rdf:Description rdf:about="http://www.core-concepts.com/events/chess-match">
+  <rdf:type rdf:resource="&ev;Event" />
+  <rdfs:label>Chess match</rdfs:label>
+  <rdfs:comment>A chess match</rdfs:comment>
+  <ev:temporalIntersection rdf:resource="http://www.core-concepts.com/events/checkers-match" />
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.core-concepts.com/events/checkers-match">
+  <rdf:type rdf:resource="&ev;Event" />
+  <rdfs:label>Checkers match</rdfs:label>
+  <rdfs:comment>A checkers match</rdfs:comment>
+</rdf:Description>
+
+<!-- End: RDF statements for temporalIntersection symmetric tests -->
+
+<!-- Beginning: RDF statements for FunctionalProperty tests -->
+
+<rdf:Description rdf:about="http://www.core-concepts.com/events/two-start-times">
+  <rdf:type rdf:resource="&ev;Event" />
+  <ev:startTime rdf:datatype="&xsd;dateTime">2015-02-09T12:00:00</ev:startTime>
+  <ev:startTime rdf:datatype="&xsd;dateTime">2015-02-10T12:00:00</ev:startTime>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.core-concepts.com/events/two-end-times">
+  <rdf:type rdf:resource="&ev;Event" />
+  <ev:endTime rdf:datatype="&xsd;dateTime">2015-02-09T12:00:00</ev:endTime>
+  <ev:endTime rdf:datatype="&xsd;dateTime">2015-02-10T12:00:00</ev:endTime>
+</rdf:Description>
+
+<!-- End: RDF statements for FunctionalProperty tests -->
 
 </rdf:RDF>
