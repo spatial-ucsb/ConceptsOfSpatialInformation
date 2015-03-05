@@ -12,47 +12,32 @@ import Data.Graph.Inductive.Graph
 import Data.Graph.Inductive.PatriciaTree
 import Data.Graph.Inductive.Query.BFS
 
-type CCNode = String
-type CCEdge = String
-type CCGraph = Gr CCNode CCEdge
+type Weight = Int
+type CCGraph = Gr () Weight
 
-labNode :: (Eq node, Eq edge) => (Gr node edge) -> Node -> LNode node
-labNode graph node = fromJust $ find select $ labNodes graph
-	where
-		select :: LNode node -> Bool
-		select (n, _) = n == node
-
-labEdge :: (Eq node, Eq edge) => (Gr node edge) -> Edge -> LEdge edge
-labEdge graph (a, b) = fromJust $ find select $ labEdges graph
-	where
-		select :: LEdge edge -> Bool
-		select (n1, n2, _) = n1 == a && n2 == b
-
-instance NETWORK CCGraph (LNode CCNode) (LEdge CCEdge) where
-	nodes = labNodes
+instance NETWORK CCGraph Node (LEdge Weight) where
+	nodes = map fst . labNodes
 	edges = labEdges
-	addNode network node = insNode node network
-	addEdge network edge = insEdge edge network
-	degree network node = deg network (fst node)
-	connected network a b = 0 /= distance network a b
-	shortestPath network a b = map label edges
+	addNode graph node = insNode (node, ()) graph
+	addEdge = flip $ insEdge
+	degree = deg
+	connected graph a b = 0 /= distance graph a b
+	shortestPath graph a b = map label edges
 		where
-			label :: Edge -> LEdge CCEdge
-			label edge = labEdge network edge
+			label :: Edge -> (LEdge Weight)
+			label (a, b) = (a, b, 1)
 			edges :: [Edge]
 			edges = zip path $ tail path
 			path :: [Node]
-			path = esp (fst a) (fst b) network
-	distance network a b = length (shortestPath network a b :: [LEdge CCEdge])
-	breadthFirst network node distance = map (label . fst) $ filter select $ level (fst node) network
+			path = esp a b graph
+	distance graph a b = length (shortestPath graph a b)
+	breadthFirst graph node distance = map fst $ filter select $ level node graph
 		where
-			label :: Node -> LNode CCNode
-			label node = labNode network node
 			select :: (Node, Int) -> Bool
 			select (_, d) = d <= distance
 
-emptyCCGraph :: CCGraph
-emptyCCGraph = empty
-
-mkGraph :: Graph gr => [LNode a] -> [LEdge b] -> gr a b
-mkGraph = Data.Graph.Inductive.Graph.mkGraph
+mkGraph :: [Node] -> [LEdge Weight] -> CCGraph
+mkGraph nodes ledges = Data.Graph.Inductive.Graph.mkGraph (map label nodes) ledges
+	where
+		label :: Node -> LNode ()
+		label node = (node, ())
