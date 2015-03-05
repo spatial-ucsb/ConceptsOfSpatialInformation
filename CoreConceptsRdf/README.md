@@ -13,4 +13,4 @@ Contents
 Dependencies
 ----------------------
 
-* rdflib <http://www.rdflib.net>
+* rdflib (4.2.1) <http://www.rdflib.net>

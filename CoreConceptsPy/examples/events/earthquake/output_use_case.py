@@ -28,7 +28,7 @@ from EarthquakeRdfWriter import *
 from EarthquakeRdfWriter2 import *
 import csv
 
-f = open('../../../../data/events/earthquake-data.csv')
+f = open('../../../../data/events/earthquake_data.csv')
 csv_f = csv.reader(f)
 
 earthquakes = []
