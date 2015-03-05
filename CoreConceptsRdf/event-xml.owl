@@ -17,7 +17,7 @@
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:owl="&owl;"
     xmlns:owl2="&owl2;"
-    xmlns:base="http://www.core-concepts.com/event/">
+    xml:base="http://www.core-concepts.com/event">
 
 <!-- OWL Header -->
 <owl:Ontology rdf:about="http://www.core-concepts.com/event/">
@@ -72,7 +72,7 @@
             <owl:onDatatype rdf:resource="&xsd;dateTime"/>
             <owl:withRestrictions rdf:parseType="Collection">
                 <rdf:Description>
-                    <xsd:minInclusive rdf:datatype="&xsd;dateTime" rdf:resource="#startTime" />
+                    <xsd:minInclusive rdf:resource="#startTime" />
                 </rdf:Description>
             </owl:withRestrictions>
         </rdfs:Datatype>
