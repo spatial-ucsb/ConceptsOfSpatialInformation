@@ -98,7 +98,6 @@
 
 <owl:ObjectProperty rdf:ID="during">
     <rdf:type rdf:resource="&owl;TransitiveProperty" />
-    <rdf:type rdf:resource="&owl2;ReflexiveProperty" />
     <rdfs:domain rdf:resource="#Event" />
     <rdfs:range rdf:resource="#Event" />
 </owl:ObjectProperty>
@@ -112,7 +111,6 @@
 
 <owl:ObjectProperty rdf:ID="temporalIntersection">
     <rdf:type rdf:resource="&owl;SymmetricProperty"/>
-    <rdf:type rdf:resource="&owl2;ReflexiveProperty"/>
     <rdfs:domain rdf:resource="#Event" />
     <rdfs:range rdf:resource="#Event" />
 </owl:ObjectProperty>
