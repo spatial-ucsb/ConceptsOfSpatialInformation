@@ -25,6 +25,8 @@ Contents
 * `objects.py`: Implementations of objects.
 * `test/`: Unit tests.
 * `utils.py`: Utilities.
+* `RdfReader.py`: Abstract Reader to turn RDF into python objects.
+* `RdfWriter.py`: Abstract Writer to turn RDF into python objects.
 
 Instructions for Unix/Linux platforms
 ----------------------
