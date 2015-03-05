@@ -11,9 +11,10 @@
 <rdf:RDF
     xmlns:rdf="&rdf;"
     xmlns:rdfs="&rdfs;"
-    xmlns:xsd="&xsd;">
+    xmlns:xsd="&xsd;"
+    xml:base="http://myearthquakes.com/">
 
 <!-- Class for Event -->
-<rdfs:Class rdf:ID="Earthquake" />
+<rdfs:Class rdf:about="Earthquake" />
 
 </rdf:RDF>

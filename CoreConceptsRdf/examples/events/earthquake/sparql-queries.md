@@ -1,7 +1,7 @@
 SPARQL Queries
 =============================================
 
-This file contains example SPARQL queries for the earthquake class RDF output.
+This file contains example SPARQL queries for the earthquake class RDF output located in the file "test.rdf".
 The RDF file was loaded in a graph on a local Virtuoso server and the following SPARQL queries were run against the RDF graph.
 
 Get all earthquakes with a magnitude of 2.5 or higher:

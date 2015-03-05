@@ -17,7 +17,7 @@ __status__ = "Development"
 from rdflib import *
 import json
 
-class RdfCreator(object):
+class RdfWriter(object):
 
     def __init__(self, bindings = None):
         """

@@ -32,8 +32,8 @@ __status__ = "Development"
 import dateutil.parser
 from datetime import *
 from earthquake import *
-from EarthquakeRdfCreator import *
-from EarthquakeRdfCreator2 import *
+from EarthquakeRdfWriter import *
+from EarthquakeRdfWriter2 import *
 import csv
 
 f = open('../../../../data/events/earthquake-data.csv')
@@ -60,7 +60,7 @@ rdf.create(earthquakes, 'xml', '../../../../CoreConceptsRdf/examples/events/eart
 """
 
 #use EarthquakeRdfCreator that inherits from RdfCreator
-rdf = EarthquakeRdfCreator('bindings.json')
+rdf = EarthquakeRdfWriter('bindings.json')
 
 for e in earthquakes:
     earthquakeid = os.urandom(16).encode('hex')

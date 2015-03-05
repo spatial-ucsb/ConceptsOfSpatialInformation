@@ -4,7 +4,7 @@
  Gets an Array of Python Earthquake objects and turns them to RDF using RDFlib.
  The RDF can either be outputted or written to a file.
 
- This class does not inherit from RDFCreator!
+ This class does not inherit from RDFWriter!
 """
 __author__ = "Marc Tim Thiemann"
 __copyright__ = "Copyright 2015"
@@ -21,7 +21,7 @@ from rdflib import Graph, BNode, Namespace, RDF, XSD, Literal, URIRef
 import os.path
 import json
 
-class EarthquakeRdfCreator2():
+class EarthquakeRdfWriter2():
 
     def __init__(self, bindings = None):
         """
