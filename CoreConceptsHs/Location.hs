@@ -18,7 +18,7 @@ module Location where
 
 -- the class of all locating relations
 class LOCATED figure ground where
-	isAt :: figure -> ground -> Maybe Bool
+--	isAt :: figure -> ground -> Maybe Bool
 	isIn :: figure -> ground -> Maybe Bool
 	-- add more spatial relations as needed
 
