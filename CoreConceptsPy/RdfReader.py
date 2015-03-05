@@ -23,6 +23,9 @@ class RdfReader(object):
         """
         Initialize Graph and setup namespaces
         @param bindings The path to a json configuration file.
+        Each prefix/namespace binding is stored as an object in an array named "bindings".
+        Each object has a name/value pair for the prefix and the namespace.
+        The name for the prefix is "prefix" and the name for the namespace is "namespace".
         """
         self.g = Graph()
 
