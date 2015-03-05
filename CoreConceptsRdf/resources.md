@@ -4,7 +4,7 @@ Core Concepts of Spatial Information - RDF Resources
 Abstract: This file contains useful resources for the work with RDF documents.
 
 Tutorials (recommended order)
-=============================
+------------------------------
 * [Semantic Web](http://www.cambridgesemantics.com/semantic-university/introduction-semantic-web-0)
 * [RDF 101](http://www.cambridgesemantics.com/semantic-university/rdf-101)
 * [RDF Nuts & Bolts](http://www.cambridgesemantics.com/semantic-university/rdf-nuts-bolts)
@@ -19,7 +19,7 @@ Tutorials (recommended order)
 * [Collection of Semantic Web Tutorials](http://www.w3.org/2001/sw/BestPractices/Tutorials)
 
 Other References
-================
+-----------------
 * [XSD cheat sheet](http://www.cambridgesemantics.com/semantic-university/xsd-datatype-cheat-sheet)
 * [RDF Validator](http://www.w3.org/RDF/Validator/)
 * [Turtle](http://www.w3.org/TR/turtle/)
@@ -32,6 +32,6 @@ Other References
 * [Virtuoso Inference Rules & Reasoning](http://docs.openlinksw.com/virtuoso/rdfsparqlrule.html)
 
 Books
-======
+------
 * [Semantic Web for the Working Ontologist](http://workingontologist.org/)
 * [Learning Sparql](http://www.learningsparql.com/)
