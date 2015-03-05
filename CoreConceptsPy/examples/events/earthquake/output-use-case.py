@@ -2,21 +2,13 @@
 # -*- coding: utf-8 -*-
 
 """
-Example 2:
-Earthquake events
+Output Use Case 1:
+Reads all earthquakes from a CSV file, creates an earthquake python object for each earthquake,
+turns each earthquake object into RDF and writes all earthquakes as RDF into a file.
 
-Use Cases:
-- get all earthquakes which origin is 100 m or deeper
-- get all earthquakes from 12/01/2014 00:00:00 - 12/6/2014 23:59:59
-- get all earthquakes in Alaska
+Provided data: CSV file with all global earthquake events for December 2014.
 
-Provided data:
-CSV file with all global earthquake events for December 2014.
-The fields for each earthquake are:
-time,latitude,longitude,depth,mag,magType,nst,gap,dmin,rms,net,id,updated,place,type
-
-Output data format:
-RDF
+Output data format: RDF
 """
 
 __author__ = "Marc Tim Thiemann"

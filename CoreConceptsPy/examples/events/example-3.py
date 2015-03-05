@@ -45,7 +45,7 @@ log = _init_log("example-3")
 
 events = []
 
-f = open('../data/events/course-data.csv')
+f = open('../../../data/events/course-data.csv')
 reader = csv.DictReader(f)
 
 def getWeekDayName(weekDayNumber):
