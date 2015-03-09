@@ -1,0 +1,204 @@
+<?xml version="1.0"?>
+
+<!-- Entities Declaration -->
+<!DOCTYPE rdf:RDF [
+    <!ENTITY rdf 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'>
+    <!ENTITY rdfs 'http://www.w3.org/2000/01/rdf-schema#'>
+    <!ENTITY xsd 'http://www.w3.org/2001/XMLSchema#'>
+    <!ENTITY owl 'http://www.w3.org/2002/07/owl#'>
+    <!ENTITY ev 'http://www.core-concepts.com/event#'>
+    <!ENTITY time 'http://www.w3.org/2006/time#'>
+    <!ENTITY evs 'http://www.core-concepts.com/events/'>
+    <!ENTITY interval 'http://www.core-concepts.com/intervals/'>
+    <!ENTITY instant 'http://www.core-concepts.com/instants/'>
+    <!ENTITY duration 'http://www.core-concepts.com/duration/'>
+    <!ENTITY tz-us 'http://www.w3.org/2006/timezone-us#'>
+]>
+
+<!-- Namespaces Declaration-->
+<rdf:RDF
+    xmlns:rdf="&rdf;"
+    xmlns:rdfs="&rdfs;"
+    xmlns:xsd="&xsd;"
+    xmlns:owl="&owl;"
+    xmlns:time="&time;"
+    xmlns:ev="&ev;">
+
+<!-- Beginning: RDF statements for before transitive tests -->
+
+<rdf:Description rdf:about="&evs;baseball">
+  <rdf:type rdf:resource="&ev;Event" />
+  <ev:hasTemporalEntity rdf:resource="&interval;baseball" />
+  <rdfs:label>Baseball</rdfs:label>
+  <rdfs:comment>A baseball game</rdfs:comment>
+</rdf:Description>
+
+<rdf:Description rdf:about="&interval;baseball">
+  <rdf:type rdf:resource="&time;ProperInterval" />
+  <time:before rdf:resource="&interval;soccer" />
+</rdf:Description>
+
+<rdf:Description rdf:about="&evs;soccer">
+  <rdf:type rdf:resource="&ev;Event" />
+  <ev:hasTemporalEntity rdf:resource="&interval;soccer" />
+  <rdfs:label>Soccer</rdfs:label>
+  <rdfs:comment>A soccer game</rdfs:comment>
+</rdf:Description>
+
+<rdf:Description rdf:about="&interval;soccer">
+  <rdf:type rdf:resource="&time;ProperInterval" />
+  <time:before rdf:resource="&interval;basketball" />
+</rdf:Description>
+
+<rdf:Description rdf:about="&evs;basketball">
+  <rdf:type rdf:resource="&ev;Event" />
+  <rdfs:label>Basketball</rdfs:label>
+  <rdfs:comment>A basketball game</rdfs:comment>
+</rdf:Description>
+
+<!-- End: RDF statements for before transitive tests -->
+
+<!-- Beginning: RDF statements for after transitive tests -->
+
+<rdf:Description rdf:about="&evs;hockey">
+  <rdf:type rdf:resource="&ev;Event" />
+  <ev:hasTemporalEntity rdf:resource="&interval;hockey" />
+  <rdfs:label>Hockey</rdfs:label>
+  <rdfs:comment>A hockey game</rdfs:comment>
+</rdf:Description>
+
+<rdf:Description rdf:about="&interval;hockey">
+  <rdf:type rdf:resource="&time;ProperInterval" />
+</rdf:Description>
+
+<rdf:Description rdf:about="&evs;climbing">
+  <rdf:type rdf:resource="&ev;Event" />
+  <ev:hasTemporalEntity rdf:resource="&interval;climbing" />
+  <rdfs:label>Climbing</rdfs:label>
+  <rdfs:comment>A climbing tour</rdfs:comment>
+</rdf:Description>
+
+<rdf:Description rdf:about="&interval;climbing">
+  <rdf:type rdf:resource="&time;ProperInterval" />
+  <time:after rdf:resource="&interval;hockey" />
+</rdf:Description>
+
+<rdf:Description rdf:about="&evs;tennis">
+  <rdf:type rdf:resource="&ev;Event" />
+  <ev:hasTemporalEntity rdf:resource="&interval;tennis" />
+  <rdfs:label>Tennis</rdfs:label>
+  <rdfs:comment>A tennis game</rdfs:comment>
+</rdf:Description>
+
+<rdf:Description rdf:about="&interval;tennis">
+  <rdf:type rdf:resource="&time;ProperInterval" />
+  <time:after rdf:resource="&interval;climbing" />
+</rdf:Description>
+
+<!-- End: RDF statements for after transitive tests -->
+
+<!-- Time Interval described by two Instants with xsd datetime values -->
+
+<rdf:Description rdf:about="&evs;golfTournament">
+  <rdf:type rdf:resource="&ev;Event" />
+  <ev:hasTemporalEntity rdf:resource="&interval;golfTournament" />
+  <rdfs:label>Golf Tournament</rdfs:label>
+  <rdfs:comment>A golf tournament</rdfs:comment>
+</rdf:Description>
+
+<rdf:Description rdf:about="&interval;golfTournament">
+  <rdf:type rdf:resource="&time;ProperInterval" />
+  <time:hasBeginning rdf:resource="&instant;golfTournamentStart" />
+  <time:hasEnd rdf:resource="&instant;golfTournamentEnd" />
+</rdf:Description>
+
+<rdf:Description rdf:about="&instant;golfTournamentStart">
+  <rdf:type rdf:resource="&time;Instant" />
+  <time:inXSDDateTime>2015-03-15T10:00:00-8:00</time:inXSDDateTime>
+</rdf:Description>
+
+<rdf:Description rdf:about="&instant;golfTournamentEnd">
+  <rdf:type rdf:resource="&time;Instant" />
+  <time:inXSDDateTime>2015-03-15T18:00:00-8:00</time:inXSDDateTime>
+</rdf:Description>
+
+<!-- Time Interval described by two Instants with DateTimeDescriptions -->
+
+<rdf:Description rdf:about="&evs;tennisTournament">
+  <rdf:type rdf:resource="&ev;Event" />
+  <ev:hasTemporalEntity rdf:resource="&interval;tennisTournament" />
+  <rdfs:label>Tennis Tournament</rdfs:label>
+  <rdfs:comment>A tennis tournament</rdfs:comment>
+</rdf:Description>
+
+<rdf:Description rdf:about="&interval;tennisTournament">
+  <rdf:type rdf:resource="&time;ProperInterval" />
+  <time:hasBeginning rdf:resource="&instant;tennisTournamentStart" />
+  <time:hasEnd rdf:resource="&instant;tennisTournamentEnd" />
+</rdf:Description>
+
+<rdf:Description rdf:about="&instant;tennisTournamentStart">
+  <rdf:type rdf:resource="&time;Instant" />
+  <time:inDateTime rdf:resource="&instant;tennisTournamentStartDescription"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="&instant;tennisTournamentStartDescription">
+  <rdf:type rdf:resource="&time;DateTimeDescription" />
+  <time:unitType rdf:resource="&time;unitMinute" />
+  <time:minute>0</time:minute>
+  <time:hour>9</time:hour>
+  <time:day>14</time:day>
+  <time:dayOfWeek>Saturday</time:dayOfWeek>
+  <time:dayOfYear>73</time:dayOfYear>
+  <time:week>11</time:week>
+  <time:month>3</time:month>
+  <time:year>2015</time:year>
+  <time:timeZone rdf:resource="&tz-us;PST" />
+</rdf:Description>
+
+<rdf:Description rdf:about="&instant;tennisTournamentEnd">
+  <rdf:type rdf:resource="&time;Instant" />
+  <time:inDateTime rdf:resource="&instant;tennisTournamentEndDescription"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="&instant;tennisTournamentEndDescription">
+  <rdf:type rdf:resource="&time;DateTimeDescription" />
+  <time:unitType rdf:resource="&time;unitMinute" />
+  <time:minute>0</time:minute>
+  <time:hour>15</time:hour>
+  <time:day>14</time:day>
+  <time:dayOfWeek>Saturday</time:dayOfWeek>
+  <time:dayOfYear>73</time:dayOfYear>
+  <time:week>11</time:week>
+  <time:month>11</time:month>
+  <time:year>2015</time:year>
+  <time:timeZone rdf:resource="&tz-us;PST" />
+</rdf:Description>
+
+<!-- Event with an Instant as start time and a duration description -->
+
+<rdf:Description rdf:about="&evs;footballGame">
+  <rdf:type rdf:resource="&ev;Event" />
+  <ev:hasTemporalEntity rdf:resource="&interval;footballGame" />
+  <rdfs:label>Football Game</rdfs:label>
+  <rdfs:comment>A football game</rdfs:comment>
+</rdf:Description>
+
+<rdf:Description rdf:about="&interval;footballGame">
+  <rdf:type rdf:resource="&time;ProperInterval" />
+  <time:hasBeginning rdf:resource="&instant;footballGameStart" />
+  <time:hasDurationDescription rdf:resource="&duration;footballGame" />
+</rdf:Description>
+
+<rdf:Description rdf:about="&instant;footballGameStart">
+  <rdf:type rdf:resource="&time;Instant" />
+  <time:inXSDDateTime>2015-03-13T15:00:00-8:00</time:inXSDDateTime>
+</rdf:Description>
+
+<rdf:Description rdf:about="&duration;footballGame">
+  <rdf:type rdf:resource="&time;DurationDescription" />
+  <time:hours>1</time:hours>
+  <time:minutes>45</time:minutes>
+</rdf:Description>
+
+</rdf:RDF>
