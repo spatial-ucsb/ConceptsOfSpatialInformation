@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Abstract: Unit tests for the PyEvent class
+Abstract: Unit tests for the implementations of the core concept 'event'
 """
 
 __author__ = "Marc Tim Thiemann"
