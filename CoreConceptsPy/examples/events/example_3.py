@@ -3,7 +3,7 @@
 
 """
 Example 3:
-UCSB course data for Winter Quarter 2015
+UCSB course data for Winter Quarter 2014
 
 Use Cases:
 - Do courses take place at the same location at the same time?
