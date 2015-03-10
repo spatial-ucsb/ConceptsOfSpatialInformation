@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-# TODO: add tests for real event data, loading it from files (examples by Werner)
-
 """
-TODO: description of module
+Abstract: Unit tests for the PyEvent class
 """
 
 __author__ = "Marc Tim Thiemann"
