@@ -218,8 +218,3 @@ class CcEvent(object):
         @return Boolean
         """
         raise NotImplementedError("overlap")
-
-class Period(object):
-    """ Simple period class. TODO: implement"""
-    def __init__(self):
-        pass
