@@ -22,7 +22,7 @@ Members & contributors:
 * Marc Thiemann
 * Michel Zimmer  ([home](https://www.mzimmer.net))
 
-![Core Concepts architecture](CoreConceptsArchitecture.png "Core Concepts architecture")
+![Core Concepts architecture](CoreConceptsArchitecture.png "Core Concepts architecture" =250x)
 
 Contents
 ----------------------
