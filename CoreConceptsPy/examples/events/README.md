@@ -1,6 +1,8 @@
 Core Concepts of Spatial Information - PyEvent use cases
 =========================================================
 
+Abstract: PyEvent use cases based on real event data.
+
 Contents
 ----------------------
 

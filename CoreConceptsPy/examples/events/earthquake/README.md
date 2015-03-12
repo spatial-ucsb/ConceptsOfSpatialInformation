@@ -1,6 +1,8 @@
 RDF input and output with earthquake data
 ==================================================
 
+Abstract: Create RDF input and output with earthquake data using RDF readers and writers and an earthquake model.
+
 The Earthquake class (`earthquake.py`) works as a model for each earthquake.
 
 There are two RdfReaders that turn RDF input into earthquake python objects:

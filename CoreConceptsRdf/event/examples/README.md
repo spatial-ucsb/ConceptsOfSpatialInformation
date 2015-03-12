@@ -1,6 +1,7 @@
 Core Concepts of Spatial Information - RDF event examples
 =========================================================
 
+Abstract: RDF event data examples and Sparql queries
 
 Contents
 ----------------------

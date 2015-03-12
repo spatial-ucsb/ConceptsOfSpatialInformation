@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
- Abstract: Operations on a street netwrk as examples for how to use the core concept 'network'
+ Abstract: Operations on a street network as examples for how to use the core concept 'network'
 """
 
 __author__ = "Michel Zimmer"
