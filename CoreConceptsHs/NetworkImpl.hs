@@ -12,10 +12,12 @@ import Data.Graph.Inductive.Graph
 import Data.Graph.Inductive.PatriciaTree
 import Data.Graph.Inductive.Query.BFS
 
+type Node = Data.Graph.Inductive.Graph.Node
 type Weight = Int
+type Edge = Data.Graph.Inductive.Graph.LEdge Weight
 type CCGraph = Gr () Weight
 
-instance NETWORK CCGraph Node (LEdge Weight) where
+instance NETWORK CCGraph NetworkImpl.Node NetworkImpl.Edge where
 	nodes = map fst . labNodes
 	edges = labEdges
 	addNode graph node = insNode (node, ()) graph
@@ -24,20 +26,20 @@ instance NETWORK CCGraph Node (LEdge Weight) where
 	connected graph a b = 0 /= distance graph a b
 	shortestPath graph a b = map label edges
 		where
-			label :: Edge -> (LEdge Weight)
+			label :: Data.Graph.Inductive.Graph.Edge -> NetworkImpl.Edge
 			label (a, b) = (a, b, 1)
-			edges :: [Edge]
+			edges :: [Data.Graph.Inductive.Graph.Edge]
 			edges = zip path $ tail path
-			path :: [Node]
+			path :: [NetworkImpl.Node]
 			path = esp a b graph
-	distance graph a b = length (shortestPath graph a b)
+	distance graph a b = length $ shortestPath graph a b
 	breadthFirst graph node distance = map fst $ filter select $ level node graph
 		where
-			select :: (Node, Int) -> Bool
+			select :: (NetworkImpl.Node, Int) -> Bool
 			select (_, d) = d <= distance
 
-mkGraph :: [Node] -> [LEdge Weight] -> CCGraph
+mkGraph :: [NetworkImpl.Node] -> [NetworkImpl.Edge] -> CCGraph
 mkGraph nodes ledges = Data.Graph.Inductive.Graph.mkGraph (map label nodes) ledges
 	where
-		label :: Node -> LNode ()
+		label :: NetworkImpl.Node -> LNode ()
 		label node = (node, ())
