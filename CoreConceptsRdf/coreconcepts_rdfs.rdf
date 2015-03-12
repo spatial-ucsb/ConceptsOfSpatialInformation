@@ -8,7 +8,7 @@
 ]>
 
 <!-- Namespaces Declaration-->
-<rdf:RDF
+<rdf:RDF 
     xmlns:rdf="&rdf;"
     xmlns:rdfs="&rdfs;"
     xmlns:xsd="&xsd;">
