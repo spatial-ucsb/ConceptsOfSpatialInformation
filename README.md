@@ -25,7 +25,7 @@ Members & contributors:
 Architecture
 ----------------------
 
-![Core Concepts architecture](CoreConceptsArchitecture.png "Core Concepts architecture")
+![Core Concepts architecture](figures/CoreConceptsArchitecture.png "Core Concepts architecture")
 
 Contents
 ----------------------
