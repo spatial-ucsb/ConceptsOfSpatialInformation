@@ -21,8 +21,11 @@ Members & contributors:
 * Eric Ahlgren
 * Marc Thiemann
 * Michel Zimmer  ([home](https://www.mzimmer.net))
-* Nhi Chung
-* Ben Schock
+
+Architecture
+----------------------
+
+![Core Concepts architecture](CoreConceptsArchitecture.png "Core Concepts architecture")
 
 Contents
 ----------------------
