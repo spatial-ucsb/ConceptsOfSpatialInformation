@@ -1,4 +1,4 @@
-module NetworkTest where
+module NetworkExamples where
 
 import Network
 import NetworkImpl
@@ -23,7 +23,7 @@ combinations :: [a] -> [(a, a)]
 combinations [] = []
 combinations (x:xs) = oneZip x xs ++ combinations xs
 
--- tests
+-- examples
 main :: IO ()
 main = do
 	putStrLn "Example for shortestPath with directed and effectively undirected graphs"
