@@ -1,7 +1,7 @@
-{-# LANGUAGE MultiParamTypeClasses #-} 
+{-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TypeSynonymInstances #-}
 {-# LANGUAGE FlexibleInstances #-}
--- core concept: location 
+-- core concept: location
 -- defining spatial relations and properties
 -- core questions: where is this? is this in relation r to that? what is in relation r to this?
 -- location questions get asked about instances of the other core concepts (fields, objects, networks, events)
@@ -18,21 +18,21 @@ module Location where
 
 -- the class of all locating relations
 class LOCATED figure ground where
-	isAt :: figure -> ground -> Bool 
-	isIn :: figure -> ground -> Bool 
+--	isAt :: figure -> ground -> Maybe Bool
+	isIn :: figure -> ground -> Maybe Bool
 	-- add more spatial relations as needed
 
 -- the class of all positioned entities
 -- putting the point constraint into the method avoids a second type parameter
 class POSITIONED figure where
-	position :: POINT point => figure -> point -- a point positioning the figure
+	position :: POINT point => figure -> Maybe point -- a point positioning the figure
 
 -- the class of all bounded entities
 -- putting the extent constraint into the method avoids a second type parameter
 class BOUNDED figure where
-	bounds :: EXTENT shape => figure -> shape -- an extent bounding the figure
+	bounds :: EXTENT shape => figure -> Maybe shape -- an extent bounding the figure
 
--- the class of all geometries 
+-- the class of all geometries
 -- all geometries need coordinate reference systems, but making it explicit creates too much overhead
 class GEOMETRY geometry -- where what?
 
@@ -40,7 +40,7 @@ class GEOMETRY geometry -- where what?
 class GEOMETRY geometry => POINT geometry -- where distance?
 
 -- the class of all extended geometries
-class GEOMETRY geometry => EXTENT geometry where 
+class GEOMETRY geometry => EXTENT geometry where
 	box :: (P2, P2) -> geometry
 
 -- geometries more complex than a point are represented as well-known text (http://en.wikipedia.org/wiki/Well-known_text)
@@ -49,7 +49,7 @@ type Coordinate = Int
 type P2 = (Coordinate, Coordinate) -- we need tuples to be able to use them as array indices; repa may take lists?
 
 instance GEOMETRY P2
-	
+
 instance POINT P2
 
 instance GEOMETRY (P2,P2)
@@ -57,7 +57,7 @@ instance EXTENT (P2,P2) where
 	box (p1, p2) = (p1, p2)
 
 
-type SRID = Int -- the spatial reference system id (EPSG code, see http://en.wikipedia.org/wiki/SRID) 
+type SRID = Int -- the spatial reference system id (EPSG code, see http://en.wikipedia.org/wiki/SRID)
 
 
 
@@ -68,14 +68,17 @@ walkingDistance = 1000.0-}
 
 {-p, q :: Coord2
 p =  (0,0)
-q =  (2,2) 
+q =  (2,2)
 pq = [p..q]-}
 
 --pq = [p..q]
 
 {-instance Ix Position where
-	range (p,q) = [p..q]	index (p,q) p = 	inRange :: (a,a) -> a -> Bool	rangeSize :: (a,a) -> Int-}
-	
+	range (p,q) = [p..q]
+	index (p,q) p =
+	inRange :: (a,a) -> a -> Bool
+	rangeSize :: (a,a) -> Int-}
+
 {-
 type Geometry = String -- well-known text representation
 instance GEOMETRY Geometry

@@ -1,11 +1,11 @@
-{-# LANGUAGE MultiParamTypeClasses #-} 
--- core concept: event 
+{-# LANGUAGE MultiParamTypeClasses #-}
+-- core concept: event
 -- core questions: when did this event happen? what properties and relations does the event have? what participants does it have?
 -- events are process portions with fields, objects, and networks as participants
 -- conjecture: all events can be seen as movements at some granularity
 -- properties and relations are thematic only
 -- temporal properties and relations get defined here, as they only apply to events
--- spatial properties and relations of events come from their participants 
+-- spatial properties and relations of events come from their participants
 -- positioning and bounding of events themselves does not seem appropriate
 -- computing event outcomes: central, but how to specify? do simple examples
 -- (c) Werner Kuhn
@@ -22,9 +22,9 @@ import Object
 class (Eq event, OBJECT object) => EVENT event object where
 	when :: event -> Date -- timing the event
 	within :: event -> Period -- containing the event
-	during :: event -> event -> Bool 
-	before :: event -> event -> Bool 
-	after :: event -> event -> Bool 
+	during :: event -> event -> Bool
+	before :: event -> event -> Bool
+	after :: event -> event -> Bool
 	overlap :: event -> event -> Bool
 	-- complete with Allen relations
 

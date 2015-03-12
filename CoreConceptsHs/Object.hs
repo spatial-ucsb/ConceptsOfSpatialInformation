@@ -1,5 +1,5 @@
-{-# LANGUAGE MultiParamTypeClasses #-} 
--- core concept: object 
+{-# LANGUAGE MultiParamTypeClasses #-}
+-- core concept: object
 -- core questions: where is this object? what are its properties and relations? is it the same as that object?
 -- properties and relations are limited to thematic ones
 -- all spatial properties and relations come from Location (only for other objects as grounds, so far)
