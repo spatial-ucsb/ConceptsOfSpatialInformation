@@ -34,12 +34,12 @@ Contents
 
 `CoreConceptsPy`: A Python implementation of the core concepts.
 
-`CoreConceptsRDF`: An RDF(S) implementation of the core concepts.
+`CoreConceptsRdf`: An RDF(S) implementation of the core concepts.
 
-Notes for contributors 
+Misc 
 ----------------------
 
-[CONTRIBUTING.md](CONTRIBUTING.md)
+[Notes for contributors](CONTRIBUTING.md)
 
 
 References
