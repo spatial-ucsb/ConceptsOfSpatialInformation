@@ -1,3 +1,9 @@
+<!---
+Abstract: Sparql queries to test the event owl ontology "event_xml_2.owl" located in the "CoreConceptsRdf" folder with RDF data from
+"owl-ontology_2.rdf".
+Author: Marc Tim Thiemann
+-->
+
 SPARQL Queries
 =============================================
 

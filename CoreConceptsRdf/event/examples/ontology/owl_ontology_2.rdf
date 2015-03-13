@@ -1,3 +1,8 @@
+<!---
+Abstract: RDF data using the owl ontology "event_xml_2.owl" located in the folder "CoreConceptsRdf/event".
+Author: Marc Tim Thiemann
+-->
+
 <?xml version="1.0"?>
 
 <!-- Entities Declaration -->

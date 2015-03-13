@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Earthquake Event Class
+Abstract: Earthquake Event Class
 """
 __author__ = "Marc Tim Thiemann"
 __copyright__ = "Copyright 2015"

@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Example 3:
-UCSB course data for Winter Quarter 2014
+Abstract: Operations on UCSB course data of Winter Quarter 2014 as examples for how to use the core concept 'event'
 
 Use Cases:
 - Do courses take place at the same location at the same time?

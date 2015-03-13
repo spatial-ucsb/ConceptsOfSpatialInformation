@@ -1,3 +1,9 @@
+<!---
+Abstract: Sparql queries to test the event owl ontology "event_xml.owl" located in the "CoreConceptsRdf" folder with RDF data from
+"owl-ontology.rdf".
+Author: Marc Tim Thiemann
+-->
+
 SPARQL Queries
 =============================================
 
@@ -11,7 +17,7 @@ The event example RDF was loaded in a separate graph named "http://localhost:889
 
 To test the inference capabilites of the owl ontology the following Sparql queries were run against the graph:
 
-**Transitive test for the before property 
+**Transitive test for the before property
 
 ```
 SPARQL DEFINE input:inference "owl-rules-1"
@@ -32,7 +38,7 @@ Result
 * http://www.core-concepts.com/events/soccer
 
 
-**Transitive test for the after property 
+**Transitive test for the after property
 
 ```
 SPARQL DEFINE input:inference "owl-rules-1"

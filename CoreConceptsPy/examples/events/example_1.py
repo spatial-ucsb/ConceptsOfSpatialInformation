@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Example 1:
-Earthquake events
+Abstract: Operations on earthquake data as examples for how to use the core concept 'event'
 
 Use Cases:
 - get all locations of earthquakes with a magnitude of 4 or higher

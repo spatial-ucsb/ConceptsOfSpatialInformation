@@ -1,3 +1,8 @@
+<!---
+Abstract: Preliminary RDFS specification of the core concepts
+Author: Marc Tim Thiemann
+-->
+
 <?xml version="1.0"?>
 
 <!-- Entities Declaration -->
@@ -8,7 +13,7 @@
 ]>
 
 <!-- Namespaces Declaration-->
-<rdf:RDF 
+<rdf:RDF
     xmlns:rdf="&rdf;"
     xmlns:rdfs="&rdfs;"
     xmlns:xsd="&xsd;">

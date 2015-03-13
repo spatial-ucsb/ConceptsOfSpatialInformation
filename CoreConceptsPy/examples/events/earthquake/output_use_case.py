@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 """
-Output Use Case 1:
+Abstract: Turns earthquake python objects into earthquake RDF objects
+
 Reads all earthquakes from a CSV file, creates an earthquake python object for each earthquake,
 turns each earthquake object into RDF and writes all earthquakes as RDF into a file.
 

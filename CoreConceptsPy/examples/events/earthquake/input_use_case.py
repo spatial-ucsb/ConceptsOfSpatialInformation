@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 """
-Turn earthquake RDF objects into earthquake python objects
+Abstract: Turns earthquake RDF objects into earthquake python objects
+
 Reads RDF earthquake objects from a file that contains earthquakes of December 2014 and turns them into Earthquake python objects.
 Prints the first 3 Python earthquakes in the list to check if the Earthquake objects are valid.
 """

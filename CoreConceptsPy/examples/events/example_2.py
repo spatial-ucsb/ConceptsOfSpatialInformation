@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Example 2:
-US weather data from 1 January 2015
+Abstract: Operations on US weather data from 1 January 2015 as examples for how to use the core concept 'event'
 
 Use Cases:
 - get all weather events before 12am
