@@ -1,0 +1,702 @@
+<?xml version="1.0"?>
+
+<!---
+Abstract: RDF earthquake data using the owl ontologies "event_ttl.owl" and "event_xml.owl" located in the folder "CoreConceptsRdf/event".
+
+- RDF statements for transitive inference on the before property with earthquake data from "data/events/earthquake_data.csv"
+- RDF statements for transitive inference on the after property with earthquake data from "data/events/earthquake_data.csv"
+- RDF statements for transitive inference on the during property with weather data from "data/events/weather_data.txt"
+- RDF statements for symmetric inference on the temporalOverlap property with course data from "data/events/course_data.csv"
+- RDF statements for symmetric inference on the temporalIntersection property with course data from "data/events/course_data.csv"
+
+Author: Marc Tim Thiemann
+-->
+
+<!-- Entities Declaration -->
+<!DOCTYPE rdf:RDF [
+    <!ENTITY rdf 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'>
+    <!ENTITY rdfs 'http://www.w3.org/2000/01/rdf-schema#'>
+    <!ENTITY xsd 'http://www.w3.org/2001/XMLSchema#'>
+    <!ENTITY owl 'http://www.w3.org/2002/07/owl#'>
+    <!ENTITY owl2 'http://www.w3.org/2006/12/owl2#'>
+    <!ENTITY ev 'http://www.core-concepts.com/event#'>
+    <!ENTITY eqs 'http://www.core-concepts.com/events/earthquake/'>
+    <!ENTITY weather 'http://www.core-concepts.com/events/weather/'>
+    <!ENTITY cl 'http://www.core-concepts.com/events/class/'>
+]>
+
+<!-- Namespaces Declaration-->
+<rdf:RDF
+    xmlns:rdf="&rdf;"
+    xmlns:rdfs="&rdfs;"
+    xmlns:xsd="&xsd;"
+    xmlns:owl="&owl;"
+    xmlns:owl2="&owl2;"
+    xmlns:ev="&ev;">
+
+<!-- Beginning: RDF statements for before transitive tests -->
+
+<rdf:Description rdf:about="&eqs;01331aa855fa28da5b5ccd40b6213d32">
+  <rdf:type rdf:resource="&ev;Event" />
+  <ev:startTime>2014-12-20T21:31:35</ev:startTime>
+  <ev:hasAttribute rdf:resource="&eqs;01331aa855fa28da5b5ccd40b6213d32/attribute/place" />
+  <ev:hasAttribute rdf:resource="&eqs;01331aa855fa28da5b5ccd40b6213d32/attribute/magnitude" />
+  <ev:hasAttribute rdf:resource="&eqs;01331aa855fa28da5b5ccd40b6213d32/attribute/latitude" />
+  <ev:hasAttribute rdf:resource="&eqs;01331aa855fa28da5b5ccd40b6213d32/attribute/longitude" />
+  <ev:before rdf:resource="&eqs;25659f600c9afff060d4a5427fa1fa95" />
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;01331aa855fa28da5b5ccd40b6213d32/attribute/place">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>place</ev:key>
+  <ev:value>51km SW of Unalaska, Alaska</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;01331aa855fa28da5b5ccd40b6213d32/attribute/magnitude">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>magnitude</ev:key>
+  <ev:value>1.5</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;01331aa855fa28da5b5ccd40b6213d32/attribute/latitude">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>latitude</ev:key>
+  <ev:value>53.5463</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;01331aa855fa28da5b5ccd40b6213d32/attribute/longitude">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>longitude</ev:key>
+  <ev:value>-167.0932</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;25659f600c9afff060d4a5427fa1fa95">
+  <rdf:type rdf:resource="&ev;Event" />
+  <ev:startTime>2014-12-26T09:09:33</ev:startTime>
+  <ev:hasAttribute rdf:resource="&eqs;25659f600c9afff060d4a5427fa1fa95/attribute/place" />
+  <ev:hasAttribute rdf:resource="&eqs;25659f600c9afff060d4a5427fa1fa95/attribute/magnitude" />
+  <ev:hasAttribute rdf:resource="&eqs;25659f600c9afff060d4a5427fa1fa95/attribute/latitude" />
+  <ev:hasAttribute rdf:resource="&eqs;25659f600c9afff060d4a5427fa1fa95/attribute/longitude" />
+  <ev:before rdf:resource="&eqs;4978f1066e8cddf51e72555962138292" />
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;25659f600c9afff060d4a5427fa1fa95/attribute/place">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>place</ev:key>
+  <ev:value>59km ENE of Cantwell, Alaska</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;25659f600c9afff060d4a5427fa1fa95/attribute/magnitude">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>magnitude</ev:key>
+  <ev:value>1.0</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;25659f600c9afff060d4a5427fa1fa95/attribute/latitude">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>latitude</ev:key>
+  <ev:value>63.5453</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;25659f600c9afff060d4a5427fa1fa95/attribute/longitude">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>longitude</ev:key>
+  <ev:value>-147.8002</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;4978f1066e8cddf51e72555962138292">
+  <rdf:type rdf:resource="&ev;Event" />
+  <ev:startTime>2014-12-28T19:17:31.420000</ev:startTime>
+  <ev:hasAttribute rdf:resource="&eqs;4978f1066e8cddf51e72555962138292/attribute/place" />
+  <ev:hasAttribute rdf:resource="&eqs;4978f1066e8cddf51e72555962138292/attribute/magnitude" />
+  <ev:hasAttribute rdf:resource="&eqs;4978f1066e8cddf51e72555962138292/attribute/latitude" />
+  <ev:hasAttribute rdf:resource="&eqs;4978f1066e8cddf51e72555962138292/attribute/longitude" />
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;4978f1066e8cddf51e72555962138292/attribute/place">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>place</ev:key>
+  <ev:value>7km ESE of Valle Vista, California</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;4978f1066e8cddf51e72555962138292/attribute/magnitude">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>magnitude</ev:key>
+  <ev:value>0.45</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;4978f1066e8cddf51e72555962138292/attribute/latitude">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>latitude</ev:key>
+  <ev:value>33.7133333</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;4978f1066e8cddf51e72555962138292/attribute/longitude">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>longitude</ev:key>
+  <ev:value>-116.8228333</ev:value>
+</rdf:Description>
+
+<!-- End: RDF statements for before transitive tests -->
+
+<!-- Beginning: RDF statements for after transitive tests -->
+
+<rdf:Description rdf:about="&eqs;cc16e1b39c2fa1dc9b79369570ab12e7">
+  <rdf:type rdf:resource="&ev;Event" />
+  <ev:startTime>2014-12-06T21:09:26.360000</ev:startTime>
+  <ev:hasAttribute rdf:resource="&eqs;cc16e1b39c2fa1dc9b79369570ab12e7/attribute/place" />
+  <ev:hasAttribute rdf:resource="&eqs;cc16e1b39c2fa1dc9b79369570ab12e7/attribute/magnitude" />
+  <ev:hasAttribute rdf:resource="&eqs;cc16e1b39c2fa1dc9b79369570ab12e7/attribute/latitude" />
+  <ev:hasAttribute rdf:resource="&eqs;cc16e1b39c2fa1dc9b79369570ab12e7/attribute/longitude" />
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;cc16e1b39c2fa1dc9b79369570ab12e7/attribute/place">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>place</ev:key>
+  <ev:value>61km N of Sidomulyo, Indonesia</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;cc16e1b39c2fa1dc9b79369570ab12e7/attribute/magnitude">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>magnitude</ev:key>
+  <ev:value>4.2</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;cc16e1b39c2fa1dc9b79369570ab12e7/attribute/latitude">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>latitude</ev:key>
+  <ev:value>1.2028</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;cc16e1b39c2fa1dc9b79369570ab12e7/attribute/longitude">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>longitude</ev:key>
+  <ev:value>122.5532</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;b6915b5c2e13a466ebf45dac9eaf4ce5">
+  <rdf:type rdf:resource="&ev;Event" />
+  <ev:startTime>2014-12-09T21:17:09.910000</ev:startTime>
+  <ev:hasAttribute rdf:resource="&eqs;b6915b5c2e13a466ebf45dac9eaf4ce5/attribute/place" />
+  <ev:hasAttribute rdf:resource="&eqs;b6915b5c2e13a466ebf45dac9eaf4ce5/attribute/magnitude" />
+  <ev:hasAttribute rdf:resource="&eqs;b6915b5c2e13a466ebf45dac9eaf4ce5/attribute/latitude" />
+  <ev:hasAttribute rdf:resource="&eqs;b6915b5c2e13a466ebf45dac9eaf4ce5/attribute/longitude" />
+  <ev:after rdf:resource="&eqs;cc16e1b39c2fa1dc9b79369570ab12e7" />
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;b6915b5c2e13a466ebf45dac9eaf4ce5/attribute/place">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>place</ev:key>
+  <ev:value>14km ESE of Mammoth Lakes, California</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;b6915b5c2e13a466ebf45dac9eaf4ce5/attribute/magnitude">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>magnitude</ev:key>
+  <ev:value>0.44</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;b6915b5c2e13a466ebf45dac9eaf4ce5/attribute/latitude">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>latitude</ev:key>
+  <ev:value>37.6108333</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;b6915b5c2e13a466ebf45dac9eaf4ce5/attribute/longitude">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>longitude</ev:key>
+  <ev:value>-118.8186667</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;1ec8007ed339685f251ec75f1c0c6ac7">
+  <rdf:type rdf:resource="&ev;Event" />
+  <ev:startTime>2014-12-28T08:44:48.730000</ev:startTime>
+  <ev:hasAttribute rdf:resource="&eqs;1ec8007ed339685f251ec75f1c0c6ac7/attribute/place" />
+  <ev:hasAttribute rdf:resource="&eqs;1ec8007ed339685f251ec75f1c0c6ac7/attribute/magnitude" />
+  <ev:hasAttribute rdf:resource="&eqs;1ec8007ed339685f251ec75f1c0c6ac7/attribute/latitude" />
+  <ev:hasAttribute rdf:resource="&eqs;1ec8007ed339685f251ec75f1c0c6ac7/attribute/longitude" />
+  <ev:after rdf:resource="&eqs;b6915b5c2e13a466ebf45dac9eaf4ce5" />
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;1ec8007ed339685f251ec75f1c0c6ac7/attribute/place">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>place</ev:key>
+  <ev:value>4km WNW of Cobb, California</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;1ec8007ed339685f251ec75f1c0c6ac7/attribute/magnitude">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>magnitude</ev:key>
+  <ev:value>0.46</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;1ec8007ed339685f251ec75f1c0c6ac7/attribute/latitude">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>latitude</ev:key>
+  <ev:value>38.8353348</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;1ec8007ed339685f251ec75f1c0c6ac7/attribute/longitude">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>longitude</ev:key>
+  <ev:value>-122.7728348</ev:value>
+</rdf:Description>
+
+<!-- End: RDF statements for after transitive tests -->
+
+<!-- Beginning: RDF statements for during transitive tests -->
+
+<rdf:Description rdf:about="&weather;befa1fd6d5237a7880786ba16f935225">
+<rdf:type rdf:resource="&ev;Event" />
+  <ev:startTime>2015-01-01T15:43:00</ev:startTime>
+  <ev:hasAttribute rdf:resource="&weather;befa1fd6d5237a7880786ba16f935225/attribute/weatherType" />
+  <ev:hasAttribute rdf:resource="&weather;befa1fd6d5237a7880786ba16f935225/attribute/latitude" />
+  <ev:hasAttribute rdf:resource="&weather;befa1fd6d5237a7880786ba16f935225/attribute/longitude" />
+  <ev:during rdf:resource="&weather;7ea9bb7b37dbe63074e61de46f3a82dd" />
+</rdf:Description>
+
+<rdf:Description rdf:about="&weather;befa1fd6d5237a7880786ba16f935225/attribute/weatherType">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>weatherType</ev:key>
+  <ev:value>Snow</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&weather;befa1fd6d5237a7880786ba16f935225/attribute/latitude">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>latitude</ev:key>
+  <ev:value>43.03</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&weather;befa1fd6d5237a7880786ba16f935225/attribute/longitude">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>longitude</ev:key>
+  <ev:value>-78.95</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&weather;7ea9bb7b37dbe63074e61de46f3a82dd">
+<rdf:type rdf:resource="&ev;Event" />
+  <ev:startTime>2015-01-01T15:43:00</ev:startTime>
+  <ev:hasAttribute rdf:resource="&weather;7ea9bb7b37dbe63074e61de46f3a82dd/attribute/weatherType" />
+  <ev:hasAttribute rdf:resource="&weather;7ea9bb7b37dbe63074e61de46f3a82dd/attribute/latitude" />
+  <ev:hasAttribute rdf:resource="&weather;7ea9bb7b37dbe63074e61de46f3a82dd/attribute/longitude" />
+  <ev:during rdf:resource="&weather;b9d5e185e3a89aa5dfa47766dedc12a8" />
+</rdf:Description>
+
+<rdf:Description rdf:about="&weather;7ea9bb7b37dbe63074e61de46f3a82dd/attribute/weatherType">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>weatherType</ev:key>
+  <ev:value>Rain</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&weather;7ea9bb7b37dbe63074e61de46f3a82dd/attribute/latitude">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>latitude</ev:key>
+  <ev:value>32.85</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&weather;7ea9bb7b37dbe63074e61de46f3a82dd/attribute/longitude">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>longitude</ev:key>
+  <ev:value>-97.15</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&weather;b9d5e185e3a89aa5dfa47766dedc12a8">
+<rdf:type rdf:resource="&ev;Event" />
+  <ev:startTime>2015-01-01T15:43:00</ev:startTime>
+  <ev:hasAttribute rdf:resource="&weather;b9d5e185e3a89aa5dfa47766dedc12a8/attribute/weatherType" />
+  <ev:hasAttribute rdf:resource="&weather;b9d5e185e3a89aa5dfa47766dedc12a8/attribute/latitude" />
+  <ev:hasAttribute rdf:resource="&weather;b9d5e185e3a89aa5dfa47766dedc12a8/attribute/longitude" />
+</rdf:Description>
+
+<rdf:Description rdf:about="&weather;b9d5e185e3a89aa5dfa47766dedc12a8/attribute/weatherType">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>weatherType</ev:key>
+  <ev:value>Rain</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&weather;b9d5e185e3a89aa5dfa47766dedc12a8/attribute/latitude">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>latitude</ev:key>
+  <ev:value>37.41</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&weather;b9d5e185e3a89aa5dfa47766dedc12a8/attribute/longitude">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>longitude</ev:key>
+  <ev:value>-97.32</ev:value>
+</rdf:Description>
+
+<!-- End: RDF statements for during transitive tests -->
+
+
+<!-- Beginning: RDF statements for temporalOverlap symmetric tests -->
+
+<rdf:Description rdf:about="&cl;b4cc6c8d4e4c6c7d11d715d4c8f8022e">
+  <rdf:type rdf:resource="&ev;Event" />
+  <ev:startTime>2014-01-08T11:30:00</ev:startTime>
+  <ev:endTime>2014-01-08T13:00:00</ev:endTime>
+  <ev:temporalOverlap rdf:resource="&cl;2f51a3827f3a558449c51d6a9d1e7d74" />
+  <ev:hasAttribute rdf:resource="&cl;b4cc6c8d4e4c6c7d11d715d4c8f8022e/attribute/term" />
+  <ev:hasAttribute rdf:resource="&cl;b4cc6c8d4e4c6c7d11d715d4c8f8022e/attribute/session" />
+  <ev:hasAttribute rdf:resource="&cl;b4cc6c8d4e4c6c7d11d715d4c8f8022e/attribute/academicGroup" />
+  <ev:hasAttribute rdf:resource="&cl;b4cc6c8d4e4c6c7d11d715d4c8f8022e/attribute/classNumber" />
+  <ev:hasAttribute rdf:resource="&cl;b4cc6c8d4e4c6c7d11d715d4c8f8022e/attribute/subject" />
+  <ev:hasAttribute rdf:resource="&cl;b4cc6c8d4e4c6c7d11d715d4c8f8022e/attribute/catalogNumber" />
+  <ev:hasAttribute rdf:resource="&cl;b4cc6c8d4e4c6c7d11d715d4c8f8022e/attribute/section" />
+  <ev:hasAttribute rdf:resource="&cl;b4cc6c8d4e4c6c7d11d715d4c8f8022e/attribute/courseTitle" />
+  <ev:hasAttribute rdf:resource="&cl;b4cc6c8d4e4c6c7d11d715d4c8f8022e/attribute/component" />
+  <ev:hasAttribute rdf:resource="&cl;b4cc6c8d4e4c6c7d11d715d4c8f8022e/attribute/location" />
+  <ev:hasAttribute rdf:resource="&cl;b4cc6c8d4e4c6c7d11d715d4c8f8022e/attribute/instructor" />
+  <ev:hasAttribute rdf:resource="&cl;b4cc6c8d4e4c6c7d11d715d4c8f8022e/attribute/units" />
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;b4cc6c8d4e4c6c7d11d715d4c8f8022e/attribute/term">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>term</ev:key>
+  <ev:value>Winter 2014</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;b4cc6c8d4e4c6c7d11d715d4c8f8022e/attribute/session">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>session</ev:key>
+  <ev:value>Regular Academic Session</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;b4cc6c8d4e4c6c7d11d715d4c8f8022e/attribute/academicGroup">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>academicGroup</ev:key>
+  <ev:value>Engineering</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;b4cc6c8d4e4c6c7d11d715d4c8f8022e/attribute/classNumber">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>classNumber</ev:key>
+  <ev:value>25799</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;b4cc6c8d4e4c6c7d11d715d4c8f8022e/attribute/subject">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>subject</ev:key>
+  <ev:value>Naval Architecture And Marine Engineering (NAVARCH)</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;b4cc6c8d4e4c6c7d11d715d4c8f8022e/attribute/catalogNumber">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>catalogNumber</ev:key>
+  <ev:value>431</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;b4cc6c8d4e4c6c7d11d715d4c8f8022e/attribute/section">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>section</ev:key>
+  <ev:value>001</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;b4cc6c8d4e4c6c7d11d715d4c8f8022e/attribute/courseTitle">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>courseTitle</ev:key>
+  <ev:value>Mar Engineering II</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;b4cc6c8d4e4c6c7d11d715d4c8f8022e/attribute/component">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>component</ev:key>
+  <ev:value>LEC</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;b4cc6c8d4e4c6c7d11d715d4c8f8022e/attribute/location">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>location</ev:key>
+  <ev:value>ARR</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;b4cc6c8d4e4c6c7d11d715d4c8f8022e/attribute/instructor">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>instructor</ev:key>
+  <ev:value>Werner</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;b4cc6c8d4e4c6c7d11d715d4c8f8022e/attribute/units">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>units</ev:key>
+  <ev:value>3.00</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;2f51a3827f3a558449c51d6a9d1e7d74">
+  <rdf:type rdf:resource="&ev;Event" />
+  <ev:startTime>2014-01-08T11:00:00</ev:startTime>
+  <ev:endTime>2014-01-08T12:00:00</ev:endTime>
+  <ev:hasAttribute rdf:resource="&cl;2f51a3827f3a558449c51d6a9d1e7d74/attribute/term" />
+  <ev:hasAttribute rdf:resource="&cl;2f51a3827f3a558449c51d6a9d1e7d74/attribute/session" />
+  <ev:hasAttribute rdf:resource="&cl;2f51a3827f3a558449c51d6a9d1e7d74/attribute/academicGroup" />
+  <ev:hasAttribute rdf:resource="&cl;2f51a3827f3a558449c51d6a9d1e7d74/attribute/classNumber" />
+  <ev:hasAttribute rdf:resource="&cl;2f51a3827f3a558449c51d6a9d1e7d74/attribute/subject" />
+  <ev:hasAttribute rdf:resource="&cl;2f51a3827f3a558449c51d6a9d1e7d74/attribute/catalogNumber" />
+  <ev:hasAttribute rdf:resource="&cl;2f51a3827f3a558449c51d6a9d1e7d74/attribute/section" />
+  <ev:hasAttribute rdf:resource="&cl;2f51a3827f3a558449c51d6a9d1e7d74/attribute/courseTitle" />
+  <ev:hasAttribute rdf:resource="&cl;2f51a3827f3a558449c51d6a9d1e7d74/attribute/component" />
+  <ev:hasAttribute rdf:resource="&cl;2f51a3827f3a558449c51d6a9d1e7d74/attribute/location" />
+  <ev:hasAttribute rdf:resource="&cl;2f51a3827f3a558449c51d6a9d1e7d74/attribute/instructor" />
+  <ev:hasAttribute rdf:resource="&cl;2f51a3827f3a558449c51d6a9d1e7d74/attribute/units" />
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;2f51a3827f3a558449c51d6a9d1e7d74/attribute/term">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>term</ev:key>
+  <ev:value>Winter 2014</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;2f51a3827f3a558449c51d6a9d1e7d74/attribute/session">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>session</ev:key>
+  <ev:value>Regular Academic Session</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;2f51a3827f3a558449c51d6a9d1e7d74/attribute/academicGroup">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>academicGroup</ev:key>
+  <ev:value>Literature, Science &amp; the Arts</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;2f51a3827f3a558449c51d6a9d1e7d74/attribute/classNumber">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>classNumber</ev:key>
+  <ev:value>22828</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;2f51a3827f3a558449c51d6a9d1e7d74/attribute/subject">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>subject</ev:key>
+  <ev:value>Environment (ENVIRON)</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;2f51a3827f3a558449c51d6a9d1e7d74/attribute/catalogNumber">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>catalogNumber</ev:key>
+  <ev:value>391</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;2f51a3827f3a558449c51d6a9d1e7d74/attribute/section">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>section</ev:key>
+  <ev:value>001</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;2f51a3827f3a558449c51d6a9d1e7d74/attribute/courseTitle">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>courseTitle</ev:key>
+  <ev:value>Sustainable Campus</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;2f51a3827f3a558449c51d6a9d1e7d74/attribute/component">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>component</ev:key>
+  <ev:value>LEC</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;2f51a3827f3a558449c51d6a9d1e7d74/attribute/location">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>location</ev:key>
+  <ev:value>1046 DANA</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;2f51a3827f3a558449c51d6a9d1e7d74/attribute/instructor">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>instructor</ev:key>
+  <ev:value>Shriberg, Zimmerman</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;2f51a3827f3a558449c51d6a9d1e7d74/attribute/units">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>units</ev:key>
+  <ev:value>3.00</ev:value>
+</rdf:Description>
+
+<!-- End: RDF statements for temporalOverlap symmetric tests -->
+
+<!-- Beginning: RDF statements for temporalIntersection symmetric tests -->
+
+<rdf:Description rdf:about="&cl;de03b9f182888b848ba1c2f061e69f63">
+  <rdf:type rdf:resource="&ev;Event" />
+  <ev:startTime>2014-01-08T10:00:00</ev:startTime>
+  <ev:endTime>2014-01-08T12:00:00</ev:endTime>
+  <ev:temporalIntersection rdf:resource="&cl;712fc5d39fdb5ed768635035b5d19a11" />
+  <ev:hasAttribute rdf:resource="&cl;de03b9f182888b848ba1c2f061e69f63/attribute/term" />
+  <ev:hasAttribute rdf:resource="&cl;de03b9f182888b848ba1c2f061e69f63/attribute/session" />
+  <ev:hasAttribute rdf:resource="&cl;de03b9f182888b848ba1c2f061e69f63/attribute/academicGroup" />
+  <ev:hasAttribute rdf:resource="&cl;de03b9f182888b848ba1c2f061e69f63/attribute/classNumber" />
+  <ev:hasAttribute rdf:resource="&cl;de03b9f182888b848ba1c2f061e69f63/attribute/subject" />
+  <ev:hasAttribute rdf:resource="&cl;de03b9f182888b848ba1c2f061e69f63/attribute/catalogNumber" />
+  <ev:hasAttribute rdf:resource="&cl;de03b9f182888b848ba1c2f061e69f63/attribute/section" />
+  <ev:hasAttribute rdf:resource="&cl;de03b9f182888b848ba1c2f061e69f63/attribute/courseTitle" />
+  <ev:hasAttribute rdf:resource="&cl;de03b9f182888b848ba1c2f061e69f63/attribute/component" />
+  <ev:hasAttribute rdf:resource="&cl;de03b9f182888b848ba1c2f061e69f63/attribute/location" />
+  <ev:hasAttribute rdf:resource="&cl;de03b9f182888b848ba1c2f061e69f63/attribute/instructor" />
+  <ev:hasAttribute rdf:resource="&cl;de03b9f182888b848ba1c2f061e69f63/attribute/units" />
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;de03b9f182888b848ba1c2f061e69f63/attribute/term">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>term</ev:key>
+  <ev:value>Winter 2014</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;de03b9f182888b848ba1c2f061e69f63/attribute/session">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>session</ev:key>
+  <ev:value>Regular Academic Session</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;de03b9f182888b848ba1c2f061e69f63/attribute/academicGroup">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>academicGroup</ev:key>
+  <ev:value>Literature, Science &amp; the Arts</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;de03b9f182888b848ba1c2f061e69f63/attribute/classNumber">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>classNumber</ev:key>
+  <ev:value>12066</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;de03b9f182888b848ba1c2f061e69f63/attribute/subject">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>subject</ev:key>
+  <ev:value>Physics (PHYSICS)</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;de03b9f182888b848ba1c2f061e69f63/attribute/catalogNumber">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>catalogNumber</ev:key>
+  <ev:value>141</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;de03b9f182888b848ba1c2f061e69f63/attribute/section">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>section</ev:key>
+  <ev:value>022</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;de03b9f182888b848ba1c2f061e69f63/attribute/courseTitle">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>courseTitle</ev:key>
+  <ev:value>Elementary Lab I</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;de03b9f182888b848ba1c2f061e69f63/attribute/component">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>component</ev:key>
+  <ev:value>LAB</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;de03b9f182888b848ba1c2f061e69f63/attribute/location">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>location</ev:key>
+  <ev:value>1224 RAND</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;de03b9f182888b848ba1c2f061e69f63/attribute/instructor">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>instructor</ev:key>
+  <ev:value>Ringe</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;de03b9f182888b848ba1c2f061e69f63/attribute/units">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>units</ev:key>
+  <ev:value>1.00</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;712fc5d39fdb5ed768635035b5d19a11">
+  <rdf:type rdf:resource="&ev;Event" />
+  <ev:startTime>2014-01-08T10:00:00</ev:startTime>
+  <ev:endTime>2014-01-08T11:00:00</ev:endTime>
+  <ev:hasAttribute rdf:resource="&cl;712fc5d39fdb5ed768635035b5d19a11/attribute/term" />
+  <ev:hasAttribute rdf:resource="&cl;712fc5d39fdb5ed768635035b5d19a11/attribute/session" />
+  <ev:hasAttribute rdf:resource="&cl;712fc5d39fdb5ed768635035b5d19a11/attribute/academicGroup" />
+  <ev:hasAttribute rdf:resource="&cl;712fc5d39fdb5ed768635035b5d19a11/attribute/classNumber" />
+  <ev:hasAttribute rdf:resource="&cl;712fc5d39fdb5ed768635035b5d19a11/attribute/subject" />
+  <ev:hasAttribute rdf:resource="&cl;712fc5d39fdb5ed768635035b5d19a11/attribute/catalogNumber" />
+  <ev:hasAttribute rdf:resource="&cl;712fc5d39fdb5ed768635035b5d19a11/attribute/section" />
+  <ev:hasAttribute rdf:resource="&cl;712fc5d39fdb5ed768635035b5d19a11/attribute/courseTitle" />
+  <ev:hasAttribute rdf:resource="&cl;712fc5d39fdb5ed768635035b5d19a11/attribute/component" />
+  <ev:hasAttribute rdf:resource="&cl;712fc5d39fdb5ed768635035b5d19a11/attribute/location" />
+  <ev:hasAttribute rdf:resource="&cl;712fc5d39fdb5ed768635035b5d19a11/attribute/instructor" />
+  <ev:hasAttribute rdf:resource="&cl;712fc5d39fdb5ed768635035b5d19a11/attribute/units" />
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;712fc5d39fdb5ed768635035b5d19a11/attribute/term">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>term</ev:key>
+  <ev:value>Winter 2014</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;712fc5d39fdb5ed768635035b5d19a11/attribute/session">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>session</ev:key>
+  <ev:value>Regular Academic Session</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;712fc5d39fdb5ed768635035b5d19a11/attribute/academicGroup">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>academicGroup</ev:key>
+  <ev:value>Literature, Science &amp; the Arts</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;712fc5d39fdb5ed768635035b5d19a11/attribute/classNumber">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>classNumber</ev:key>
+  <ev:value>27547</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;712fc5d39fdb5ed768635035b5d19a11/attribute/subject">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>subject</ev:key>
+  <ev:value>Mathematics (MATH)</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;712fc5d39fdb5ed768635035b5d19a11/attribute/catalogNumber">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>catalogNumber</ev:key>
+  <ev:value>186</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;712fc5d39fdb5ed768635035b5d19a11/attribute/section">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>section</ev:key>
+  <ev:value>001</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;712fc5d39fdb5ed768635035b5d19a11/attribute/courseTitle">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>courseTitle</ev:key>
+  <ev:value>Honors Calc II</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;712fc5d39fdb5ed768635035b5d19a11/attribute/component">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>component</ev:key>
+  <ev:value>LEC</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;712fc5d39fdb5ed768635035b5d19a11/attribute/location">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>location</ev:key>
+  <ev:value>4153 USB</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;712fc5d39fdb5ed768635035b5d19a11/attribute/instructor">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>instructor</ev:key>
+  <ev:value>Chung</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&cl;712fc5d39fdb5ed768635035b5d19a11/attribute/units">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>units</ev:key>
+  <ev:value>4.00</ev:value>
+</rdf:Description>
+
+<!-- End: RDF statements for temporalIntersection symmetric tests -->
+
+</rdf:RDF>
