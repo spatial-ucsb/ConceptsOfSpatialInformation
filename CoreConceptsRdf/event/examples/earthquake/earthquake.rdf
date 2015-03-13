@@ -1,9 +1,9 @@
+<?xml version="1.0"?>
+
 <!--
 Abstract: RDF specification of an earthquake
 Author: Marc Tim Thiemann
 -->
-
-<?xml version="1.0"?>
 
 <!-- Entities Declaration -->
 <!DOCTYPE rdf:RDF [

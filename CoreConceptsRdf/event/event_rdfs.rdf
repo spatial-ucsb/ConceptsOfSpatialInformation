@@ -1,9 +1,9 @@
+<?xml version="1.0"?>
+
 <!---
 Abstract: RDF schema for the core concept event
 Author: Marc Tim Thiemann
 -->
-
-<?xml version="1.0"?>
 
 <!-- Entities Declaration -->
 <!DOCTYPE rdf:RDF [

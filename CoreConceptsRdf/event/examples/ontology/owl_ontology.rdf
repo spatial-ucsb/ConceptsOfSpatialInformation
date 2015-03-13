@@ -1,9 +1,9 @@
+<?xml version="1.0"?>
+
 <!---
 Abstract: RDF data using the owl ontologies "event_ttl.owl" and "event_xml.owl" located in the folder "CoreConceptsRdf/event".
 Author: Marc Tim Thiemann
 -->
-
-<?xml version="1.0"?>
 
 <!-- Entities Declaration -->
 <!DOCTYPE rdf:RDF [
@@ -130,21 +130,5 @@ Author: Marc Tim Thiemann
 </rdf:Description>
 
 <!-- End: RDF statements for temporalIntersection symmetric tests -->
-
-<!-- Beginning: RDF statements for FunctionalProperty tests -->
-
-<rdf:Description rdf:about="http://www.core-concepts.com/events/two-start-times">
-  <rdf:type rdf:resource="&ev;Event" />
-  <ev:startTime rdf:datatype="&xsd;dateTime">2015-02-09T12:00:00</ev:startTime>
-  <ev:startTime rdf:datatype="&xsd;dateTime">2015-02-10T12:00:00</ev:startTime>
-</rdf:Description>
-
-<rdf:Description rdf:about="http://www.core-concepts.com/events/two-end-times">
-  <rdf:type rdf:resource="&ev;Event" />
-  <ev:endTime rdf:datatype="&xsd;dateTime">2015-02-09T12:00:00</ev:endTime>
-  <ev:endTime rdf:datatype="&xsd;dateTime">2015-02-10T12:00:00</ev:endTime>
-</rdf:Description>
-
-<!-- End: RDF statements for FunctionalProperty tests -->
 
 </rdf:RDF>

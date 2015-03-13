@@ -1,9 +1,9 @@
+<?xml version="1.0"?>
+
 <!---
 Abstract: RDF data using the RDF schema "event_rdfs.rdf" located in the folder "CoreConceptsRdf/event".
 Author: Marc Tim Thiemann
 -->
-
-<?xml version="1.0"?>
 
 <!-- Entities Declaration -->
 <!DOCTYPE rdf:RDF [
