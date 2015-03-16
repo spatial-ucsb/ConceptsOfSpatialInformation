@@ -5,6 +5,8 @@ Abstract: RDF earthquake data using the owl ontologies "event_ttl.owl" and "even
 
 - RDF statements for transitive inference on the before property with earthquake data from "data/events/earthquake_data.csv"
 - RDF statements for transitive inference on the after property with earthquake data from "data/events/earthquake_data.csv"
+The places of the earthquake data are linked to the corresponding rdf dbpedia places.
+
 - RDF statements for transitive inference on the during property with weather data from "data/events/weather_data.txt"
 - RDF statements for symmetric inference on the temporalOverlap property with course data from "data/events/course_data.csv"
 - RDF statements for symmetric inference on the temporalIntersection property with course data from "data/events/course_data.csv"
@@ -23,6 +25,7 @@ Author: Marc Tim Thiemann
     <!ENTITY eqs 'http://www.core-concepts.com/events/earthquake/'>
     <!ENTITY weather 'http://www.core-concepts.com/events/weather/'>
     <!ENTITY cl 'http://www.core-concepts.com/events/class/'>
+    <!ENTITY dbpedia 'http://dbpedia.org/resource/'>
 ]>
 
 <!-- Namespaces Declaration-->
@@ -40,16 +43,23 @@ Author: Marc Tim Thiemann
   <rdf:type rdf:resource="&ev;Event" />
   <ev:startTime>2014-12-20T21:31:35</ev:startTime>
   <ev:hasAttribute rdf:resource="&eqs;01331aa855fa28da5b5ccd40b6213d32/attribute/place" />
+  <ev:hasAttribute rdf:resource="&eqs;01331aa855fa28da5b5ccd40b6213d32/attribute/placeDescription" />
   <ev:hasAttribute rdf:resource="&eqs;01331aa855fa28da5b5ccd40b6213d32/attribute/magnitude" />
   <ev:hasAttribute rdf:resource="&eqs;01331aa855fa28da5b5ccd40b6213d32/attribute/latitude" />
   <ev:hasAttribute rdf:resource="&eqs;01331aa855fa28da5b5ccd40b6213d32/attribute/longitude" />
   <ev:before rdf:resource="&eqs;25659f600c9afff060d4a5427fa1fa95" />
 </rdf:Description>
 
+<rdf:Description rdf:about="&eqs;01331aa855fa28da5b5ccd40b6213d32/attribute/placeDescription">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>placeDescription</ev:key>
+  <ev:value>51km SW of Unalaska, Alaska</ev:value>
+</rdf:Description>
+
 <rdf:Description rdf:about="&eqs;01331aa855fa28da5b5ccd40b6213d32/attribute/place">
   <rdf:type rdf:resource="&ev;Attribute" />
   <ev:key>place</ev:key>
-  <ev:value>51km SW of Unalaska, Alaska</ev:value>
+  <ev:value rdf:resource="&dbpedia;Unalaska,_Alaska" />
 </rdf:Description>
 
 <rdf:Description rdf:about="&eqs;01331aa855fa28da5b5ccd40b6213d32/attribute/magnitude">
@@ -74,16 +84,23 @@ Author: Marc Tim Thiemann
   <rdf:type rdf:resource="&ev;Event" />
   <ev:startTime>2014-12-26T09:09:33</ev:startTime>
   <ev:hasAttribute rdf:resource="&eqs;25659f600c9afff060d4a5427fa1fa95/attribute/place" />
+  <ev:hasAttribute rdf:resource="&eqs;25659f600c9afff060d4a5427fa1fa95/attribute/placeDescription" />
   <ev:hasAttribute rdf:resource="&eqs;25659f600c9afff060d4a5427fa1fa95/attribute/magnitude" />
   <ev:hasAttribute rdf:resource="&eqs;25659f600c9afff060d4a5427fa1fa95/attribute/latitude" />
   <ev:hasAttribute rdf:resource="&eqs;25659f600c9afff060d4a5427fa1fa95/attribute/longitude" />
   <ev:before rdf:resource="&eqs;4978f1066e8cddf51e72555962138292" />
 </rdf:Description>
 
+<rdf:Description rdf:about="&eqs;25659f600c9afff060d4a5427fa1fa95/attribute/placeDescription">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>placeDescription</ev:key>
+  <ev:value>59km ENE of Cantwell, Alaska</ev:value>
+</rdf:Description>
+
 <rdf:Description rdf:about="&eqs;25659f600c9afff060d4a5427fa1fa95/attribute/place">
   <rdf:type rdf:resource="&ev;Attribute" />
   <ev:key>place</ev:key>
-  <ev:value>59km ENE of Cantwell, Alaska</ev:value>
+  <ev:value rdf:resource="&dbpedia;Cantwell,_Alaska" />
 </rdf:Description>
 
 <rdf:Description rdf:about="&eqs;25659f600c9afff060d4a5427fa1fa95/attribute/magnitude">
@@ -108,15 +125,22 @@ Author: Marc Tim Thiemann
   <rdf:type rdf:resource="&ev;Event" />
   <ev:startTime>2014-12-28T19:17:31.420000</ev:startTime>
   <ev:hasAttribute rdf:resource="&eqs;4978f1066e8cddf51e72555962138292/attribute/place" />
+  <ev:hasAttribute rdf:resource="&eqs;4978f1066e8cddf51e72555962138292/attribute/placeDescription" />
   <ev:hasAttribute rdf:resource="&eqs;4978f1066e8cddf51e72555962138292/attribute/magnitude" />
   <ev:hasAttribute rdf:resource="&eqs;4978f1066e8cddf51e72555962138292/attribute/latitude" />
   <ev:hasAttribute rdf:resource="&eqs;4978f1066e8cddf51e72555962138292/attribute/longitude" />
 </rdf:Description>
 
+<rdf:Description rdf:about="&eqs;4978f1066e8cddf51e72555962138292/attribute/placeDescription">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>placeDescription</ev:key>
+  <ev:value>7km ESE of Valle Vista, California</ev:value>
+</rdf:Description>
+
 <rdf:Description rdf:about="&eqs;4978f1066e8cddf51e72555962138292/attribute/place">
   <rdf:type rdf:resource="&ev;Attribute" />
   <ev:key>place</ev:key>
-  <ev:value>7km ESE of Valle Vista, California</ev:value>
+  <ev:value rdf:resource="&dbpedia;Valle_Vista,_California" />
 </rdf:Description>
 
 <rdf:Description rdf:about="&eqs;4978f1066e8cddf51e72555962138292/attribute/magnitude">
@@ -141,53 +165,67 @@ Author: Marc Tim Thiemann
 
 <!-- Beginning: RDF statements for after transitive tests -->
 
-<rdf:Description rdf:about="&eqs;cc16e1b39c2fa1dc9b79369570ab12e7">
+<rdf:Description rdf:about="&eqs;4e5d008c31e67d385736bf2ce92aed04">
   <rdf:type rdf:resource="&ev;Event" />
-  <ev:startTime>2014-12-06T21:09:26.360000</ev:startTime>
-  <ev:hasAttribute rdf:resource="&eqs;cc16e1b39c2fa1dc9b79369570ab12e7/attribute/place" />
-  <ev:hasAttribute rdf:resource="&eqs;cc16e1b39c2fa1dc9b79369570ab12e7/attribute/magnitude" />
-  <ev:hasAttribute rdf:resource="&eqs;cc16e1b39c2fa1dc9b79369570ab12e7/attribute/latitude" />
-  <ev:hasAttribute rdf:resource="&eqs;cc16e1b39c2fa1dc9b79369570ab12e7/attribute/longitude" />
+  <ev:startTime>2014-12-02T20:50:21.760000</ev:startTime>
+  <ev:hasAttribute rdf:resource="&eqs;4e5d008c31e67d385736bf2ce92aed04/attribute/placeDescription" />
+  <ev:hasAttribute rdf:resource="&eqs;4e5d008c31e67d385736bf2ce92aed04/attribute/place" />
+  <ev:hasAttribute rdf:resource="&eqs;4e5d008c31e67d385736bf2ce92aed04/attribute/magnitude" />
+  <ev:hasAttribute rdf:resource="&eqs;4e5d008c31e67d385736bf2ce92aed04/attribute/latitude" />
+  <ev:hasAttribute rdf:resource="&eqs;4e5d008c31e67d385736bf2ce92aed04/attribute/longitude" />
 </rdf:Description>
 
-<rdf:Description rdf:about="&eqs;cc16e1b39c2fa1dc9b79369570ab12e7/attribute/place">
+<rdf:Description rdf:about="&eqs;4e5d008c31e67d385736bf2ce92aed04/attribute/placeDescription">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>placeDescription</ev:key>
+  <ev:value>23km NW of Huntington, Utah</ev:value>
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;4e5d008c31e67d385736bf2ce92aed04/attribute/place">
   <rdf:type rdf:resource="&ev;Attribute" />
   <ev:key>place</ev:key>
-  <ev:value>61km N of Sidomulyo, Indonesia</ev:value>
+  <ev:value rdf:resource="&dbpedia;Huntington,_Utah" />
 </rdf:Description>
 
-<rdf:Description rdf:about="&eqs;cc16e1b39c2fa1dc9b79369570ab12e7/attribute/magnitude">
+<rdf:Description rdf:about="&eqs;4e5d008c31e67d385736bf2ce92aed04/attribute/magnitude">
   <rdf:type rdf:resource="&ev;Attribute" />
   <ev:key>magnitude</ev:key>
-  <ev:value>4.2</ev:value>
+  <ev:value>1.83</ev:value>
 </rdf:Description>
 
-<rdf:Description rdf:about="&eqs;cc16e1b39c2fa1dc9b79369570ab12e7/attribute/latitude">
+<rdf:Description rdf:about="&eqs;4e5d008c31e67d385736bf2ce92aed04/attribute/latitude">
   <rdf:type rdf:resource="&ev;Attribute" />
   <ev:key>latitude</ev:key>
-  <ev:value>1.2028</ev:value>
+  <ev:value>39.4436667</ev:value>
 </rdf:Description>
 
-<rdf:Description rdf:about="&eqs;cc16e1b39c2fa1dc9b79369570ab12e7/attribute/longitude">
+<rdf:Description rdf:about="&eqs;4e5d008c31e67d385736bf2ce92aed04/attribute/longitude">
   <rdf:type rdf:resource="&ev;Attribute" />
   <ev:key>longitude</ev:key>
-  <ev:value>122.5532</ev:value>
+  <ev:value>-111.1868333</ev:value>
 </rdf:Description>
 
 <rdf:Description rdf:about="&eqs;b6915b5c2e13a466ebf45dac9eaf4ce5">
   <rdf:type rdf:resource="&ev;Event" />
   <ev:startTime>2014-12-09T21:17:09.910000</ev:startTime>
   <ev:hasAttribute rdf:resource="&eqs;b6915b5c2e13a466ebf45dac9eaf4ce5/attribute/place" />
+  <ev:hasAttribute rdf:resource="&eqs;b6915b5c2e13a466ebf45dac9eaf4ce5/attribute/placeDescription" />
   <ev:hasAttribute rdf:resource="&eqs;b6915b5c2e13a466ebf45dac9eaf4ce5/attribute/magnitude" />
   <ev:hasAttribute rdf:resource="&eqs;b6915b5c2e13a466ebf45dac9eaf4ce5/attribute/latitude" />
   <ev:hasAttribute rdf:resource="&eqs;b6915b5c2e13a466ebf45dac9eaf4ce5/attribute/longitude" />
-  <ev:after rdf:resource="&eqs;cc16e1b39c2fa1dc9b79369570ab12e7" />
+  <ev:after rdf:resource="&eqs;4e5d008c31e67d385736bf2ce92aed04" />
+</rdf:Description>
+
+<rdf:Description rdf:about="&eqs;b6915b5c2e13a466ebf45dac9eaf4ce5/attribute/placeDescription">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>placeDescription</ev:key>
+  <ev:value>14km ESE of Mammoth Lakes, California</ev:value>
 </rdf:Description>
 
 <rdf:Description rdf:about="&eqs;b6915b5c2e13a466ebf45dac9eaf4ce5/attribute/place">
   <rdf:type rdf:resource="&ev;Attribute" />
   <ev:key>place</ev:key>
-  <ev:value>14km ESE of Mammoth Lakes, California</ev:value>
+  <ev:value rdf:resource="&dbpedia;Mammoth_Lakes,_California" />
 </rdf:Description>
 
 <rdf:Description rdf:about="&eqs;b6915b5c2e13a466ebf45dac9eaf4ce5/attribute/magnitude">
@@ -212,16 +250,23 @@ Author: Marc Tim Thiemann
   <rdf:type rdf:resource="&ev;Event" />
   <ev:startTime>2014-12-28T08:44:48.730000</ev:startTime>
   <ev:hasAttribute rdf:resource="&eqs;1ec8007ed339685f251ec75f1c0c6ac7/attribute/place" />
+  <ev:hasAttribute rdf:resource="&eqs;1ec8007ed339685f251ec75f1c0c6ac7/attribute/placeDescription" />
   <ev:hasAttribute rdf:resource="&eqs;1ec8007ed339685f251ec75f1c0c6ac7/attribute/magnitude" />
   <ev:hasAttribute rdf:resource="&eqs;1ec8007ed339685f251ec75f1c0c6ac7/attribute/latitude" />
   <ev:hasAttribute rdf:resource="&eqs;1ec8007ed339685f251ec75f1c0c6ac7/attribute/longitude" />
   <ev:after rdf:resource="&eqs;b6915b5c2e13a466ebf45dac9eaf4ce5" />
 </rdf:Description>
 
+<rdf:Description rdf:about="&eqs;1ec8007ed339685f251ec75f1c0c6ac7/attribute/placeDescription">
+  <rdf:type rdf:resource="&ev;Attribute" />
+  <ev:key>placeDescription</ev:key>
+  <ev:value>4km WNW of Cobb, California</ev:value>
+</rdf:Description>
+
 <rdf:Description rdf:about="&eqs;1ec8007ed339685f251ec75f1c0c6ac7/attribute/place">
   <rdf:type rdf:resource="&ev;Attribute" />
   <ev:key>place</ev:key>
-  <ev:value>4km WNW of Cobb, California</ev:value>
+  <ev:value rdf:resource="&dbpedia;Cobb,_California" />
 </rdf:Description>
 
 <rdf:Description rdf:about="&eqs;1ec8007ed339685f251ec75f1c0c6ac7/attribute/magnitude">
