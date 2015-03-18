@@ -18,18 +18,21 @@ __email__ = ""
 __date__ = "February 2015"
 __status__ = "Development"
 
+import sys
+
+sys.path = [ '.', '../../..' ] + sys.path
 from earthquake import *
 from EarthquakeRdfReader import *
 from EarthquakeRdfReader2 import *
 
 #EarthquakeRdfReader2 does not inherit from RdfReader
 """
-rdf = EarthquakeRdfReader2('bindings.json')
-earthquakes = rdf.read('../../../../CoreConceptsRdf/examples/events/earthquake/test.rdf', format="xml")
+rdf = EarthquakeRdfReader2('examples/events/earthquake/bindings.json')
+earthquakes = rdf.read('tmp/testEarthquake.rdf', format="xml")
 """
 
-rdf = EarthquakeRdfReader('bindings.json')
-earthquakes = rdf.read('../../../../CoreConceptsRdf/examples/events/earthquake/test.rdf', format="xml")
+rdf = EarthquakeRdfReader('examples/events/earthquake/bindings.json')
+earthquakes = rdf.read('tmp/testEarthquake.rdf', format="xml")
 
 for x in range(0,3):
     print earthquakes[x].latitude

@@ -23,9 +23,9 @@ sys.path = [ '.', '../..' ] + sys.path
 from utils import _init_log
 from networks import *
 
-log = _init_log("fake_weighted_network")
+log = _init_log("synthetic_weighted_network")
 
-print "\nShortest paths in the fake weighted network"
+print "\nShortest paths in the synthetic weighted network"
 N = NetworkX()
 
 # horizontal
@@ -82,7 +82,7 @@ for i in range(len(N.edges())):
         if weighted[j] == N.edges()[i][0] and weighted[j+1] == N.edges()[i][1] or weighted[j] == N.edges()[i][1] and weighted[j+1] == N.edges()[i][0]:
             edge_color[i] = 'blue'
 
-plt.figure().canvas.set_window_title('FAKE WEIGHTED NETWORK')
+plt.figure().canvas.set_window_title('SYNTHETIC WEIGHTED NETWORK')
 nx.draw(N._G, node_position, edge_color=edge_color)
 nx.draw_networkx_labels(N._G, node_position, node_labels)
 nx.draw_networkx_edge_labels(N._G, node_position, edge_labels)

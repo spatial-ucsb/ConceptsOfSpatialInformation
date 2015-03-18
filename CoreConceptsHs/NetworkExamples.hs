@@ -1,3 +1,7 @@
+-- examples for core concept: network
+-- (c) Michel Zimmer
+-- latest change: Mar 17, 2015
+
 module NetworkExamples where
 
 import Network
@@ -55,13 +59,15 @@ main = do
 		where
 			degrees :: [(Node, Int)]
 			degrees = zip (nodes karateGraph) $ map (\node -> degree karateGraph node) $ nodes karateGraph
-			selectLonely :: (Node, Int) -> Bool
-			selectLonely (_, i) = i == 0
-			selectPopular :: (Node, Int) -> Bool
-			selectPopular (_, i) = i == (maximum $ map snd degrees :: Int)
 			lonely :: [Node]
-			lonely = map fst $ filter selectLonely degrees
+			lonely = map fst $ filter select degrees
+				where
+					select :: (Node, Int) -> Bool
+					select (_, i) = i == 0
 			popular :: [Node]
-			popular = map fst $ filter selectPopular degrees
+			popular = map fst $ filter select degrees
+				where
+					select :: (Node, Int) -> Bool
+					select (_, i) = i == (maximum $ map snd degrees :: Int)
 			allPaths :: [[(Node, Node, Weight)]]
 			allPaths = map (\pair -> shortestPath karateGraph (fst pair) $ snd pair) $ combinations $ nodes karateGraph

@@ -3,6 +3,10 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TypeSynonymInstances #-}
 
+-- implementation for core concept: network
+-- (c) Michel Zimmer
+-- latest change: Mar 11, 2015
+
 module NetworkImpl where
 
 import Network

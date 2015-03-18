@@ -37,7 +37,7 @@ import csv
 
 log = _init_log("example-1")
 
-f = open('../../../data/events/earthquake_data.csv')
+f = open('../data/events/earthquake_data.csv')
 csv_f = csv.reader(f)
 
 events = []

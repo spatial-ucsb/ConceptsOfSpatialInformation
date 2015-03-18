@@ -34,7 +34,7 @@ from datetime import *
 
 log = _init_log("example-2")
 
-file = open('../../../data/events/weather_data.txt', 'r')
+file = open('../data/events/weather_data.txt', 'r')
 
 events = []
 

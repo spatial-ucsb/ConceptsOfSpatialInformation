@@ -1,7 +1,7 @@
-Notes for next steps
-=============================================
+TODO
+====
+- [Haskell] Rewrite NetworkImpl.Edge as a combination of ID, source, target and weight
 
-Haskell
-
-* Shapefiles: http://hackage.haskell.org/package/shapefile
-* FGL graph library: https://hackage.haskell.org/package/fgl
+Ideas and next steps
+====================
+- Add the complements for different functions, like removeEdge for addEdge on networks

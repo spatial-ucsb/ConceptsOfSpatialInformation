@@ -10,14 +10,8 @@ all:
 	@echo "\n";
 
 clean:
-	@rm -f *.pyc;
-	@rm -f test/*.pyc;
-	@rm -f examples/*.pyc;
-	@rm -f examples/events/*.pyc;
-	@rm -f examples/fields/*.pyc;
-	@rm -f examples/locations/*.pyc;
-	@rm -f examples/networks/*.pyc;
-	@rm -f examples/objects/*.pyc;
+	@rm -rf *.pyc **/*.pyc tmp;
+	@mkdir tmp;
 
 test-events: clean
 	python -m unittest discover -s 'test' -p 'events_test.py' -t '..';
@@ -38,9 +32,11 @@ test-all: clean
 	python -m unittest discover -s 'test' -p '*_test.py' -t '..';
 
 example-events: clean
-	python examples/events/example-1.py
-	python examples/events/example-2.py
-	python examples/events/example-3.py
+	python examples/events/example_1.py
+	python examples/events/example_2.py
+	python examples/events/example_3.py
+	python examples/events/earthquake/output_use_case.py
+	python examples/events/earthquake/input_use_case.py
 
 example-fields: clean
 	@echo "No examples for fields yet. Have a look at the tests."
@@ -50,7 +46,7 @@ example-locations: clean
 
 example-networks: clean
 	python examples/networks/karate.py
-	python examples/networks/fake_weighted_network.py
+	python examples/networks/synthetic_weighted_network.py
 	python examples/networks/ucsb.py
 
 example-objects: clean
@@ -58,7 +54,7 @@ example-objects: clean
 
 example-all: example-events example-fields example-locations example-networks example-objects
 
-install_py_dependencies:
+install-dependencies:
 	# for Linux/Mac
-	easy_install networkx;
+	sudo pip install networkx;
 	# TODO: install other dependencies

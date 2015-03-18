@@ -22,6 +22,9 @@ __email__ = ""
 __date__ = "February 2015"
 __status__ = "Development"
 
+import sys
+
+sys.path = [ '.', '../../..' ] + sys.path
 import dateutil.parser
 from datetime import *
 from earthquake import *
@@ -29,7 +32,7 @@ from EarthquakeRdfWriter import *
 from EarthquakeRdfWriter2 import *
 import csv
 
-f = open('../../../../data/events/earthquake_data.csv')
+f = open('../data/events/earthquake_data.csv')
 csv_f = csv.reader(f)
 
 earthquakes = []
@@ -48,16 +51,16 @@ earthquakes = earthquakes[1:]
 
 # use initial EarthquakeRdfCreator that does not inherit from RdfCreator
 """
-rdf = EarthquakeRdfCreator2('bindings.json')
-rdf.create(earthquakes, 'xml', '../../../../CoreConceptsRdf/examples/events/earthquake/test', 'http://myearthquakes.com/earthquakes/')
+rdf = EarthquakeRdfCreator2('examples/events/earthquake/bindings.json')
+rdf.create(earthquakes, 'xml', 'tmp/testEarthquake', 'http://myearthquakes.com/earthquakes/')
 """
 
 #use EarthquakeRdfCreator that inherits from RdfCreator
-rdf = EarthquakeRdfWriter('bindings.json')
+rdf = EarthquakeRdfWriter('examples/events/earthquake/bindings.json')
 
 for e in earthquakes:
     earthquakeid = os.urandom(16).encode('hex')
     uri = "http://myearthquakes.com/earthquakes/" + earthquakeid
     rdf.add(uri, e)
 
-rdf.serialize('xml', '../../../../CoreConceptsRdf/examples/events/earthquake/test')
+rdf.serialize('xml', 'tmp/testEarthquake')

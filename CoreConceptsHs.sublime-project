@@ -1,0 +1,37 @@
+{
+	"build_systems": [
+		{
+			"cmd": ["make", "test-all"],
+			"name": "CoreConceptsHs",
+			"selector": "source.hs",
+			"variants": [
+				{
+					"cmd": ["make", "example-all"],
+					"name": "Run"
+				}
+			],
+			"working_dir": "${project_path:${folder}}/CoreConceptsHs"
+		}
+	],
+	"folders":
+	[
+		{
+			"follow_symlinks": true,
+			"path": ".",
+			"file_exclude_patterns": [
+				"*.hi",
+				"*.o",
+				"*.pyc"
+			]
+		}
+	],
+	"settings": {
+		"default_encoding": "UTF-8",
+		"default_line_ending": "unix",
+		"ensure_newline_at_eof_on_save": true,
+		"fallback_encoding": "UTF-8",
+		"tab_size": 4,
+		"translate_tabs_to_spaces": false,
+		"trim_trailing_white_space_on_save": true
+	}
+}

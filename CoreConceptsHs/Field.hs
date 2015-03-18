@@ -7,7 +7,8 @@
 -- other core operations: compute new fields from local, focal, and zonal operations
 -- fields are bounded, the bounds defining their domain
 -- fields have state in time, but points are purely spatial
--- (c) Werner Kuhn, Nov 23, 2014
+-- (c) Werner Kuhn
+-- latest change: Nov 23, 2014
 
 module Field where
 

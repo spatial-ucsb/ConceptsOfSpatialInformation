@@ -26,7 +26,7 @@ from networks import *
 
 log = _init_log("ucsb")
 
-print "\nShortest paths in the ucsb street network"
+print "\nShortest paths in the UCSB street network"
 N = NetworkX()
 
 node_ids = {}
@@ -77,6 +77,6 @@ for i in range(len(N.edges())):
             edge_color[i] = 'blue'
 
 plt.figure().canvas.set_window_title('UCSB STREET NETWORK')
-nx.draw(N._G, node_positions, edge_color = edge_color)
+nx.draw(N._G, node_positions, edge_color = edge_color, node_size = 10)
 nx.draw_networkx_labels(N._G, node_positions, node_labels)
 plt.show()

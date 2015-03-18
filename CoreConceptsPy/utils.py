@@ -27,15 +27,15 @@ def _json_pretty_print( jsonObj ):
     return s
 
 def _to_unicode(s):
-    if (type(s) is str): 
-        try: 
+    if (type(s) is str):
+        try:
             return unicode(s)
             #return s
-        except UnicodeDecodeError: 
+        except UnicodeDecodeError:
             #print "UnicodeDecodeError on string: "+s
             return s
     else: return s
-    
+
 def _read_file( filePath ):
     """ Loads file into a string """
     with open (filePath, "r") as f:
@@ -68,16 +68,16 @@ def _write_str_to_file( s, fn ):
     assert _is_str(s,fn)
     with open(fn, "w") as text_file: text_file.write(s)
     log.info(str(len(s))+" chars written in "+fn)
-    
+
 def _wrap_cdata_text( s ):
-    ss = "<![CDATA[\n" + s + "\n]]>" 
-    return ss   
-   
+    ss = "<![CDATA[\n" + s + "\n]]>"
+    return ss
+
 def _read_str_from_file( fn ):
     content = False
     with open(fn) as f:
         content = f.readlines()
-    return "".join(content)    
+    return "".join(content)
 
 def _cut_str( s, maxchar ):
     if s is None: return s
@@ -103,10 +103,10 @@ def _get_ellipse_coords( x, y, a, b, angle=0.0, k=2):
     sin_beta = np.sin(beta)
     cos_beta = np.cos(beta)
     alpha = np.radians(np.r_[0.:360.:1j*(360*k+1)])
- 
+
     sin_alpha = np.sin(alpha)
     cos_alpha = np.cos(alpha)
-    
+
     pts[:, 0] = x + (a * cos_alpha * cos_beta - b * sin_alpha * sin_beta)
     pts[:, 1] = y + (a * cos_alpha * sin_beta + b * sin_alpha * cos_beta)
 
@@ -118,12 +118,12 @@ def _sort_dict_by_value(d, asc=True):
 
 def _valid_XML_char_ordinal(i):
     return ( # conditions ordered by presumed frequency
-        0x20 <= i <= 0xD7FF 
+        0x20 <= i <= 0xD7FF
         or i in (0x9, 0xA, 0xD)
         or 0xE000 <= i <= 0xFFFD
         or 0x10000 <= i <= 0x10FFFF
         )
-    
+
 def _clean_str_for_xml( s ):
     clean_s = ''.join(c for c in s if _valid_XML_char_ordinal(ord(c)))
     #print clean_s
@@ -132,8 +132,8 @@ def _clean_str_for_xml( s ):
     return clean_s
 
 def _str_to_ascii( a ):
-    """ 
-    Decode any string to ASCII. 
+    """
+    Decode any string to ASCII.
     This avoids many unicode problems, but loses non English characters.
     @param a a string
     @return an ASCII string
@@ -143,7 +143,7 @@ def _str_to_ascii( a ):
 
 def _split_list(alist, wanted_parts):
     length = len(alist)
-    sublists = [ alist[i*length // wanted_parts: (i+1)*length // wanted_parts] 
+    sublists = [ alist[i*length // wanted_parts: (i+1)*length // wanted_parts]
              for i in range(wanted_parts) ]
     i = 0
     for s in sublists: i+=len(s)
@@ -152,7 +152,7 @@ def _split_list(alist, wanted_parts):
 
 def float_eq( a, b, err=1e-08):
     """
-    Check if floats a and b are equal within tolerance err 
-    @return boolean 
+    Check if floats a and b are equal within tolerance err
+    @return boolean
     """
     return abs(a - b) <= err

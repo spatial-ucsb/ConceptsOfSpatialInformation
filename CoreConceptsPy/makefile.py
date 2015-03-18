@@ -2,21 +2,24 @@
 
 import fnmatch
 import os
+import shutil
 import subprocess
 import sys
 import unittest
 
 examples = {
     'events': [
-        'example-1.py',
-        'example-2.py',
-        'example-3.py'
+        'example_1.py',
+        'example_2.py',
+        'example_3.py',
+        'earthquake/output_use_case.py',
+        'earthquake/input_use_case.py'
     ],
     'fields': [],
     'locations': [],
     'networks': [
         'karate.py',
-        'fake_weighted_network.py',
+        'synthetic_weighted_network.py',
         'ucsb.py'
     ],
     'objects': []
@@ -27,6 +30,8 @@ def usage():
     print '  or:  python %s example-events|fields|locations|networks|objects|all' % (sys.argv[0])
 
 def clean():
+    shutil.rmtree('tmp')
+    os.mkdir('tmp')
     for root, dirnames, filenames in os.walk('.'):
         for filename in fnmatch.filter(filenames, '*.pyc'):
             os.remove(os.path.join(root, filename))

@@ -44,7 +44,7 @@ log = _init_log("example-3")
 
 events = []
 
-f = open('../../../data/events/course_data.csv')
+f = open('../data/events/course_data.csv')
 reader = csv.DictReader(f)
 
 def getWeekDayName(weekDayNumber):
@@ -215,7 +215,7 @@ for x in range(0, len(courses)):
                                     counter += 1
 
 if overlapping is False:
-    print "None of the courses overlaps with another course \n"
+    print "None of the courses overlaps with another course\n"
 
 print "What is the next time and date for a certain course?"
 

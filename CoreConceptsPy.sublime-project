@@ -2,7 +2,7 @@
     "build_systems": [
         {
             "cmd": ["make", "test-all"],
-            "name": "CC",
+            "name": "CoreConceptsPy",
             "selector": "source.py",
             "variants": [
                 {
@@ -17,7 +17,12 @@
     [
         {
             "follow_symlinks": true,
-            "path": "."
+            "path": ".",
+            "file_exclude_patterns": [
+                "*.hi",
+                "*.o",
+                "*.pyc"
+            ]
         }
     ],
     "settings": {

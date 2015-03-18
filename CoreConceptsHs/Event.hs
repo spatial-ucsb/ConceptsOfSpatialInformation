@@ -1,4 +1,5 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
+
 -- core concept: event
 -- core questions: when did this event happen? what properties and relations does the event have? what participants does it have?
 -- events are process portions with fields, objects, and networks as participants

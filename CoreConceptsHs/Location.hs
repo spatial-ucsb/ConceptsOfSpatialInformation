@@ -1,6 +1,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TypeSynonymInstances #-}
 {-# LANGUAGE FlexibleInstances #-}
+
 -- core concept: location
 -- defining spatial relations and properties
 -- core questions: where is this? is this in relation r to that? what is in relation r to this?

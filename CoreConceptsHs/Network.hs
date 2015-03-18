@@ -5,9 +5,9 @@
 
 -- core concept: network
 -- core question: are two nodes connected? what is the shortest path between them?
--- all nodes are objects (until I see a need to change this)
 -- how to bring in PATH and LINK from earlier specs?
--- (c) Werner Kuhn, Nov 23, 2014
+-- (c) Werner Kuhn, Michel Zimmer
+-- latest change: Mar 2, 2015
 
 module Network where
 

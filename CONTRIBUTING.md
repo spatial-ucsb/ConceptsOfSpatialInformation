@@ -1,22 +1,18 @@
-How to use Git & GitHub
-=======================
-(These are probably more resources you will ever need on Git.)
-- Cheat sheet (including links to software): https://training.github.com/kit/downloads/github-git-cheat-sheet.pdf
-- Straight forward explanation of the main concepts and tasks in Git: https://rogerdudler.github.io/git-guide/
-- Official Git documentation - good reference: http://git-scm.com/doc
-- Realy good guides for a lot of day to day Git(Hub) operations: https://guides.github.com/
-- Help with specific problems: https://help.github.com/
+General conventions
+===================
+- [Ressources on learning](Learn.md) (Git, Haskell, Python & RDF are covered)
+- Use the [GitHub: Fork & pull](https://help.github.com/articles/using-pull-requests/#fork--pull) workflow
+- `TODO` is used to indicate that something is missing or unfinished.
+- `WIP` is used to indicate that something could change any time.
 
+Style guides
+------------
+- [Haskell](https://stackoverflow.com/questions/1983047/good-haskell-coding-standards)
+- [Python](https://google-styleguide.googlecode.com/svn/trunk/pyguide.html)
 
-Rules for the different coding languages
-========================================
-In all files `TODO` is used to indicate that there is work to do.
-Only the person who wrote a `TODO` shall remove it and of course only if it has been resolved.
-
-Haskell
--------
-https://stackoverflow.com/questions/1983047/good-haskell-coding-standards
-
-Python
-------
-https://google-styleguide.googlecode.com/svn/trunk/pyguide.html
+Editors and IDEs
+================
+- [Sublime Text](https://www.sublimetext.com/3) [Text editor with Plugins] (recommended)
+- [Smultron](https://www.peterborgapps.com/smultron/) [Text editor] (*Mac OS X* onyl)
+- [Apatana](http://www.aptana.com/) [*Python IDE*]
+- [PyCharm](https://www.jetbrains.com/pycharm/) [*Python IDE*]

@@ -1,15 +1,7 @@
-
 .project
-
 .pydevproject
-
+.settings/org.eclipse.core.resources.prefs
+org.eclipse.core.resources.prefs
 **/*.sublime-workspace
 
 **/Thumbs.db
-data/fields/testLocal.tif
-data/fields/testFocal.tif
-data/fields/testZonal.tif
-
-.settings/org.eclipse.core.resources.prefs
-
-org.eclipse.core.resources.prefs
