@@ -7,7 +7,7 @@ Contents
 ----------------------
 
 * `event/`: RDF event ontologies and examples.
-* `coreconceps_rdfs.rdf`: Preliminary RDF schema of the core concepts
+* `coreconcepts_rdfs.rdf`: Preliminary RDF schema of the core concepts
 
 
 RDFS vs. OWL
