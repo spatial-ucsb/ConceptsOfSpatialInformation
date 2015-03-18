@@ -57,4 +57,4 @@ example-all: example-events example-fields example-locations example-networks ex
 install-dependencies:
 	# for Linux/Mac
 	sudo pip install networkx;
-	# TODO: install other dependencies
+	@echo "Make sure, that you have installed GDAL and NumPy!"

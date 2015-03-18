@@ -51,10 +51,11 @@ To run the examples execute: `make example-all`
 
 Dependencies
 ----------------------
-TODO
-- [FGL](https://hackage.haskell.org/package/fgl) (Version: latest*)
+- [GDAL] (http://www.gdal.org) (Version: latest*)
+- [NumPy] (http://www.numpy.org) (Version: latest*)
+- [NetworkX] (https://networkx.github.io/) (Version: 1.9.1)
 
-\* Most recent stable release on hackage
+\* Most recent stable release
 
 ### Unix/Linux platforms
 To install the dependencies execute: `make install-dependencies`
