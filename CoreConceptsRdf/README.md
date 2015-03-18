@@ -7,7 +7,7 @@ Contents
 ----------------------
 
 * `event/`: RDF event ontologies and examples.
-* `resources.md`: Useful resources for the work with RDF documents.
+* `coreconcepts_rdfs.rdf`: Preliminary RDF schema of the core concepts
 
 
 RDFS vs. OWL
