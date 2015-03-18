@@ -30,10 +30,21 @@ Contents
 - `CoreConceptsPy`: A Python implementation of the core concepts.
 - `CoreConceptsRdf`: An RDF(S) implementation of the core concepts.
 
+Status
+------
+Haskell: TODO
+
+Python: TODO
+
+RDF: TODO
+
+TODO
+----
+- [Haskell] Rewrite NetworkImpl.Edge as a combination of ID, source, target and weight
+
 Misc
 ----------------------
 - [How to contribute](CONTRIBUTING.md)
-- [Next steps and other notes](Notes.md)
 
 References
 ----------

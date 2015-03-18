@@ -51,6 +51,7 @@ To run the examples execute: `make example-all`
 
 Dependencies
 ----------------------
+TODO
 - [FGL](https://hackage.haskell.org/package/fgl) (Version: latest*)
 
 \* Most recent stable release on hackage
