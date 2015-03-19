@@ -36,7 +36,8 @@ Haskell: TODO
 
 Python: TODO
 
-RDF: TODO
+RDF: Two thorough ontologies written in owl and one basic ontology written in RDFS for the event core concept. For every event ontology there are use cases including example RDF data and SPARQL queries. Apart from that, there is a basic, preliminary ontology written in RDFS for all core concepts.
+There are still thorough ontologies needed for the core concepts location, field, network and object.
 
 TODO
 ----
