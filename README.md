@@ -34,7 +34,7 @@ Status
 ------
 Haskell: Locations, fields, networks, objects and events are specified. Only networks are implemented. No unit tests exist yet. Only networks have examples.
 
-Python: TODO
+Python: Locations, fields, networks, objects and events have an abstract class. Except locations all of them have an implementation. Unit tests exist for everything except locations, but the tests for fields and objects should not be considered full unit tests and are more like examples. Only events and networks have examples.
 
 RDF: Two thorough ontologies written in owl and one basic ontology written in RDFS for the event core concept. For every event ontology there are use cases including example RDF data and SPARQL queries. Apart from that, there is a basic, preliminary ontology written in RDFS for all core concepts.
 There are still thorough ontologies needed for the core concepts location, field, network and object.
