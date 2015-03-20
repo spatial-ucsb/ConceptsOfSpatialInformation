@@ -1,6 +1,6 @@
 Core Concepts of Spatial Information - Network Data
 ===================================================
-Abstract: TODO
+Abstract: Network data that is used in the Network examples.
 
 
 
