@@ -49,4 +49,3 @@ example-all: example-events example-fields example-locations example-networks ex
 install-dependencies:
 	# for Linux/Mac
 	cabal install fgl;
-	# TODO: install other dependencies
