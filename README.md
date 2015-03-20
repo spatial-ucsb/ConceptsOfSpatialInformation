@@ -32,7 +32,7 @@ Contents
 
 Status
 ------
-Haskell: TODO
+Haskell: Locations, fields, networks, objects and events are specified. Only networks are implemented. No unit tests exist yet. Only networks have examples.
 
 Python: TODO
 
