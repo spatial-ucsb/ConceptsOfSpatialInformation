@@ -13,7 +13,7 @@ Haskell
 
 Python
 ======
-TODO
+- [Python learning guide for every skill level](http://www.learnpython.org/)
 
 RDF
 ===
