@@ -1,2 +1,6 @@
 201503251242   0     2     0Eric C:\Users\Eric\Documents\Aptana Studio 3 Workspace\ConceptsOfSpatialInformation\data\fields\Slope_CalPol1 = SLOPE(C:\Users\Eric\Documents\Aptana Studio 3 Workspace\ConceptsOfSpatialInformation\data\fields\CalPolyDEM.tif,  1.0, DEGREE)
 201503251245   0     3     0Eric C:\Users\Eric\Documents\Aptana Studio 3 Workspace\ConceptsOfSpatialInformation\data\fields\Aspect_CalPo1 = ASPECT(C:\Users\Eric\Documents\Aptana Studio 3 Workspace\ConceptsOfSpatialInformation\data\fields\CalPolyDEM.tif)
+201503251356   0     1     0Eric C:\Users\Eric\Documents\Aptana Studio 3 Workspace\ConceptsOfSpatialInformation\data\fields\Slope_CalPol1 = SLOPE(C:\Users\Eric\Documents\Aptana Studio 3 Workspace\ConceptsOfSpatialInformation\data\fields\CalPolyDEM.tif,  1.0, DEGREE)
+201503251429   0     0     0Eric C:\Users\Eric\Documents\Aptana Studio 3 Workspace\ConceptsOfSpatialInformation\data\fields\ZonalGe_zona1 = ZONALArea(C:\Users\Er
+201503251432   0     0     0Eric C:\Users\Eric\Documents\Aptana Studio 3 Workspace\ConceptsOfSpatialInformation\data\fields\ZonalGe_zona1 = ZONALArea(C:\Users\Er
+201503251436   0     2     0Eric C:\Users\Eric\Documents\Aptana Studio 3 Workspace\ConceptsOfSpatialInformation\data\fields\Aspect_CalPo1 = ASPECT(C:\Users\Eric\Documents\Aptana Studio 3 Workspace\ConceptsOfSpatialInformation\data\fields\CalPolyDEM.tif)

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Abstract: Derive aspect values from a digital elevation model as an example of the core concept 'field'
+Abstract: Derive aspect values from a digital elevation model as an example of the focal function from the core concept 'field.'
 
 """
 
@@ -44,4 +44,4 @@ arcpy.CheckOutExtension("Spatial")
 outAspect = Aspect(inRaster)
 
 # Save the output 
-outAspect.save(os.path.join("..","..","..","data","fields","tmp","outAspect"))
+outAspect.save(os.path.join("..","..","..","data","fields","tmp","outAspect.tif"))

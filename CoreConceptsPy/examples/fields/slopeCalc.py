@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Abstract: Derive slope values from a digital elevation model as an example of the core concept 'field'
+Abstract: Derive slope values from a digital elevation model as an example of the focal function from the core concept 'field.'
 
 """
 
@@ -44,5 +44,5 @@ arcpy.CheckOutExtension("Spatial")
 outSlope = Slope(inRaster, outMeasurement)
 
 # Save the output 
-outSlope.save(os.path.join("..","..","..","data","fields","tmp","outSlope"))
+outSlope.save(os.path.join("..","..","..","data","fields","tmp","outSlope.tif"))
 

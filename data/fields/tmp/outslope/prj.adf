@@ -1,6 +1,0 @@
-Projection    UTM
-Zone          10
-Spheroid      GRS80
-Units         METERS
-Zunits        METERS /* NAVD_1988 - VCS# =   5703
-Parameters    
