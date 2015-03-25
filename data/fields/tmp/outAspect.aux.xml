@@ -1,0 +1,9 @@
+<PAMDataset>
+  <SRS>PROJCS[&quot;NAD_1983_2011_UTM_Zone_10N&quot;,GEOGCS[&quot;GCS_NAD_1983_2011&quot;,DATUM[&quot;D_NAD_1983_2011&quot;,SPHEROID[&quot;GRS_1980&quot;,6378137.0,298.257222101]],PRIMEM[&quot;Greenwich&quot;,0.0],UNIT[&quot;Degree&quot;,0.0174532925199433]],PROJECTION[&quot;Transverse_Mercator&quot;],PARAMETER[&quot;False_Easting&quot;,500000.0],PARAMETER[&quot;False_Northing&quot;,0.0],PARAMETER[&quot;Central_Meridian&quot;,-123.0],PARAMETER[&quot;Scale_Factor&quot;,0.9996],PARAMETER[&quot;Latitude_Of_Origin&quot;,0.0],UNIT[&quot;Meter&quot;,1.0],VERTCS[&quot;NAVD_1988&quot;,VDATUM[&quot;North_American_Vertical_Datum_1988&quot;],PARAMETER[&quot;Vertical_Shift&quot;,0.0],PARAMETER[&quot;Direction&quot;,1.0],UNIT[&quot;Meter&quot;,1.0]]]</SRS>
+  <Metadata>
+    <MDI key="DataType">Generic</MDI>
+  </Metadata>
+  <PAMRasterBand band="1">
+    <NoDataValue le_hex_equiv="000000E0FFFFEFC7">-3.40282346638529E+038</NoDataValue>
+  </PAMRasterBand>
+</PAMDataset>

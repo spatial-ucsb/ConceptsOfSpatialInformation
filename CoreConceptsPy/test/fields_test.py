@@ -30,7 +30,7 @@ from fields import *
 log = _init_log("fields_test")
 
 def getTestField():
-    testField = GeoTiffField( os.path.join("..","data","fields","testField.tif") )
+    testField = GeoTiffField( os.path.join("..","..","data","fields","testField.tif") )
     return testField
 
 def squareMean3( array, centerPixel ):
@@ -54,7 +54,7 @@ def meanZonalFunc( array, position ):
     @param position - (i,j) coordinates for zonal operation (retrieve zonal geometry and write new value)
     @return - mean value of masked input array derived from zonal geometry of "zone.tif" at input position
     """
-    zoneRast = GeoTiffField(os.path.join("..","data","fields","zone.tif") )
+    zoneRast = GeoTiffField(os.path.join("..","..","data","fields","zone.tif") )
     zoneArr = zoneRast.gField.ReadAsArray()
     band = zoneRast.gField.GetRasterBand(1)
     ndVal = band.GetNoDataValue()
@@ -110,7 +110,7 @@ class TestGeoTiffField(unittest.TestCase):
         dem.focal( newGtiffPath, squareMean3 )
         testCoords = ( 711750.8, 3910105.1 )
         offset = getGtiffOffset ( dem.gField, testCoords )
-        array = gdal.Open( os.path.join("..","data","fields","testField.tif") ).ReadAsArray()
+        array = gdal.Open( os.path.join("..","..","data","fields","testField.tif") ).ReadAsArray()
         testNeighArray = squareMean3( array, offset )
         testNeighArray = np.round(testNeighArray, 3)
         testDem = GeoTiffField( newGtiffPath )
@@ -136,7 +136,7 @@ class TestGeoTiffField(unittest.TestCase):
         dem = getTestField()
         dem.zonal( newGtiffPath, meanZonalFunc )
 
-        zonePath = os.path.join("..","data","fields","zone.tif")
+        zonePath = os.path.join("..","..","data","fields","zone.tif")
         zoneRast = GeoTiffField(zonePath)
         newRast = GeoTiffField(newGtiffPath)
         testCoord1 = ( 711750.8, 3910105.1 )
