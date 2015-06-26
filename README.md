@@ -27,7 +27,7 @@ Architecture
 
 The Core Concepts Cube
 ----------------------
-![Core Concepts Cube](figures/CoreConceptsCube_thumbnail.png "Core Concepts Cube")
+[ ![Core Concepts Cube](figures/CoreConceptsCube_thumbnail.png "Core Concepts Cube") ](https://github.com/spatial-ucsb/ConceptsOfSpatialInformation/raw/master/figures/CoreConceptsCube.pdf "PDF Cube")
 
 The cube can be printed from the [pdf](https://github.com/spatial-ucsb/ConceptsOfSpatialInformation/raw/master/figures/CoreConceptsCube.pdf) version.
 
