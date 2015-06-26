@@ -20,13 +20,17 @@ Members & contributors:
 * Marc Thiemann
 * Michel Zimmer ([home](https://www.mzimmer.net))
 
-The Core Concepts Cube
-----------------------
-![Core Concepts Cube](figures/CoreConceptsCube_thumbnail.png "Core Concepts Cube")
 
 Architecture
 ----------------------
 ![Core Concepts architecture](figures/CoreConceptsArchitecture.png "Core Concepts architecture")
+
+The Core Concepts Cube
+----------------------
+![Core Concepts Cube](figures/CoreConceptsCube_thumbnail.png "Core Concepts Cube")
+
+The cube can be printed from the [pdf](https://github.com/spatial-ucsb/ConceptsOfSpatialInformation/blob/master/figures/CoreConceptsCube.pdf) version.
+
 
 Contents
 ----------------------
