@@ -5,6 +5,7 @@
 Abstract: Calculate area for 3 zones of study for a solar panel site-suitability analysis. Zone 1 is rooftops, zone 2 parking 
 lots and zone 3 sloping grassland. This is an example of the zonal function from the core concept 'field.'
 
+@OBSOLETE: THESE EXAMPLES ARE BASED ON ARCPY.
 """
 
 __author__ = "Eric Ahlgren"

@@ -4,6 +4,7 @@
 """
 Abstract: Derive aspect values from a digital elevation model as an example of the focal function from the core concept 'field.'
 
+@OBSOLETE: THESE EXAMPLES ARE BASED ON ARCPY.
 """
 
 __author__ = "Eric Ahlgren"

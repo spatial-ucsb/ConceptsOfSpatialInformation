@@ -6,6 +6,7 @@ Abstract: Calculate total incoming solar raditaion for 3 zones of study for a so
 Zone 1 is rooftops, zone 2 parking lots and zone 3 sloping grassland. Output is a table (.dbf) with the total 
 insolation for each zone. This is an example of the zonal function from the core concept 'field.'
 
+@OBSOLETE: THESE EXAMPLES ARE BASED ON ARCPY.
 """
 
 __author__ = "Eric Ahlgren"
