@@ -73,4 +73,3 @@ class ArcShpObject(CcObject):
             return True
         else:
             return False
-

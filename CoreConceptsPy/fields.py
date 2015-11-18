@@ -174,3 +174,6 @@ class GeoTiffField(CcField):
         newArray = np.around(newArray.astype(np.double), 3)
         outBand.WriteArray(newArray)
         outBand.FlushCache()
+        
+    def addDomain(self, domain):
+        raise NotImplementedError("addDomain in GeoTiffField")

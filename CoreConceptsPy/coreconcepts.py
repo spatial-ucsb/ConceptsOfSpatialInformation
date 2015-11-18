@@ -60,6 +60,10 @@ class CcField(object):
     def domain( self, position, value ):
         """ @return Domains can be described as intervals, rectangles, corner points, convex hulls or boundaries """
         raise NotImplementedError("domain")
+    
+    def addDomain(self, domain ):
+        """ @param domain add a new domain to the field """
+        raise NotImplementedError("add_domain")
 
     def rectNeigh( self, position, width, height ):
         """
@@ -124,6 +128,21 @@ class CcObject(object):
         @return Boolean True if self and obj are identical
         """
         raise NotImplementedError("identity")
+
+class CcObjectSet(object):
+    """
+    Set class for object sets
+    """
+    def __init__(self):
+        self.obj_set = set()
+    
+    def add(self, obj ):
+        assert obj is not None
+        self.obj_set.add(obj)
+    
+    def remove(self, obj):
+        self.obj_set.remove(obj)
+        
 
 class CcNetwork(object):
     """
