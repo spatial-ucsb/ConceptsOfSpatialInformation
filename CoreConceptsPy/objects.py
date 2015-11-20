@@ -73,3 +73,7 @@ class ArcShpObject(CcObject):
             return True
         else:
             return False
+        
+    class ArcShpObjectSet(CcObjectSet):
+        def __init__( self, shp_filepath, objIndex ):
+            # TODO: load the objects from the shapefile and add them to self.obj_set

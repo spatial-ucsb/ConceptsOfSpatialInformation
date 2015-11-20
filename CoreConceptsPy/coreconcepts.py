@@ -53,19 +53,25 @@ class CcField(object):
         """ Define appropriate parameters for construction of the concrete object """
         pass
 
-    def getValue( self, position ):
-        """ @return the value of field at position """
-        raise NotImplementedError("getValue")
+    def value_at( self, position ):
+        """ 
+        @return the value of field at position, or None if it is outside of the domain.
+        """
+        raise NotImplementedError("valueAt")
 
-    def domain( self, position, value ):
-        """ @return Domains can be described as intervals, rectangles, corner points, convex hulls or boundaries """
+    def domain( self ):
+        """
+        @return current domain of the field
+        """
         raise NotImplementedError("domain")
     
-    def addDomain(self, domain ):
-        """ @param domain add a new domain to the field """
-        raise NotImplementedError("add_domain")
+    def restrict_domain(self, geometry ):
+        """ 
+        @param domain a domain to be subtracted to the current domain  
+        """
+        raise NotImplementedError("restrict_domain")
 
-    def rectNeigh( self, position, width, height ):
+    def rect_neigh( self, position, width, height ):
         """
         Map algebra: rectangular neighborhood function
         @return Geometry (a field mask)
@@ -79,21 +85,22 @@ class CcField(object):
         """
         raise NotImplementedError("zone")
 
-    def local( self, fun ):
+    def local( self, fields, fun ):
         """
         Map algebra's local operations, with a function to compute the new values
+        @param fields other fields
         @return new CcField field
         """
         raise NotImplementedError("local")
 
-    def focal( self, fun ):
+    def focal( self, fields, fun ):
         """
         Map algebra's focal operations, with a kernel function to compute the new values based on the neighborhood of the position
         @return new CcField field
         """
         raise NotImplementedError("focal")
 
-    def zonal( self, fun ):
+    def zonal( self, fields, fun ):
         """
         Map algebra's zonal operations, with a function to compute the new values based on zones containing the positions.
         @return new CcField field
@@ -237,3 +244,8 @@ class CcEvent(object):
         @return Boolean
         """
         raise NotImplementedError("overlap")
+
+class CcGranularity:
+    def __init__(self):
+        pass
+        # TODO: cell_size_x, cell_size_y

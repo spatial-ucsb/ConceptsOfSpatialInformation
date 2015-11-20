@@ -46,20 +46,14 @@ def load_data():
     # TODO: load data here using the right classes
     # use addDomain on the fields
     
-    # light_1994a_field = GeoTiffField( field_path )
-    # light_1994b_field = GeoTiffField( field_path2 )
-    # flare_objset = CcObjectSet( flare_path )
+    light_1994a_field = GeoTiffField( field_path )
+    light_1994b_field = GeoTiffField( field_path2 )
+    flare_objset = ArcShpObjectSet( flare_path )
     # etc
-    return None,None,None
+    return light_1994a_field, light_1994b_field, flare_objset
 
-def build_object_set( shpfile_path ):
-    # TODO: scan through shapefile with ArcShpObject and build object set
-    objs = CcObjectSet()
-    # TODO: add objects
-    return objs
-
-def field_avg(field_a, field_b):
-    # TODO: implement field average function
+def field_avg( values ):
+    # TODO: implement field average function on n values
     return None
     
 def compute_luminosity( light_1994a_field, light_1994b_field, flare_objset ):
@@ -75,8 +69,10 @@ def compute_luminosity( light_1994a_field, light_1994b_field, flare_objset ):
     #        final_result = coarsen(luminosity_around_roads, 0.1, 0.1)
     
     # PYTHON CODE
-    # light_1994_field = light_1994a_field.local( light_1994b_field, field_avg )
+    light_1994_field = light_1994a_field.local( [light_1994b_field], field_avg )
     # TODO
+    # buffer to be called on ArcShpObjectSet
+    # coarsen
 
 def main():
     print 'Running China Lights case study'

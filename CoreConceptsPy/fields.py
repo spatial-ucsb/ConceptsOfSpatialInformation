@@ -43,6 +43,11 @@ def getGtiffOffset( gtiff, position ):
     arry = int((yQuery - uly)/pixHeight)
     return arry, arrx
 
+def FieldGranularity(CcGranularity):
+    # TODO: 
+    def __init__( self, x, y ):
+        pass
+
 class GeoTiffField(CcField):
     """
     Subclass of Abstract Fields (core concept 'field') in the GeoTiff format. Based on GDAL.
@@ -52,18 +57,37 @@ class GeoTiffField(CcField):
     Worboys, Michael, and Matt Duckham. GIS : a computing perspective. Boca Raton, Fla: CRC Press, 2004. Print.
 
     """
-    def __init__( self, filepath ):
+    def __init__( self, filepath, geometry, operation ):
+        """
+        @param filepath path to the GeoTiff field
+        @param geometry domain of the field 
+        @param operation 'inside' or 'outside' 
+        """
+        assert operation in ['inside','outside']
         self.gField = gdal.Open( filepath, GA_Update )
+        # set the initial domain of the field
+        # TODO: add the geometry to the domain_geoms tuple
+        self.domain_geoms = () # tuple [geometry, 'inside'|'outside']
 
-    def getValue( self, position ):
+    def value_at( self, position ):
         """
-        Returns the value of a pixel at an input position
+        Returns the value of a raster pixel at an input position.
+        
         @param position the coordinate pair in self's coordinate system
-        @return the raw value of the pixel at input position in self
+        @return the raw value of the pixel at input position in self or None if it is outside of the domain
         """
-        offset = getGtiffOffset( self.gField, position )
-        array = self.gField.ReadAsArray( offset[1],offset[0], 1,1 ) #Convert image to NumPy array
-        return array
+        if self._is_in_domain(position):
+            offset = getGtiffOffset( self.gField, position )
+            array = self.gField.ReadAsArray( offset[1],offset[0], 1,1 ) #Convert image to NumPy array
+            return array
+        else: return None
+    
+    def _is_in_domain(self, position ):
+        """
+        @param position 
+        @return True if position is in the current domain or False otherwise 
+        """
+        # TODO: implement using self.domain_geoms
 
     def zone( self, position ):
         """
@@ -76,7 +100,7 @@ class GeoTiffField(CcField):
         maskArray = ma.masked_not_equal( array, val )  #All values not equal to zone value of input are masked
         return maskArray
 
-    def local( self, newGtiffPath, func ):
+    def local( self, fields, func, newGtiffPath ):
         """
         Assign a new value to each pixel in gtiff based on func. Return a new GeoTiff at newGtiffPath.
 
@@ -89,12 +113,14 @@ class GeoTiffField(CcField):
 
         1. For each location x, h(x) = f(x) dot g(x)" (Worboys & Duckham 148)
 
-        @param newGtiffPath - file path for the new GeoTiff
+        @param fields - other input fields 
         @param func - the local function to be applied to each value in GeoTiff
+        @param newGtiffPath - file path for the new GeoTiff
         @return N/A; write new raster to newGtiffPath
         """
         oldArray = self.gField.ReadAsArray()
         newArray = func(oldArray)
+        # TODO: update to handle input fields
         driver = self.gField.GetDriver()
         newRaster = driver.CreateCopy(newGtiffPath, self.gField)
         outBand = newRaster.GetRasterBand(1)
@@ -102,7 +128,7 @@ class GeoTiffField(CcField):
         outBand.WriteArray(newArray)
         outBand.FlushCache()
 
-    def focal( self, newGtiffPath, kernFunc ):
+    def focal( self, fields, kernFunc, newGtiffPath ):
         """
         Assign a new value to each pixel in self based on focal map algebra. Return a new GeoTiff at filepath newGtiffPath.
 
@@ -140,7 +166,7 @@ class GeoTiffField(CcField):
         outBand.WriteArray(newArray)
         outBand.FlushCache()
 
-    def zonal( self, newGtiffPath, zoneFunc ):
+    def zonal( self, fields, zoneFunc, newGtiffPath ):
         """
         Assign a new value to self based on zonal map algebra. Return a new GeoTiff at filepath newGtiffPath.
 
@@ -175,5 +201,27 @@ class GeoTiffField(CcField):
         outBand.WriteArray(newArray)
         outBand.FlushCache()
         
-    def addDomain(self, domain):
-        raise NotImplementedError("addDomain in GeoTiffField")
+    def domain(self):
+        # TODO: implement
+        raise NotImplementedError("domain")
+    
+    def restrict_domain(self, geometry, operation ):
+        # TODO: implement
+        # add [geometry,operation] to self.domain_geoms
+        pass 
+    
+    def coarsen(self, granularity, func ):
+        """
+        Constructs new field with lower granularity.
+        
+        Default strategy: mean
+        @param granularity a FieldGranularity
+        @param aggregation strategy func
+        @return a new coarser field
+        """
+        pass
+        # TODO: implement with 'aggregate' in GDAL
+        # default strategy: mean
+        # http://gis.stackexchange.com/questions/110769/gdal-python-aggregate-raster-into-lower-resolution 
+        
+        
