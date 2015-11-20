@@ -32,11 +32,9 @@ a2 :: Array P2 String
 a2 = array ((1,1),(2,2)) [((1,1),"ul"), ((1,2),"ur"), ((2,1),"ll"), ((2,2),"lr")]
 
 instance BOUNDED (Array P2 String) where
-	bounds a = box (Data.Array.bounds a)
+	bounds a = Just (box (Data.Array.bounds a))
 
 instance FIELD Array P2 String where
-	getValue a p = a!p
-	local a f = fmap f a -- arrays are instances of the functor class
+	valueAt a p = a!p
+--	local a f = fmap f a -- arrays are instances of the functor class
 --	focal a k = needs a better field
-
--- instances from solar energy project
