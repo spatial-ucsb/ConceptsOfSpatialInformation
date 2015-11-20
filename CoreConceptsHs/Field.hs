@@ -3,12 +3,13 @@
 {-# LANGUAGE TypeOperators #-} -- to allow for new index types for Repa arrays (not sure)
 
 -- core concept: field
--- core question: what is the value of an attribute at a point?
--- other core operations: compute new fields from local, focal, and zonal operations
--- fields are bounded, the bounds defining their domain
--- fields have state in time, but points are purely spatial
+-- core question: what is the value of an attribute at a position?
+-- other core operations: neighborhood, map algebra, change domain
+-- currently, only the local operation takes multiple fields as inputs
+-- fields are bounded, with the bounds defining their domain
+-- fields have state in time, but positions are purely spatial
 -- (c) Werner Kuhn
--- latest change: Nov 23, 2014
+-- latest change: Nov 20, 2015
 
 module Field where
 
@@ -18,13 +19,14 @@ import Data.Array
 
 -- the class of all field types
 class (POINT position, BOUNDED (field position value)) => FIELD field position value where
-	getValue :: field position value -> position -> value
-	local :: field position value -> (value -> value') -> field position value' -- map algebra's local operations, with a function to compute the new values
-	focal :: field position value -> (position -> value') -> field position value' -- map algebra's focal operations, with a kernel function to compute the new values based on the neighborhood of the position
-	zonal :: field position value -> (position -> value') -> field position value' -- map algebra's zonal operations, with a function to compute the new values based on zones containing the positions
+	valueAt :: field position value -> position -> value
+	neighborhood :: field position value -> position -> [position]
+	zones :: field position value -> [(value -> bool)] -> [[position]] -- do we need to make sure the subsets partition the domain? is this the best form of a partitioning function?
+	local :: [field position value] -> ([value] -> value') -> field position value' 
+	focal :: field position value -> (neighborhood -> value') -> field position value' -- with a kernel function to compute the new values based on the values in the neighborhood of the position
+	zonal :: field position value -> (zones -> value') -> field position value' -- map algebra's zonal operations, with a function to compute the new values based on zones containing the positions
 
--- Haskell implementations in Array (http://www.haskell.org/tutorial/arrays.html) or Repa (http://www.haskell.org/haskellwiki/Numeric_Haskell%3a_A_Repa_Tutorial)
-
+-- Haskell implementations of fields can be done in Array (http://www.haskell.org/tutorial/arrays.html) or Repa (http://www.haskell.org/haskellwiki/Numeric_Haskell%3a_A_Repa_Tutorial)
 -- Array representation
 a2 :: Array P2 String
 a2 = array ((1,1),(2,2)) [((1,1),"ul"), ((1,2),"ur"), ((2,1),"ll"), ((2,2),"lr")]

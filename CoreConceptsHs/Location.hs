@@ -13,7 +13,7 @@
 -- positions are purely spatial
 -- move to partWhole class, which is not always locating, isPart :: figure -> ground -> Bool
 -- (c) Werner Kuhn
--- latest change: November 22, 2014
+-- latest change: November 20, 2015
 
 module Location where
 
