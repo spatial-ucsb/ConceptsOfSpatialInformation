@@ -3,17 +3,11 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE FunctionalDependencies #-}
 
--- the content concept of a network
+-- core concept: network
 -- core question: are two nodes connected? what is the shortest path between them?
 -- how to bring in PATH and LINK from earlier specs?
--- (c) Werner Kuhn
--- latest change: Feb 27, 2016
-
--- TO DO
--- make networks a subclass of objects
--- Graph representation in FGL
--- also, use FGL to determine core queries
-
+-- (c) Werner Kuhn, Michel Zimmer
+-- latest change: Mar 2, 2015
 
 module Network where
 
@@ -30,3 +24,5 @@ class NETWORK network node edge | network -> node, network -> edge where
 	distance :: network -> node -> node -> Int -- length of the shortest path as number of nodes
 	breadthFirst :: network -> node -> Int -> [node]  -- all nodes at distance Int from a node
 
+-- Graph representation in FGL
+-- also, use FGL to determine core queries

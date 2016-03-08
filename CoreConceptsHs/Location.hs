@@ -1,94 +1,89 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE TypeSynonymInstances #-}
-{-# LANGUAGE FlexibleInstances #-}
 
--- core concept: location
--- defining spatial relations and properties
--- core questions: where is this? is this in relation r to that? what is in relation r to this?
--- location questions get asked about instances of the other core concepts (fields, objects, networks, events)
--- these instances are always taken at the time (i.e. in a state) at which they play the figure and ground roles
--- the answer to the question "is Santa Barbara in the United States" is different for "the United States now" and "the United States before 1848"
--- thus, figures and grounds are spatio-temporal, but the locating relations are not!
--- space and time need to be separated, not treated as 4d, in order to deal with examples like the Santa Barbara one
--- positions are purely spatial
--- move to partWhole class, which is not always locating, isPart :: figure -> ground -> Bool
+-- the base concept of location
+-- spatial properties and relations 
+-- places are objects, not location values (i.e. they do not belong here)
+-- vector geometry could be represented as well-known text (http://en.wikipedia.org/wiki/Well-known_text)
+-- better encoding would be GeoJSON (http://www.macwright.org/2015/03/23/geojson-second-bite.html)
+-- or just use http://hackage.haskell.org/package/hgeometry 
 -- (c) Werner Kuhn
--- latest change: November 20, 2015
+-- latest change: March 7, 2016
 
 module Location where
 
--- the class of all locating relations
-class LOCATED figure ground where
---	isAt :: figure -> ground -> Maybe Bool
-	isIn :: figure -> ground -> Maybe Bool
-	-- add more spatial relations as needed
+-- coordinates 
+-- all implementations are necessarily discrete
+-- conceptualizations can still be continuous!
+-- Haskell Integers can be of arbitrary precision
+-- thus, there should be no need for any other coordinate type!
+type Coord = Integer
+	
+-- the number of dimensions
+-- Int is too general, but simplifies dimension tests
+type Dimension = Int 
+errorDim = "different dimensions"
 
--- the class of all positioned entities
--- putting the point constraint into the method avoids a second type parameter
-class POSITIONED figure where
-	position :: POINT point => figure -> Maybe point -- a point positioning the figure
+-- spatial reference systems
+-- for now just an enumeration 
+-- possibly use http://en.wikipedia.org/wiki/SRID later
+data SRS = WGS84 | Local deriving (Eq, Show)
+errorSRS = "different spatial reference systems"
 
--- the class of all bounded entities
--- putting the extent constraint into the method avoids a second type parameter
-class BOUNDED figure where
-	bounds :: EXTENT shape => figure -> Maybe shape -- an extent bounding the figure
+-- positions  
+-- a list of coordinates controlled for dimension and given a reference system
+data Position = Position [Coord] Dimension SRS deriving (Eq, Show)
+dim (Position clist dim srs) = dim
+srs (Position clist dim srs) = srs
+coords (Position clist dim srs) = clist
+coord (Position clist dim srs) dimension 
+	| dim < dimension = error "insufficient dimensions"
+	| otherwise = clist!!dimension 
 
--- the class of all geometries
--- all geometries need coordinate reference systems, but making it explicit creates too much overhead
-class GEOMETRY geometry -- where what?
+-- converting positions to tuples 
+-- so far, only 2-tuples needed (for field arrays) 
+-- SRID intentionally dropped, can be added if needed
+pos2Tup2 :: Position -> (Coord, Coord) 
+pos2Tup2 (Position c 2 s) = (c!!0,c!!1)
 
--- the class of all points (non-extended geometries)
-class GEOMETRY geometry => POINT geometry -- where distance?
+-- extents 
+-- unifying vector and raster geometries (including graphs)
+-- extents are sub-spaces or regions in any (specified) dimension
+-- they are not boundaries, but may have boundaries
+-- their behavior is defined by spatial relations (add more as needed)
+class EXTENTS extent where
+	positionIn :: Position -> extent -> Bool
+--	boundary :: extent coord -> Maybe MultiPoly -- needs a geometry package to implement
 
--- the class of all extended geometries
-class GEOMETRY geometry => EXTENT geometry where
-	box :: (P2, P2) -> geometry
+instance EXTENTS Position where 
+	positionIn (Position clist1 dim1 srs1) (Position clist2 dim2 srs2)
+		| dim1 /= dim2 = error errorDim
+		| srs1 /= srs2 = error errorSRS
+		| otherwise = clist1 == clist2
 
--- geometries more complex than a point are represented as well-known text (http://en.wikipedia.org/wiki/Well-known_text)
-type Coordinate = Int
+-- bounding boxes 
+-- defined by a position and coordinate shifts
+-- this may be the least ambiguous definition (2 positions is ambiguous on the sphere)
+data MBR = MBR Position [Coord] deriving (Eq, Show)
 
-type P2 = (Coordinate, Coordinate) -- we need tuples to be able to use them as array indices; repa may take lists?
+instance EXTENTS MBR where 
+	positionIn (Position clist1 dim1 srs1) (MBR (Position clist2 dim2 srs2) clist3)
+		| dim1 /= dim2 = error errorDim
+		| srs1 /= srs2 = error errorSRS
+		| otherwise = foldr1 (&&) (zipWith3 between clist1 clist2 clist3) 
+			where between c1 c2 c3 = (c2 <= c1) && c1 <= (c2+c3) 
 
-instance GEOMETRY P2
+-- TESTS
+p11 = Position [1,1] 2 Local
+p12 = Position [1,2] 2 Local
+p21 = Position [2,1] 2 Local
+p22 = Position [2,2] 2 Local
 
-instance POINT P2
+p11t = pos2Tup2 p11
+p12t = pos2Tup2 p12
+p21t = pos2Tup2 p21
+p22t = pos2Tup2 p22
 
-instance GEOMETRY (P2,P2)
-instance EXTENT (P2,P2) where
-	box (p1, p2) = (p1, p2)
+mbr = MBR p11 [1,1]
 
-
-type SRID = Int -- the spatial reference system id (EPSG code, see http://en.wikipedia.org/wiki/SRID)
-
-
-
-{-distance :: Coordinates -> Coordinates -> Int
-distance [a1, o1] [a2, o2] = abs (a2 - a1) + abs (o2 - o1) -- Manhattan distance, assuming projected coordinates in m
-walkingDistance = 1000.0-}
--- need procedure calls to WKT operations anywhere
-
-{-p, q :: Coord2
-p =  (0,0)
-q =  (2,2)
-pq = [p..q]-}
-
---pq = [p..q]
-
-{-instance Ix Position where
-	range (p,q) = [p..q]
-	index (p,q) p =
-	inRange :: (a,a) -> a -> Bool
-	rangeSize :: (a,a) -> Int-}
-
-{-
-type Geometry = String -- well-known text representation
-instance GEOMETRY Geometry
-geomFromP2 :: P2 -> Geometry
-geomFromP2 (x,y) = "POINT (" ++ show x ++ space ++ show y ++ ")"
-
-geomFrom2P2 :: (P2,P2) -> Geometry
-geomFrom2P2 ((x1,y1),(x2,y2)) = "MULTIPOINT (" ++ show x1 ++ " " ++ show y1 ++ comma ++ space ++ show x2 ++ space ++ show y2 ++ ")"
-
-space = " "
-comma = ","
--}
+lt1 = positionIn p11 mbr
+lt2 = positionIn p22 mbr
