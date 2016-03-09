@@ -4,7 +4,7 @@
 -- core question: what is the value of an attribute at a position?
 -- the spatio-temporal framework (in the sense of Worboys) is taken here to be an object (having temporal state)
 -- (c) Werner Kuhn
--- latest change: Mar 7, 2016
+-- latest change: Mar 8, 2016
 
 -- TO DO
 --	do a vector field model and find out how to abstract over raster and vector representations of the field function
@@ -31,17 +31,35 @@ class FIELDS field where
 	zonal :: field position value object event -> (zones -> value') -> field position value' object event -- map algebra's zonal operations, with a function to compute the new values based on zones containing the positions
 -}
 
--- a raster model of a 2d spatial field function 
-type FieldFunction2d = Array (Coord, Coord) Value
-a2 :: FieldFunction2d
+-- a raster model of a 2d field 
+-- with a raster function
+type FieldArray2d = Array (Coord, Coord) Value
+a2 :: FieldArray2d
 a2 = array (p11t, p22t) [(p11t, Boolean True), (p21t, Boolean False), (p12t, Boolean True), (p22t, Boolean False)]
 
--- 2d raster fields
-data RasterField2d = RasterField2d FieldFunction2d (Box MBR)
-rf1 = RasterField2d a2 box
+data RasterField2d = RasterField2d FieldArray2d (Box MBR)
+rf = RasterField2d a2 box
 
 instance FIELDS RasterField2d where
 	valueAt (RasterField2d a (Box mbr)) p = if positionIn p mbr then a!(pos2Tup2 p) else error "position outside field domain"
 
+-- a vector model of a field
+-- with a point set and an interpolation function
+type FieldPoints = [(Position, Value)]
+fieldPoints :: FieldPoints
+fieldPoints = [(p11, Boolean True), (p21, Boolean False), (p12, Boolean True), (p22, Boolean False)]
+
+-- a mockup interpolation
+-- eventually use IDW on numeric values https://www.e-education.psu.edu/geog486/node/1877 
+interpolate :: FieldPoints -> Position -> Value
+interpolate fp p = snd (fp!!0)
+
+data VectorField = VectorField FieldPoints (FieldPoints -> Position -> Value)
+vf = VectorField fieldPoints interpolate
+
+instance FIELDS VectorField where
+	valueAt (VectorField fp interpolate) p = interpolate fp p
+
 -- TESTS
-ft1 = valueAt rf1 p11
+ft1 = valueAt rf p11
+ft2 = valueAt vf p11

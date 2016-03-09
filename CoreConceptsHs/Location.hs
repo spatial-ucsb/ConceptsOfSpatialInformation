@@ -39,6 +39,9 @@ coord (Position clist dim srs) dimension
 	| dim < dimension = error "insufficient dimensions"
 	| otherwise = clist!!dimension 
 
+distance :: Position -> Position -> Double 
+distance p1 p2 = error "not yet implemented"
+
 -- converting positions to tuples 
 -- so far, only 2-tuples needed (for field arrays) 
 -- SRID intentionally dropped, can be added if needed
