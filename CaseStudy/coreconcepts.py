@@ -7,7 +7,7 @@ from arcpy import env
 from arcpy.sa import *
 
 # Set ArcPy workspace settings
-env.workspace = "C:\Users\lafia\Documents\GitHub\ConceptsOfSpatialInformation\CoreConceptsPy\ArcPy\data" # TODO: set workspace determined by filepath locations
+env.workspace = r"C:\Users\lafia\Documents\GitHub\ConceptsOfSpatialInformation\CoreConceptsPy\ArcPy\data" # TODO: set workspace determined by filepath locations
 workspace = env.workspace
 arcpy.env.overwriteOutput = True
 # Check out any necessary licenses
@@ -126,7 +126,7 @@ class GeoTiffField(CcField):
         """
         Restricts current instance's domain based on object's domain
         @param object an object to be subtracted to the current domain
-        @param operation an operation to be performed based on the object
+        @param operation on object, valid options: "inside", "outside"
         """
 
         (nfilepath, nfilename) = os.path.split(self.filepath)
@@ -167,9 +167,9 @@ class GeoTiffField(CcField):
 
     # TODO: remove; temporary fix to "preprocess"; see restrict_domain
     def removeFlares(self, object):
-        outputLocation = "C:\Users\lafia\Documents\GitHub\ConceptsOfSpatialInformation\CoreConceptsPy\ArcPy\data\China_noFlares.shp"
+        outputLocation = r"C:\Users\lafia\Documents\GitHub\ConceptsOfSpatialInformation\CoreConceptsPy\ArcPy\data\China_noFlares.shp"
         # erase gas flares from country, generates a mask
-        arcpy.Erase_analysis("C:\Users\lafia\Documents\GitHub\ConceptsOfSpatialInformation\CoreConceptsPy\ArcPy\data\China.shp", object.filename, outputLocation)
+        arcpy.Erase_analysis(r"C:\Users\lafia\Documents\GitHub\ConceptsOfSpatialInformation\CoreConceptsPy\ArcPy\data\China.shp", object.filename, outputLocation)
 
         return outputLocation
 
@@ -270,26 +270,30 @@ class ArcShpObject(CcObject):
 
 # make CcField instance (factory)
 def makeField(filepath):
-    domain = determineDomain(filepath) # determine domain
-    # determine input file type
-    if filepath.endswith(".tif"):
-        return GeoTiffField(filepath, domain)
-    elif filepath.endswith(".mp3"):
-        pass
-    assert 0, "Bad shape creation: " + filepath
-    #makeField = staticmethod(makeField)
+    try:
+        domain = determineDomain(filepath) # determine domain
+        # determine input file type
+        if filepath.endswith(".tif"):
+            return GeoTiffField(filepath, domain)
+        elif filepath.endswith(".mp3"):
+            pass
+        #makeField = staticmethod(makeField)
+    except IOError as e:
+        print "Cannot make object. The file type at " + filepath + " is not a valid type"
 
 
 # make CcObject instance (factory)
 def makeObject(filepath):
-    domain = determineDomain(filepath) # determine domain
-    # determine input file type
-    if filepath.endswith(".shp"):
-        return ArcShpObject(filepath, 1, domain) #TODO: alter objIndex
-    elif filepath.endswith(".mp3"):
-        pass
-    assert 0, "Bad shape creation: " + filepath
-    #makeObject = staticmethod(makeObject)
+    try:
+        domain = determineDomain(filepath) # determine domain
+        # determine input file type
+        if filepath.endswith(".shp"):
+            return ArcShpObject(filepath, 1, domain) #TODO: alter objIndex
+        elif filepath.endswith(".mp3"):
+            pass
+        #makeObject = staticmethod(makeObject)
+    except IOError as e:
+        print "Cannot make object. The file type at " + filepath + " is not a valid type"
 
 
 # helper function for cc factories
