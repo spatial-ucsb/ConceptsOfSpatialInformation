@@ -4,11 +4,11 @@ __status__ = ""
 
 from coreconcepts import * # TODO: Package up Cc
 
-china_boundary_filepath = "C:\Users\lafia\Documents\GitHub\ConceptsOfSpatialInformation\CoreConceptsPy\ArcPy\data\China.shp"
-china_lights_1_filepath = "C:\Users\lafia\Documents\GitHub\ConceptsOfSpatialInformation\CoreConceptsPy\ArcPy\data\F101994.tif"
-china_lights_2_filepath = "C:\Users\lafia\Documents\GitHub\ConceptsOfSpatialInformation\CoreConceptsPy\ArcPy\data\F121994.tif"
-gas_flares_filepath     = "C:\Users\lafia\Documents\GitHub\ConceptsOfSpatialInformation\CoreConceptsPy\ArcPy\data\Flares_China_1.shp"
-china_roads_filepath    = "data/china_roads.shp"
+china_boundary_filepath = r"C:\Users\lafia\Documents\GitHub\ConceptsOfSpatialInformation\CoreConceptsPy\ArcPy\data\China.shp"
+china_lights_1_filepath = r"C:\Users\lafia\Documents\GitHub\ConceptsOfSpatialInformation\CoreConceptsPy\ArcPy\data\F101994.tif"
+china_lights_2_filepath = r"C:\Users\lafia\Documents\GitHub\ConceptsOfSpatialInformation\CoreConceptsPy\ArcPy\data\F121994.tif"
+gas_flares_filepath     = r"C:\Users\lafia\Documents\GitHub\ConceptsOfSpatialInformation\CoreConceptsPy\ArcPy\data\Flares_China_1.shp"
+china_roads_filepath    = r"data/china_roads.shp"
 
 # TODO: determine how to chain following methods when different objects return (syntax adjustment?)
 
