@@ -18,7 +18,7 @@ __status__ = "Development"
 import ogr
 
 from utils import _init_log
-from coreconcepts import CcObject
+from coreconcepts import CcObject, CcObjectSet
 
 log = _init_log("objects")
 
@@ -39,8 +39,11 @@ class ArcShpObject(CcObject):
         return env
 
     def relation( self, obj, relType ):
+        
+        if relType not in ['Intersects','Equals','Disjoint','Touches','Crosses','Within','Contains','Overlaps']:
+            raise ValueError("Error: {0} is not a valid value for 'relType'.".format(relType))
+        
         #Get geometeries
-        assert relType in ['Intersects','Equals','Disjoint','Touches','Crosses','Within','Contains','Overlaps']
         geom1 = self.sObj.GetGeometryRef()
         geom2 = obj.sObj.GetGeometryRef()
         if getattr(geom1,relType)(geom2): #getattr is equivalent to geom1.relType
@@ -51,6 +54,10 @@ class ArcShpObject(CcObject):
     def property( self, prop ):
         #Get index of property - note: index 13 is building name
         index = self.sObj.GetFieldIndex(prop)
+
+        if index == -1:
+            raise ValueError("Error: {0} is not a valid property.".format(prop))
+
         propDefn = self.sObj.GetFieldDefnRef(index)
         propType = propDefn.GetType()
         #Return value as a propType
@@ -74,6 +81,7 @@ class ArcShpObject(CcObject):
         else:
             return False
         
-    class ArcShpObjectSet(CcObjectSet):
-        def __init__( self, shp_filepath, objIndex ):
-            # TODO: load the objects from the shapefile and add them to self.obj_set
+class ArcShpObjectSet(CcObjectSet):
+    def __init__( self, shp_filepath, objIndex ):
+        # TODO: load the objects from the shapefile and add them to self.obj_set
+        pass
