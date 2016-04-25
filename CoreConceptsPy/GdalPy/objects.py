@@ -82,6 +82,15 @@ class ArcShpObject(CcObject):
             return False
         
 class ArcShpObjectSet(CcObjectSet):
-    def __init__( self, shp_filepath, objIndex ):
+    def __init__(self, shp_filepath):
         # TODO: load the objects from the shapefile and add them to self.obj_set
         pass
+
+    def bounds(self):
+        """ 
+        Return bounds of entire ObjectSet in form of (MinX, MaxX, MinY, MaxY) 
+        """
+        
+        return self.layer.GetEnvelope()
+
+        
