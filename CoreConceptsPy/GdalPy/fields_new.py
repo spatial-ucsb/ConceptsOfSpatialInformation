@@ -25,7 +25,8 @@ from gdalconst import *
 from utils import _init_log
 from coreconcepts import CcField
 
-VALID_LOCAL_OPS = ('average', 'min', 'max')
+VALID_LOCAL_OPS = ('average', 'mean', 'median', 'min', 'minimum', 'max', 'maximum')
+VALID_DOMAIN_OPS = ('inside', 'outside')
 
 log = _init_log("fields")
 
@@ -100,6 +101,7 @@ class GeoTiffField(CcField):
         self.transform = transform
         self.nodata = nodata
         self.domain = domain
+
         
     def value_at( self, position ):
         """
@@ -154,7 +156,7 @@ class GeoTiffField(CcField):
         TODO: Make newGtiffPath optional
         """
 
-        oldArray = self.gField.ReadAsArray()
+        oldArray = self.data
         newArray = oldArray.copy()
         rows = oldArray.shape[0]
         cols = oldArray.shape[1]
@@ -206,23 +208,36 @@ class GeoTiffField(CcField):
         outBand.FlushCache()
         
     def domain(self):
+        """
+        Return mask or actual geometries?
+        """
         # TODO: implement
         raise NotImplementedError("domain")
     
-    def restrict_domain(self, geometry, operation ):
+    def restrict_domain(self, layer, operation ):
         """
         Restricts current instance's domain based on object's domain
         @param object an object to be subtracted to the current domain
         @param operation an operation to be performed based on the object
         """
-        # TODO: implement
-        # add [geometry,operation] to self.domain_geoms
-        
-        #use gdal.RasterizeLayer(arr, [1], layer, None, None, [1], ['ALL_TOUCHED=TRUE'])
-        pass
-        
 
+        if operation not in VALID_DOMAIN_OPS:
+            raise ValueError("Error: %s is not a valid operation on restrict_domain." % operation)
 
+        nrows, ncols = self.data.shape
+
+        mask_raster = gdal.GetDriverByName('MEM').Create('', nrows, ncols, 1, gdal.GDT_Byte)
+        mask_raster.GetRasterBand(1).Fill(miss_value)
+
+        #this function burns the polygons onto the raster
+        #NOTE: this freezes with in memory raster (use temp file?)
+        gdal.RasterizeLayer(mask_raster, [1], layer, None, None, [1], ['ALL_TOUCHED=TRUE'])
+
+        self.domain_mask = mask_raster.ReadAsArray()
+
+        if operation == 'outside': 
+            self.domain_mask = np.absolute(self.domain_mask - 1)
+        
     def coarsen(self, granularity, func ):
         """
         Constructs new field with lower granularity.
@@ -268,7 +283,7 @@ class GeoTiffField(CcField):
             raise ValueError("Error: @func must be either a function or one of the following strings: %s" 
                 % ', '.join(VALID_LOCAL_OPS))
 
-        #stack the rasters
+        #stack the rasters (is this less memory-efficient than a loop? need to build an extra array)
         stacked = np.dstack([f.data for f in fields])
 
         #apply function along stacked axis (note: this assumes 2d raster with only 1 band)
