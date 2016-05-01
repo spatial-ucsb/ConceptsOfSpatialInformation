@@ -314,6 +314,23 @@ class GeoTiffField(CcField):
 
         #inspired by http://gis.stackexchange.com/questions/139906/replicating-result-of-gdalwarp-using-gdal-python-bindings
         
+        if func == 'average':
+            func = gdal.GRA_Average
+        elif func == 'bilinear':
+            func = gdal.GRA_Bilinear
+        elif func == 'cubic':
+            func = gdal.GRA_Cubic
+        elif func == 'cubic_spline':
+            func = gdal.GRA_CubicSpline
+        elif func == 'lanczos': 
+            func = gdal.GRA_Lanczos
+        elif func == 'mode':
+            func = gdal.GRA_Mode
+        elif func == 'nearest_neighbor':
+            func = gdal.GRA_NearestNeighbour
+        else:
+            raise ValueError("Error: 'func' not a valid value.")
+
         #get bounds of current rastes
         xmin, ymax, xmax, ymin = self.bounds()
 
@@ -330,7 +347,7 @@ class GeoTiffField(CcField):
         
         orig_dataset = self.to_gdal_dataset()
 
-        gdal.ReprojectImage(orig_dataset, dst, self.projection, self.projection, gdal.GRA_NearestNeighbour)
+        gdal.ReprojectImage(orig_dataset, dst, self.projection, self.projection, func)
 
         return GeoTiffField.from_gdal_dataset(dst)
 
@@ -369,7 +386,7 @@ class GeoTiffField(CcField):
         return dataset
 
     def local(self, func):
-        #fields.local([self]) ?
+        #fields.local([self]) ? (possible to avoid duplicating code?)
         pass
 
     def to_file(self, filepath):
