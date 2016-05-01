@@ -214,11 +214,12 @@ class GeoTiffField(CcField):
         # TODO: implement
         raise NotImplementedError("domain")
     
-    def restrict_domain(self, layer, operation ):
+    def restrict_domain(self, layer, operation='inside'):
         """
         Restricts current instance's domain based on object's domain
-        @param object an object to be subtracted to the current domain
-        @param operation an operation to be performed based on the object
+
+        @param layer - The layer (allow objects?) that defines the domain
+        @param operation - inside or outside
         """
 
         if operation not in VALID_DOMAIN_OPS:
@@ -238,7 +239,7 @@ class GeoTiffField(CcField):
         if operation == 'outside': 
             self.domain_mask = np.absolute(self.domain_mask - 1)
         
-    def coarsen(self, granularity, func ):
+    def coarsen(self, pixel_size, func):
         """
         Constructs new field with lower granularity.
         
@@ -251,7 +252,53 @@ class GeoTiffField(CcField):
         # TODO: implement with 'aggregate' in GDAL
         # default strategy: mean
         # http://gis.stackexchange.com/questions/110769/gdal-python-aggregate-raster-into-lower-resolution 
+
+        #inspired by http://gis.stackexchange.com/questions/139906/replicating-result-of-gdalwarp-using-gdal-python-bindings
+        xmin, pixel_x, _, ymax, _, pixel_y = self.transform
+        nrows, ncols = self.data.shape
+        xmax = xmin + (ncols * pixel_x)
+        ymin = ymax - (nrows * pixel_x)
+
+        #get bounds of current raster
+        bounds = self.bounds()
+
+        dst_nrows = int((xmax - xmin) / float(pixel_size))
+        dst_ncols = int((ymax - ymin) / float(pixel_size))
+
+        #note: seems like there is a maximum number of rows X columns (if exceeded, will return None)
+        driver = gdal.GetDriverByName('MEM')
+        dst = driver.Create('', dst_nrows, dst_ncols, 1, gdal.GDT_Byte)
+
+        dst_transform = (xmin, pixel_size, 0, ymax, 0, -pixel_size)
+        dst.SetGeoTransform(dst_transform)
+        dst.SetProjection(self.projection)
         
+        orig_dataset = self.to_gdal_dataset()
+
+        gdal.ReprojectImage(orig_dataset, dst, self.projection, self.projection, gdal.GRA_NearestNeighbour)
+
+        return GeoTiffField.from_gdal_dataset(dst)
+
+    def to_gdal_dataset(self):
+        nrows, ncols = self.data.shape
+
+        #assuming we are saving a GeoTIFF...
+        driver = gdal.GetDriverByName('MEM')
+        dataset = driver.Create('', ncols, nrows, 1, gdal.GDT_Byte)
+
+        dataset.SetProjection(self.projection)
+        dataset.SetGeoTransform(self.transform)
+        
+        band = dataset.GetRasterBand(1)
+
+        if self.nodata:
+            band.SetNoDataValue(self.nodata)
+
+        band.WriteArray(self.data)
+        band.FlushCache()
+
+        return dataset
+
 
     @classmethod
     def local(cls, fields, func, newGtiffPath=None):
@@ -336,11 +383,39 @@ class GeoTiffField(CcField):
 if __name__ == '__main__':
     #example usage:
 
+    import os
+
+    cur_path = os.path.dirname(os.path.realpath(__file__))
+
     #should these input methods be part of 'fields' (ie, fields.from_file()?)
-    field1 = GeoTiffField.from_file('chinaLights1.tif')
-    field2 = GeoTiffField.from_file('chinaLights2.tif')
+    china_lights1 = GeoTiffField.from_file(china_lights1_filepath)
+    china_lights2 = GeoTiffField.from_file(china_lights2_filepath)
+    china_boundary = objects.from_file(china_boundary_filepath)
+    gas_flares = objects.from_file(gas_flares_filepath)
 
-    average = GeoTiffField.local([field1, field2], 'average')
+    china_lights1 = china_lights1.restrict_domain(china_boundary, 'inside')    
+    china_lights2 = china_lights2.restrict_domain(china_boundary, 'inside')
 
-    average.to_file('chinaLights_average.tif')
+    average_luminosity = fields.local([china_lights1, china_lights2], 'average')
+
+    #remove gas flares
+    luminosity = average_luminosity.restrict_domain(gas_flares, 'outside')
+
+    #create roads buffer
+    roads = object.from_file(china_roads_filepath)
+
+    #buffer roads
+    roads_buffered = roads.buffer(0.5, 'DecimalDegrees') # TODO: updated function calling convention (exclude object)
+
+    # restrict domain of luminosity to road buffer
+    luminosity_around_roads = luminosity.restrict_domain(roads_buffered, 'inside')
+
+    # aggregate previous information
+    results = luminosity_around_roads.coarsen(0.1, 0.1)
+
+
+
+
+
+
 
