@@ -331,8 +331,8 @@ class GeoTiffField(CcField):
         else:
             raise ValueError("Error: 'func' not a valid value.")
 
-        #get bounds of current rastes
-        xmin, ymax, xmax, ymin = self.bounds()
+        #get bounds of current raster
+        minx, miny, maxx, maxy = self.bounds()
 
         dst_nrows = int((xmax - xmin) / float(pixel_size))
         dst_ncols = int((ymax - ymin) / float(pixel_size))
@@ -360,10 +360,9 @@ class GeoTiffField(CcField):
 
         xmin, pixel_x, _, ymax, _, pixel_y = self.transform
         nrows, ncols = self.data.shape
-        xmax = xmin + (ncols * pixel_x)
-        ymin = ymax - (nrows * pixel_x)
+        xmax, ymin = xmin + (ncols * pixel_x), ymax - (nrows * pixel_y)
 
-        return (minx, maxy, maxx, miny)
+        return (minx, miny, maxx, maxy)
 
     def to_gdal_dataset(self):
         nrows, ncols = self.data.shape
