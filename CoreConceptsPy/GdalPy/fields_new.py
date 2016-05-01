@@ -48,6 +48,64 @@ def getGtiffOffset( gtiff, position ):
     arry = int((yQuery - uly)/pixHeight)
     return arry, arrx
 
+def local(fields, func):
+    """
+    Assign a new value to each pixel in gtiff based on func. Return a new GeoTiff at newGtiffPath.
+
+    "Local operations
+
+    A local operation acts upon one or more spatial fields to produce a new field. The distinguishing feature
+    of a local operation is that the value is dependent only on the values of the input field functions at that location.
+    Local operations may be unary (transforming a single field), binary (transforming two fields), or n-ary (transforming
+    any number of fields).
+
+    1. For each location x, h(x) = f(x) dot g(x)" (Worboys & Duckham 148)
+
+    @param fields - List of input fields (assuming all fields have same projection and transform)
+    @param func - The local function (can be either an actual function or string (eg, 'average', 'min', 'max'))
+
+    @return - A new GeoTiffField object that 
+    """
+
+    if isinstance(func, types.FunctionType):
+        #if @func is function, use np.vectorize to make sure it's a universal function
+        func = np.vectorize(func)
+    elif func in VALID_LOCAL_OPS:
+        #if @func is a string specifying a numpy function (eg, 'min')
+        func = getattr(np, func)
+    else:
+        raise ValueError("Error: @func must be either a function or one of the following strings: %s" 
+            % ', '.join(VALID_LOCAL_OPS))
+
+    #stack the rasters (is this less memory-efficient than a loop? need to build an extra array)
+    stacked = np.dstack([f.data for f in fields])
+
+    #apply function along stacked axis (note: this assumes 2d raster with only 1 band)
+    newArray = func(stacked, axis=2)
+
+    #necessary?  causing memory errors...
+    #newArray = np.around(newArray.astype(np.double), 3)
+
+    #assuming all fields have the same projection, transform, and nodata (check for this earlier?)
+    projection = fields[0].projection
+    transform = fields[0].transform
+    nodata = fields[0].nodata
+
+    return GeoTiffField(newArray, projection, transform, nodata)
+
+
+def from_file(filepath):
+    return from_gdal_dataset(gdal.Open(filepath))
+
+def from_gdal_dataset(dataset):
+    data = dataset.ReadAsArray()
+    projection = dataset.GetProjection()
+    transform = dataset.GetGeoTransform()
+    nodata = dataset.GetRasterBand(1).GetNoDataValue()
+
+    return GeoTiffField(data, projection, transform, nodata)
+
+
 def _copy_and_update_dataset(raster, data, in_memory=True, filepath=None):
     """
     Copies input raster but replaces data (preserving transform, projection, etc)
@@ -79,6 +137,7 @@ def FieldGranularity(CcGranularity):
     # TODO: 
     def __init__( self, x, y ):
         pass
+
 
 
 class GeoTiffField(CcField):
@@ -309,51 +368,9 @@ class GeoTiffField(CcField):
 
         return dataset
 
-
-    @classmethod
-    def local(cls, fields, func, newGtiffPath=None):
-        """
-        Assign a new value to each pixel in gtiff based on func. Return a new GeoTiff at newGtiffPath.
-
-        "Local operations
-
-        A local operation acts upon one or more spatial fields to produce a new field. The distinguishing feature
-        of a local operation is that the value is dependent only on the values of the input field functions at that location.
-        Local operations may be unary (transforming a single field), binary (transforming two fields), or n-ary (transforming
-        any number of fields).
-
-        1. For each location x, h(x) = f(x) dot g(x)" (Worboys & Duckham 148)
-
-        @param fields - List of input fields (assuming all fields have same projection and transform)
-        @param func - The local function (can be either an actual function or string (eg, 'average', 'min', 'max'))
-
-        @return - A new GeoTiffField object that 
-        """
-
-        if isinstance(func, types.FunctionType):
-            #if @func is function, use np.vectorize to make sure it's a universal function
-            func = np.vectorize(func)
-        elif func in VALID_LOCAL_OPS:
-            #if @func is a string specifying a numpy function (eg, 'min')
-            func = getattr(np, func)
-        else:
-            raise ValueError("Error: @func must be either a function or one of the following strings: %s" 
-                % ', '.join(VALID_LOCAL_OPS))
-
-        #stack the rasters (is this less memory-efficient than a loop? need to build an extra array)
-        stacked = np.dstack([f.data for f in fields])
-
-        #apply function along stacked axis (note: this assumes 2d raster with only 1 band)
-        newArray = func(stacked, axis=2)
-
-        #necessary?  causing memory errors...
-        #newArray = np.around(newArray.astype(np.double), 3)
-
-        projection = fields[0].projection
-        transform = fields[0].transform
-        nodata = fields[0].nodata
-
-        return cls(newArray, projection, transform, nodata)
+    def local(self, func):
+        #fields.local([self]) ?
+        pass
 
     def to_file(self, filepath):
         nrows, ncols = self.data.shape
@@ -376,18 +393,7 @@ class GeoTiffField(CcField):
         #should clean up on its own, but delete just in case
         del dataset
 
-    @classmethod 
-    def from_file(cls, filepath):
-        return cls.from_gdal_dataset(gdal.Open(filepath))
 
-    @classmethod
-    def from_gdal_dataset(cls, dataset):
-        data = dataset.ReadAsArray()
-        projection = dataset.GetProjection()
-        transform = dataset.GetGeoTransform()
-        nodata = dataset.GetRasterBand(1).GetNoDataValue()
-
-        return cls(data, projection, transform, nodata)
 
 
 if __name__ == '__main__':
