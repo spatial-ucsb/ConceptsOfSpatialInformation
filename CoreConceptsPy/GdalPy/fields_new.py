@@ -298,23 +298,22 @@ class GeoTiffField(CcField):
         if operation == 'outside': 
             self.domain_mask = np.absolute(self.domain_mask - 1)
         
-    def coarsen(self, pixel_size, func):
+    def coarsen(self, pixel_size, func='average'):
         """
         Constructs new field with lower granularity.
-        
-        Default strategy: mean
-        @param granularity a FieldGranularity
-        @param aggregation strategy func
-        @return a new coarser field
-        """
-        pass
-        # TODO: implement with 'aggregate' in GDAL
-        # default strategy: mean
-        # http://gis.stackexchange.com/questions/110769/gdal-python-aggregate-raster-into-lower-resolution 
 
-        #inspired by http://gis.stackexchange.com/questions/139906/replicating-result-of-gdalwarp-using-gdal-python-bindings
+        NOTE: Resampling seems unnecessarily complicated using the GDAL python wrapper.
+        The command-line 'gdalwarp' is the C++ option, but there is no similar function in 
+        python.  This approach is inspired by:
+
+        http://gis.stackexchange.com/questions/139906/replicating-result-of-gdalwarp-using-gdal-python-bindings
         
-        if func == 'average':
+        @param pixel_size - the deired pixel size (use FieldGranularity in future?)
+        @param func - the name of the function used t aggergate
+        @return - a new coarser field
+        """
+        
+        if func in ('average', 'mean'):
             func = gdal.GRA_Average
         elif func == 'bilinear':
             func = gdal.GRA_Bilinear
