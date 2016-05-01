@@ -254,13 +254,9 @@ class GeoTiffField(CcField):
         # http://gis.stackexchange.com/questions/110769/gdal-python-aggregate-raster-into-lower-resolution 
 
         #inspired by http://gis.stackexchange.com/questions/139906/replicating-result-of-gdalwarp-using-gdal-python-bindings
-        xmin, pixel_x, _, ymax, _, pixel_y = self.transform
-        nrows, ncols = self.data.shape
-        xmax = xmin + (ncols * pixel_x)
-        ymin = ymax - (nrows * pixel_x)
-
-        #get bounds of current raster
-        bounds = self.bounds()
+        
+        #get bounds of current rastes
+        xmin, ymax, xmax, ymin = self.bounds()
 
         dst_nrows = int((xmax - xmin) / float(pixel_size))
         dst_ncols = int((ymax - ymin) / float(pixel_size))
@@ -278,6 +274,20 @@ class GeoTiffField(CcField):
         gdal.ReprojectImage(orig_dataset, dst, self.projection, self.projection, gdal.GRA_NearestNeighbour)
 
         return GeoTiffField.from_gdal_dataset(dst)
+
+    def bounds(self):
+        """
+        Returns the bounds (in defined units) of the current object.
+
+        @return - Bounds of current object in format: (minx, maxy, maxx, miny)
+        """
+
+        xmin, pixel_x, _, ymax, _, pixel_y = self.transform
+        nrows, ncols = self.data.shape
+        xmax = xmin + (ncols * pixel_x)
+        ymin = ymax - (nrows * pixel_x)
+
+        return (minx, maxy, maxx, miny)
 
     def to_gdal_dataset(self):
         nrows, ncols = self.data.shape
