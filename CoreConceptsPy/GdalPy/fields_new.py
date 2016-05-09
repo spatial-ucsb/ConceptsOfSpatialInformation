@@ -281,6 +281,9 @@ class GeoTiffField(CcField):
         """
         Restricts current instance's domain based on object's domain
 
+        NOTES: Should @layer be a single Object or a set of Objects? How to handle the fact that we need an OGR
+        object to call RasterizeLayer?  Implement layer.to_ogr_object()? 
+
         @param layer - The layer (allow objects?) that defines the domain
         @param operation - inside or outside
         """

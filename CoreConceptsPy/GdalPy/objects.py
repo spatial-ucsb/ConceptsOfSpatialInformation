@@ -94,6 +94,10 @@ class ArcShpObject(CcObject):
 
         return geom.Buffer(val)
 
+    def to_ogr_datasource(self):
+        pass
+
+
         
 class ArcShpObjectSet(CcObjectSet):
     def __init__(self, layer):
