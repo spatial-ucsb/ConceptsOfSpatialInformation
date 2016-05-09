@@ -363,6 +363,25 @@ class GeoTiffField(CcField):
 
         return (minx, miny, maxx, maxy)
 
+    def local(self, func):
+        """
+        Unary local operation.
+        """
+
+        if isinstance(func, types.FunctionType):
+            #if @func is function, use np.vectorize to make sure it's a universal function
+            func = np.vectorize(func)
+        else:
+            raise ValueError("Error: @func must be either a function or one of the following strings: %s" 
+                % ', '.join(VALID_LOCAL_OPS))
+
+        newArray = func(self.data)
+        projection = self.projection
+        transform = self.transform
+        nodata = self.nodata
+
+        return GeoTiffField(newArray, projection, transform, nodata)
+
     def to_gdal_dataset(self):
         nrows, ncols = self.data.shape
 
@@ -382,10 +401,6 @@ class GeoTiffField(CcField):
         band.FlushCache()
 
         return dataset
-
-    def local(self, func):
-        #fields.local([self]) ? (possible to avoid duplicating code?)
-        pass
 
     def to_file(self, filepath):
         nrows, ncols = self.data.shape
@@ -414,13 +429,13 @@ class GeoTiffField(CcField):
 if __name__ == '__main__':
     #example usage:
 
-    import os
+    import os, objects
 
     cur_path = os.path.dirname(os.path.realpath(__file__))
 
     #should these input methods be part of 'fields' (ie, fields.from_file()?)
-    china_lights1 = GeoTiffField.from_file(china_lights1_filepath)
-    china_lights2 = GeoTiffField.from_file(china_lights2_filepath)
+    china_lights1 = from_file(china_lights1_filepath)
+    china_lights2 = from_file(china_lights2_filepath)
     china_boundary = objects.from_file(china_boundary_filepath)
     gas_flares = objects.from_file(gas_flares_filepath)
 
