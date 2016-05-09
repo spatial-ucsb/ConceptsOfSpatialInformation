@@ -372,8 +372,7 @@ class GeoTiffField(CcField):
             #if @func is function, use np.vectorize to make sure it's a universal function
             func = np.vectorize(func)
         else:
-            raise ValueError("Error: @func must be either a function or one of the following strings: %s" 
-                % ', '.join(VALID_LOCAL_OPS))
+            raise ValueError("Error: @func must be a function.")
 
         newArray = func(self.data)
         projection = self.projection
