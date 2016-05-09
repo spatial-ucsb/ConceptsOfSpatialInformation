@@ -89,6 +89,7 @@ def local(fields, func):
     #assuming all fields have the same projection, transform, and nodata (check for this earlier?)
     projection = fields[0].projection
     transform = fields[0].transform
+    domain = fields[0].domain
     nodata = fields[0].nodata
 
     return GeoTiffField(newArray, projection, transform, nodata)
@@ -114,6 +115,8 @@ def _copy_and_update_dataset(raster, data, in_memory=True, filepath=None):
     @param data - Array of data that will overwrite original data
     @param in_memory - Boolean to indicate if new raster will be in memory (instead of saved to disk)
     @param filepath - Location of new raster if being saved to disk
+
+
 
     @return - The new gdal dataset (ie, raster)
     """
@@ -149,7 +152,7 @@ class GeoTiffField(CcField):
     Worboys, Michael, and Matt Duckham. GIS : a computing perspective. Boca Raton, Fla: CRC Press, 2004. Print.
 
     """
-    def __init__(self, data, projection, transform, nodata=None, domain=None):
+    def __init__(self, data, projection, transform, domain=None, nodata=None):
         """
         @param filepath path to the GeoTiff field
         @param geometry domain of the field 
@@ -158,8 +161,8 @@ class GeoTiffField(CcField):
         self.data = data
         self.projection = projection
         self.transform = transform
-        self.nodata = nodata
-        self.domain = domain
+        self.nodata = nodata or -1
+        self.domain = domain or np.ones(data.shape)
 
         
     def value_at( self, position ):
@@ -171,16 +174,17 @@ class GeoTiffField(CcField):
         """
         if self._is_in_domain(position):
             offset = getGtiffOffset( self.gField, position )
-            array = self.gField.ReadAsArray( offset[1],offset[0], 1,1 ) #Convert image to NumPy array
+            array = self.data[offset[1],offset[0]]
             return array
         else: return None
     
-    def _is_in_domain(self, position ):
+    def _is_in_domain(self, position):
         """
         @param position 
         @return True if position is in the current domain or False otherwise 
         """
-        # TODO: implement using self.domain_geoms
+        
+        return self.domain[position] == 1
 
     def zone( self, position ):
         """
@@ -293,10 +297,10 @@ class GeoTiffField(CcField):
         #NOTE: this freezes with in memory raster (use temp file?)
         gdal.RasterizeLayer(mask_raster, [1], layer, None, None, [1], ['ALL_TOUCHED=TRUE'])
 
-        self.domain_mask = mask_raster.ReadAsArray()
+        self.domain = mask_raster.ReadAsArray()
 
         if operation == 'outside': 
-            self.domain_mask = np.absolute(self.domain_mask - 1)
+            self.domain = np.absolute(self.domain_mask - 1)
         
     def coarsen(self, pixel_size, func='average'):
         """
@@ -374,14 +378,21 @@ class GeoTiffField(CcField):
         else:
             raise ValueError("Error: @func must be a function.")
 
+
+        #NOTE: How to deal with pixels outside the domain?  Perform local function but keep domain?
         newArray = func(self.data)
         projection = self.projection
         transform = self.transform
+        domain = self.domain
         nodata = self.nodata
 
         return GeoTiffField(newArray, projection, transform, nodata)
 
     def to_gdal_dataset(self):
+        """
+        Returns a GDAL DataSet object.
+        """
+
         nrows, ncols = self.data.shape
 
         #assuming we are saving a GeoTIFF...
@@ -447,7 +458,7 @@ if __name__ == '__main__':
     luminosity = average_luminosity.restrict_domain(gas_flares, 'outside')
 
     #create roads buffer
-    roads = object.from_file(china_roads_filepath)
+    roads = objects.from_file(china_roads_filepath)
 
     #buffer roads
     roads_buffered = roads.buffer(0.5, 'DecimalDegrees') # TODO: updated function calling convention (exclude object)

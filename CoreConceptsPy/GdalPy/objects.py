@@ -91,12 +91,15 @@ class ArcShpObject(CcObject):
 
     def buffer(self, val):
         geom = self.sObj.GetGeometryRef()
-        
+
         return geom.Buffer(val)
 
         
 class ArcShpObjectSet(CcObjectSet):
     def __init__(self, layer):
+        """
+        NOTE: Should this class contain a list of ArcShpObjects, or just refer to the ogr layer?
+        """
         self.layer = layer
         
     def bounds(self):
