@@ -22,6 +22,14 @@ from coreconcepts import CcObject, CcObjectSet
 
 log = _init_log("objects")
 
+
+def from_file(filepath):
+    shp = ogr.Open(filepath)
+    layer = shp.GetLayer(0)
+
+    ArcShpObjectSet(layer)
+
+
 class ArcShpObject(CcObject):
     """
     Subclass of Abstract Object (CcObject) in the ArcMap Shapefile format
@@ -80,17 +88,34 @@ class ArcShpObject(CcObject):
             return True
         else:
             return False
+
+    def buffer(self, val):
+        geom = self.sObj.GetGeometryRef()
+        
+        return geom.Buffer(val)
+
         
 class ArcShpObjectSet(CcObjectSet):
-    def __init__(self, shp_filepath):
-        # TODO: load the objects from the shapefile and add them to self.obj_set
-        pass
-
+    def __init__(self, layer):
+        self.layer = layer
+        
     def bounds(self):
         """ 
         Return bounds of entire ObjectSet in form of (MinX, MaxX, MinY, MaxY) 
         """
         
-        return self.layer.GetEnvelope()
+        return self.layer.GetExtent()
 
-        
+    def buffer(self, val):
+        """
+        Buffer all objects in this set.
+
+        NOTE: Return self or new ObjectSet?
+        """
+
+        for indx in xrange(self.layer.GetFeatureCount()):
+            feature = self.layer.GetFeature(indx)
+            geom = feature.GetGeometryRef()
+            buffered = geom.Buffer(val)
+            feature.SetGeometry(buffered)
+
