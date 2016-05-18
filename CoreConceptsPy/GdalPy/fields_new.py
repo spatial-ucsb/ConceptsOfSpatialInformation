@@ -48,7 +48,7 @@ def getGtiffOffset( gtiff, position ):
     arry = int((yQuery - uly)/pixHeight)
     return arry, arrx
 
-def local(fields, func):
+def local(fields, func, domain=None):
     """
     Assign a new value to each pixel in gtiff based on func. Return a new GeoTiff at newGtiffPath.
 
@@ -66,6 +66,14 @@ def local(fields, func):
 
     @return - A new GeoTiffField object that 
     """
+    unique_projections = set(field.projection for field in fields)
+    unique_transforms = set(",".join(map(str, field.transform)) for field in fields)
+
+    if len(unique_projections) > 1:
+        raise ValueError("Error: each field in @fields must have the same projection.") 
+
+    if len(unique_transforms) > 1:
+        raise ValueError("Error: each field in @fields mut have the same geotransform.")
 
     if isinstance(func, types.FunctionType):
         #if @func is function, use np.vectorize to make sure it's a universal function
@@ -99,6 +107,10 @@ def from_file(filepath):
     return from_gdal_dataset(gdal.Open(filepath))
 
 def from_gdal_dataset(dataset):
+    """
+    NOTES: Add function parameter to reduce multi-band raster down to single-band field
+    (based on NDVI, for example)?  Right now we are just assuming one band.
+    """
     data = dataset.ReadAsArray()
     projection = dataset.GetProjection()
     transform = dataset.GetGeoTransform()
