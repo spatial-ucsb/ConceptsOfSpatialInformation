@@ -30,23 +30,22 @@ VALID_DOMAIN_OPS = ('inside', 'outside')
 
 log = _init_log("fields")
 
-def getGtiffOffset( gtiff, position ):
-    """
-    Convert GeoTiff coordinates to matrix offset. Used for getValue GeoTiffField method and focal mean function.
-    @param position - the input geocoordinates in coordinate system of gtiff
-    @return - the i,j pair representing input position in the image matrix
-    """
-    transform = gtiff.GetGeoTransform()
-    #Convert geo-coords to (i,j) image space coordinates
-    ulx = transform [0]
-    uly = transform [3]
-    xQuery = position [0]
-    yQuery = position [1]
-    pixWidth = transform [1]
-    pixHeight = transform [5]
-    arrx = int((xQuery - ulx)/pixWidth)
-    arry = int((yQuery - uly)/pixHeight)
-    return arry, arrx
+def pixel_to_coords(col, row, transform):
+    """Returns the geographic coordinate pair (lon, lat) for the given col, row, and geotransform."""
+
+    lon = transform[0] + (col * transform[1]) + (row * transform[2])
+    lat = transform[3] + (col * transform[4]) + (row * transform[2])
+
+    return lon, lat
+
+def coords_to_pixel(lon, lat, transform):
+    """Returns raster coordinate pair (col, row) for the given lon, lat, and geotransform."""
+
+    col = int((lon - transform[0]) / transform[1])
+    row = int((lat - transform[3]) / transform[5])
+
+    return col, row
+
 
 def local(fields, func, domain=None):
     """
@@ -103,18 +102,21 @@ def local(fields, func, domain=None):
     return GeoTiffField(newArray, projection, transform, nodata)
 
 
-def from_file(filepath):
-    return from_gdal_dataset(gdal.Open(filepath))
+def from_file(filepath, converter=None):
+    return from_gdal_dataset(gdal.Open(filepath), converter)
 
-def from_gdal_dataset(dataset):
+def from_gdal_dataset(dataset, converter=None):
     """
-    NOTES: Add function parameter to reduce multi-band raster down to single-band field
-    (based on NDVI, for example)?  Right now we are just assuming one band.
+    QUESTIONS:
+    * If converting multi-band raster into single-band field, read entire thing into memory?
     """
     data = dataset.ReadAsArray()
     projection = dataset.GetProjection()
     transform = dataset.GetGeoTransform()
     nodata = dataset.GetRasterBand(1).GetNoDataValue()
+
+    if converter:
+        data = converter(data)
 
     return GeoTiffField(data, projection, transform, nodata)
 
@@ -166,9 +168,13 @@ class GeoTiffField(CcField):
     """
     def __init__(self, data, projection, transform, domain=None, nodata=None):
         """
-        @param filepath path to the GeoTiff field
+        @data - path to the GeoTiff field
         @param geometry domain of the field 
         @param operation 'inside' or 'outside' 
+
+        QUESTIONS: 
+        * Should @domain be a mask or geometries?
+        * Is it asking too much to store the full array in memory?
         """
         self.data = data
         self.projection = projection
@@ -306,7 +312,7 @@ class GeoTiffField(CcField):
         nrows, ncols = self.data.shape
 
         mask_raster = gdal.GetDriverByName('MEM').Create('', nrows, ncols, 1, gdal.GDT_Byte)
-        mask_raster.GetRasterBand(1).Fill(miss_value)
+        mask_raster.GetRasterBand(1).Fill(0)
 
         #this function burns the polygons onto the raster
         #NOTE: this freezes with in memory raster (use temp file?)
@@ -321,13 +327,17 @@ class GeoTiffField(CcField):
         """
         Constructs new field with lower granularity.
 
-        NOTE: Resampling seems unnecessarily complicated using the GDAL python wrapper.
+        NOTES: 
+
+        1) Should this technically be called "resample"?
+
+        2) Resampling seems unnecessarily complicated using the GDAL python wrapper.
         The command-line 'gdalwarp' is the C++ option, but there is no similar function in 
         python.  This approach is inspired by:
 
         http://gis.stackexchange.com/questions/139906/replicating-result-of-gdalwarp-using-gdal-python-bindings
         
-        @param pixel_size - the deired pixel size (use FieldGranularity in future?)
+        @param pixel_size - the desired pixel size (use FieldGranularity in future?)
         @param func - the name of the function used t aggergate
         @return - a new coarser field
         """
@@ -352,14 +362,14 @@ class GeoTiffField(CcField):
         #get bounds of current raster
         minx, miny, maxx, maxy = self.bounds()
 
-        dst_nrows = int((xmax - xmin) / float(pixel_size))
-        dst_ncols = int((ymax - ymin) / float(pixel_size))
+        dst_nrows = abs(int((maxx - minx) / float(pixel_size)))
+        dst_ncols = abs(int((maxy - miny) / float(pixel_size)))
 
         #note: seems like there is a maximum number of rows X columns (if exceeded, will return None)
         driver = gdal.GetDriverByName('MEM')
         dst = driver.Create('', dst_nrows, dst_ncols, 1, gdal.GDT_Byte)
 
-        dst_transform = (xmin, pixel_size, 0, ymax, 0, -pixel_size)
+        dst_transform = (minx, pixel_size, 0, maxy, 0, -pixel_size)
         dst.SetGeoTransform(dst_transform)
         dst.SetProjection(self.projection)
         
@@ -367,7 +377,7 @@ class GeoTiffField(CcField):
 
         gdal.ReprojectImage(orig_dataset, dst, self.projection, self.projection, func)
 
-        return GeoTiffField.from_gdal_dataset(dst)
+        return from_gdal_dataset(dst)
 
     def bounds(self):
         """
@@ -376,9 +386,9 @@ class GeoTiffField(CcField):
         @return - Bounds of current object in format: (minx, maxy, maxx, miny)
         """
 
-        xmin, pixel_x, _, ymax, _, pixel_y = self.transform
+        minx, pixelx, _, maxy, _, pixely = self.transform
         nrows, ncols = self.data.shape
-        xmax, ymin = xmin + (ncols * pixel_x), ymax - (nrows * pixel_y)
+        maxx, miny = minx + (ncols * pixelx), maxy - (nrows * pixely)
 
         return (minx, miny, maxx, maxy)
 
