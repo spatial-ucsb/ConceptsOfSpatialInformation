@@ -30,7 +30,8 @@ VALID_DOMAIN_OPS = ('inside', 'outside')
 
 log = _init_log("fields")
 
-def pixel_to_coords(col, row, transform):
+#put these utility functions in utils.py?
+def _pixel_to_coords(col, row, transform):
     """Returns the geographic coordinate pair (lon, lat) for the given col, row, and geotransform."""
 
     lon = transform[0] + (col * transform[1]) + (row * transform[2])
@@ -38,11 +39,11 @@ def pixel_to_coords(col, row, transform):
 
     return lon, lat
 
-def coords_to_pixel(lon, lat, transform):
+def _coords_to_pixel(y, x, transform):
     """Returns raster coordinate pair (col, row) for the given lon, lat, and geotransform."""
 
-    col = int((lon - transform[0]) / transform[1])
-    row = int((lat - transform[3]) / transform[5])
+    col = int((y - transform[0]) / transform[1])
+    row = int((x - transform[3]) / transform[5])
 
     return col, row
 
@@ -66,7 +67,7 @@ def local(fields, func, domain=None):
     @return - A new GeoTiffField object that 
     """
     unique_projections = set(field.projection for field in fields)
-    unique_transforms = set(",".join(map(str, field.transform)) for field in fields)
+    unique_transforms = set(field.transform for field in fields)
 
     if len(unique_projections) > 1:
         raise ValueError("Error: each field in @fields must have the same projection.") 
@@ -168,22 +169,23 @@ class GeoTiffField(CcField):
     """
     def __init__(self, data, projection, transform, domain=None, nodata=None):
         """
-        @data - path to the GeoTiff field
-        @param geometry domain of the field 
-        @param operation 'inside' or 'outside' 
+        @param data - 2-dimensional numpy array representing the raster data
+        @param projection - projection information in WKT format
+        @param transform - 6-dimensional tuple representing the geotransform in GDAL format
+        @param domain - GEOMETRIES?
+        @param nodata - no data value
 
         QUESTIONS: 
         * Should @domain be a mask or geometries?
         * Is it asking too much to store the full array in memory?
         """
-        self.data = data
         self.projection = projection
         self.transform = transform
         self.nodata = nodata or -1
         self.domain = domain or np.ones(data.shape)
-
+        self.data = ma.array(data, mask=domain==1)
         
-    def value_at( self, position ):
+    def value_at(self, col, row):
         """
         Returns the value of a raster pixel at an input position.
         
@@ -191,18 +193,19 @@ class GeoTiffField(CcField):
         @return the raw value of the pixel at input position in self or None if it is outside of the domain
         """
         if self._is_in_domain(position):
-            offset = getGtiffOffset( self.gField, position )
-            array = self.data[offset[1],offset[0]]
+            col, row = _coords_to_pixel(x, y, self.transform)
+            array = self.data[col, row]
+            
             return array
         else: return None
     
-    def _is_in_domain(self, position):
+    def _is_in_domain(self, col, row):
         """
         @param position 
         @return True if position is in the current domain or False otherwise 
         """
         
-        return self.domain[position] == 1
+        return bool(self.data[col, row])
 
     def zone( self, position ):
         """
