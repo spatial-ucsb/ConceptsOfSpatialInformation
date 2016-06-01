@@ -194,10 +194,11 @@ class GeoTiffField(CcField):
         """
         if self._is_in_domain(position):
             col, row = _coords_to_pixel(x, y, self.transform)
-            array = self.data[col, row]
+            val = self.data[col, row]
             
-            return array
-        else: return None
+            return val
+        
+        return None
     
     def _is_in_domain(self, col, row):
         """
@@ -315,17 +316,19 @@ class GeoTiffField(CcField):
         nrows, ncols = self.data.shape
 
         mask_raster = gdal.GetDriverByName('MEM').Create('', nrows, ncols, 1, gdal.GDT_Byte)
+        mask_raster.SetProjection(self.projection)
+        mask_raster.SetGeoTransform(self.transform)
         mask_raster.GetRasterBand(1).Fill(0)
 
         #this function burns the polygons onto the raster
         #NOTE: this freezes with in memory raster (use temp file?)
         gdal.RasterizeLayer(mask_raster, [1], layer, None, None, [1], ['ALL_TOUCHED=TRUE'])
 
-        self.domain = mask_raster.ReadAsArray()
+        self.data.mask = mask_raster.ReadAsArray()
 
         if operation == 'outside': 
-            self.domain = np.absolute(self.domain_mask - 1)
-        
+            self.data.mask = np.absolute(self.domain_mask - 1)
+
     def coarsen(self, pixel_size, func='average'):
         """
         Constructs new field with lower granularity.
