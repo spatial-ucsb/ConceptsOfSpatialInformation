@@ -22,31 +22,13 @@ import numpy.ma as ma
 import gdal
 from gdalconst import *
 
-from utils import _init_log
+from utils import _init_log, _pixel_to_coords, _coords_to_pixel
 from coreconcepts import CcField
 
 VALID_LOCAL_OPS = ('average', 'mean', 'median', 'min', 'minimum', 'max', 'maximum')
 VALID_DOMAIN_OPS = ('inside', 'outside')
 
 log = _init_log("fields")
-
-#put these utility functions in utils.py?
-def _pixel_to_coords(col, row, transform):
-    """Returns the geographic coordinate pair (lon, lat) for the given col, row, and geotransform."""
-
-    lon = transform[0] + (col * transform[1]) + (row * transform[2])
-    lat = transform[3] + (col * transform[4]) + (row * transform[2])
-
-    return lon, lat
-
-def _coords_to_pixel(y, x, transform):
-    """Returns raster coordinate pair (col, row) for the given lon, lat, and geotransform."""
-
-    col = int((y - transform[0]) / transform[1])
-    row = int((x - transform[3]) / transform[5])
-
-    return col, row
-
 
 def local(fields, func, domain=None):
     """
