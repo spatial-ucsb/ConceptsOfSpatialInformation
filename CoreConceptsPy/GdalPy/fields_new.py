@@ -152,8 +152,7 @@ def _copy_and_update_dataset(raster, data, in_memory=True, filepath=None):
 
 
 def FieldGranularity(CcGranularity):
-    # TODO: 
-    def __init__( self, x, y ):
+    def __init__(self, width, height):
         pass
 
 
@@ -185,7 +184,7 @@ class GeoTiffField(CcField):
         self.domain = domain or np.ones(data.shape)
         self.data = ma.array(data, mask=domain==1)
         
-    def value_at(self, col, row):
+    def value_at(self, x, y):
         """
         Returns the value of a raster pixel at an input position.
         
@@ -324,10 +323,12 @@ class GeoTiffField(CcField):
         #NOTE: this freezes with in memory raster (use temp file?)
         gdal.RasterizeLayer(mask_raster, [1], layer, None, None, [1], ['ALL_TOUCHED=TRUE'])
 
-        self.data.mask = mask_raster.ReadAsArray()
+        mask = mask_raster.ReadAsArray()
 
         if operation == 'outside': 
-            self.data.mask = np.absolute(self.domain_mask - 1)
+            mask = np.absolute(mask - 1)
+
+        self.data.mask = mask
 
     def coarsen(self, pixel_size, func='average'):
         """
@@ -478,6 +479,8 @@ if __name__ == '__main__':
     china_lights1 = from_file(china_lights1_filepath)
     china_lights2 = from_file(china_lights2_filepath)
     china_boundary = objects.from_file(china_boundary_filepath)
+
+    #dealing with objects or layer?
     gas_flares = objects.from_file(gas_flares_filepath)
 
     china_lights1 = china_lights1.restrict_domain(china_boundary, 'inside')    

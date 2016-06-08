@@ -15,6 +15,8 @@ __email__ = ""
 __date__ = "December 2014"
 __status__ = "Development"
 
+import types
+
 import numpy as np
 import numpy.ma as ma
 import gdal
@@ -23,30 +25,137 @@ from gdalconst import *
 from utils import _init_log
 from coreconcepts import CcField
 
+VALID_LOCAL_OPS = ('average', 'mean', 'median', 'min', 'minimum', 'max', 'maximum')
+VALID_DOMAIN_OPS = ('inside', 'outside')
+
 log = _init_log("fields")
 
-def getGtiffOffset( gtiff, position ):
+#put these utility functions in utils.py?
+def _pixel_to_coords(col, row, transform):
+    """Returns the geographic coordinate pair (lon, lat) for the given col, row, and geotransform."""
+
+    lon = transform[0] + (col * transform[1]) + (row * transform[2])
+    lat = transform[3] + (col * transform[4]) + (row * transform[2])
+
+    return lon, lat
+
+def _coords_to_pixel(y, x, transform):
+    """Returns raster coordinate pair (col, row) for the given lon, lat, and geotransform."""
+
+    col = int((y - transform[0]) / transform[1])
+    row = int((x - transform[3]) / transform[5])
+
+    return col, row
+
+
+def local(fields, func, domain=None):
     """
-    Convert GeoTiff coordinates to matrix offset. Used for getValue GeoTiffField method and focal mean function.
-    @param position - the input geocoordinates in coordinate system of gtiff
-    @return - the i,j pair representing input position in the image matrix
+    Assign a new value to each pixel in gtiff based on func. Return a new GeoTiff at newGtiffPath.
+
+    "Local operations
+
+    A local operation acts upon one or more spatial fields to produce a new field. The distinguishing feature
+    of a local operation is that the value is dependent only on the values of the input field functions at that location.
+    Local operations may be unary (transforming a single field), binary (transforming two fields), or n-ary (transforming
+    any number of fields).
+
+    1. For each location x, h(x) = f(x) dot g(x)" (Worboys & Duckham 148)
+
+    @param fields - List of input fields (assuming all fields have same projection and transform)
+    @param func - The local function (can be either an actual function or string (eg, 'average', 'min', 'max'))
+
+    @return - A new GeoTiffField object that 
     """
-    transform = gtiff.GetGeoTransform()
-    #Convert geo-coords to (i,j) image space coordinates
-    ulx = transform [0]
-    uly = transform [3]
-    xQuery = position [0]
-    yQuery = position [1]
-    pixWidth = transform [1]
-    pixHeight = transform [5]
-    arrx = int((xQuery - ulx)/pixWidth)
-    arry = int((yQuery - uly)/pixHeight)
-    return arry, arrx
+    unique_projections = set(field.projection for field in fields)
+    unique_transforms = set(field.transform for field in fields)
+
+    if len(unique_projections) > 1:
+        raise ValueError("Error: each field in @fields must have the same projection.") 
+
+    if len(unique_transforms) > 1:
+        raise ValueError("Error: each field in @fields mut have the same geotransform.")
+
+    if isinstance(func, types.FunctionType):
+        #if @func is function, use np.vectorize to make sure it's a universal function
+        func = np.vectorize(func)
+    elif func in VALID_LOCAL_OPS:
+        #if @func is a string specifying a numpy function (eg, 'min')
+        func = getattr(np, func)
+    else:
+        raise ValueError("Error: @func must be either a function or one of the following strings: %s" 
+            % ', '.join(VALID_LOCAL_OPS))
+
+    #stack the rasters (is this less memory-efficient than a loop? need to build an extra array)
+    stacked = np.dstack([f.data for f in fields])
+
+    #apply function along stacked axis (note: this assumes 2d raster with only 1 band)
+    newArray = func(stacked, axis=2)
+
+    #necessary?  causing memory errors...
+    #newArray = np.around(newArray.astype(np.double), 3)
+
+    #assuming all fields have the same projection, transform, and nodata (check for this earlier?)
+    projection = fields[0].projection
+    transform = fields[0].transform
+    domain = fields[0].domain
+    nodata = fields[0].nodata
+
+    return GeoTiffField(newArray, projection, transform, nodata)
+
+
+def from_file(filepath, converter=None):
+    return from_gdal_dataset(gdal.Open(filepath), converter)
+
+def from_gdal_dataset(dataset, converter=None):
+    """
+    QUESTIONS:
+    * If converting multi-band raster into single-band field, read entire thing into memory?
+    """
+    data = dataset.ReadAsArray()
+    projection = dataset.GetProjection()
+    transform = dataset.GetGeoTransform()
+    nodata = dataset.GetRasterBand(1).GetNoDataValue()
+
+    if converter:
+        data = converter(data)
+
+    return GeoTiffField(data, projection, transform, nodata)
+
+
+def _copy_and_update_dataset(raster, data, in_memory=True, filepath=None):
+    """
+    Copies input raster but replaces data (preserving transform, projection, etc)
+
+    @param raster - Original raster to be copied
+    @param data - Array of data that will overwrite original data
+    @param in_memory - Boolean to indicate if new raster will be in memory (instead of saved to disk)
+    @param filepath - Location of new raster if being saved to disk
+
+
+
+    @return - The new gdal dataset (ie, raster)
+    """
+
+    if in_memory:
+        driver = gdal.GetDriverByName('MEM')
+        newRaster = driver.CreateCopy('', raster)
+    elif filepath:
+        driver = raster.GetDriver()
+        newRaster = driver.CreateCopy(filepath, raster)
+        
+    #assuming only 1 band (incorrect?)    
+    outBand = newRaster.GetRasterBand(1)
+    outBand.WriteArray(newArray)
+    outBand.FlushCache()
+
+    return newRaster
+
 
 def FieldGranularity(CcGranularity):
-    # TODO: 
-    def __init__( self, x, y ):
+    def __init__(self, width, height):
         pass
+
+
 
 class GeoTiffField(CcField):
     """
@@ -57,19 +166,25 @@ class GeoTiffField(CcField):
     Worboys, Michael, and Matt Duckham. GIS : a computing perspective. Boca Raton, Fla: CRC Press, 2004. Print.
 
     """
-    def __init__( self, filepath, geometry, operation ):
+    def __init__(self, data, projection, transform, domain=None, nodata=None):
         """
-        @param filepath path to the GeoTiff field
-        @param geometry domain of the field 
-        @param operation 'inside' or 'outside' 
-        """
-        assert operation in ['inside','outside']
-        self.gField = gdal.Open( filepath, GA_Update )
-        # set the initial domain of the field
-        # TODO: add the geometry to the domain_geoms tuple
-        self.domain_geoms = () # tuple [geometry, 'inside'|'outside']
+        @param data - 2-dimensional numpy array representing the raster data
+        @param projection - projection information in WKT format
+        @param transform - 6-dimensional tuple representing the geotransform in GDAL format
+        @param domain - GEOMETRIES?
+        @param nodata - no data value
 
-    def value_at( self, position ):
+        QUESTIONS: 
+        * Should @domain be a mask or geometries?
+        * Is it asking too much to store the full array in memory?
+        """
+        self.projection = projection
+        self.transform = transform
+        self.nodata = nodata or -1
+        self.domain = domain or np.ones(data.shape)
+        self.data = ma.array(data, mask=domain==1)
+        
+    def value_at(self, x, y):
         """
         Returns the value of a raster pixel at an input position.
         
@@ -77,17 +192,20 @@ class GeoTiffField(CcField):
         @return the raw value of the pixel at input position in self or None if it is outside of the domain
         """
         if self._is_in_domain(position):
-            offset = getGtiffOffset( self.gField, position )
-            array = self.gField.ReadAsArray( offset[1],offset[0], 1,1 ) #Convert image to NumPy array
-            return array
-        else: return None
+            col, row = _coords_to_pixel(x, y, self.transform)
+            val = self.data[col, row]
+            
+            return val
+        
+        return None
     
-    def _is_in_domain(self, position ):
+    def _is_in_domain(self, col, row):
         """
         @param position 
         @return True if position is in the current domain or False otherwise 
         """
-        # TODO: implement using self.domain_geoms
+        
+        return bool(self.data[col, row])
 
     def zone( self, position ):
         """
@@ -99,34 +217,6 @@ class GeoTiffField(CcField):
         val = array[position[0], position[1]]
         maskArray = ma.masked_not_equal( array, val )  #All values not equal to zone value of input are masked
         return maskArray
-
-    def local( self, fields, func, newGtiffPath ):
-        """
-        Assign a new value to each pixel in gtiff based on func. Return a new GeoTiff at newGtiffPath.
-
-        "Local operations
-
-        A local operation acts upon one or more spatial fields to produce a new field. The distinguishing feature
-        of a local operation is that the value is dependent only on the values of the input field functions at that location.
-        Local operations may be unary (transforming a single field), binary (transforming two fields), or n-ary (transforming
-        any number of fields).
-
-        1. For each location x, h(x) = f(x) dot g(x)" (Worboys & Duckham 148)
-
-        @param fields - other input fields 
-        @param func - the local function to be applied to each value in GeoTiff
-        @param newGtiffPath - file path for the new GeoTiff
-        @return N/A; write new raster to newGtiffPath
-        """
-        oldArray = self.gField.ReadAsArray()
-        newArray = func(oldArray)
-        # TODO: update to handle input fields
-        driver = self.gField.GetDriver()
-        newRaster = driver.CreateCopy(newGtiffPath, self.gField)
-        outBand = newRaster.GetRasterBand(1)
-        newArray = np.around(newArray.astype(np.double), 3)
-        outBand.WriteArray(newArray)
-        outBand.FlushCache()
 
     def focal( self, fields, kernFunc, newGtiffPath ):
         """
@@ -150,7 +240,7 @@ class GeoTiffField(CcField):
         TODO: Make newGtiffPath optional
         """
 
-        oldArray = self.gField.ReadAsArray()
+        oldArray = self.data
         newArray = oldArray.copy()
         rows = oldArray.shape[0]
         cols = oldArray.shape[1]
@@ -202,26 +292,220 @@ class GeoTiffField(CcField):
         outBand.FlushCache()
         
     def domain(self):
+        """
+        Return mask or actual geometries?
+        """
         # TODO: implement
         raise NotImplementedError("domain")
     
-    def restrict_domain(self, geometry, operation ):
-        # TODO: implement
-        # add [geometry,operation] to self.domain_geoms
-        pass 
-    
-    def coarsen(self, granularity, func ):
+    def restrict_domain(self, layer, operation='inside'):
+        """
+        Restricts current instance's domain based on object's domain
+
+        NOTES: Should @layer be a single Object or a set of Objects? How to handle the fact that we need an OGR
+        object to call RasterizeLayer?  Implement layer.to_ogr_object()? 
+
+        @param layer - The layer (allow objects?) that defines the domain
+        @param operation - inside or outside
+        """
+
+        if operation not in VALID_DOMAIN_OPS:
+            raise ValueError("Error: %s is not a valid operation on restrict_domain." % operation)
+
+        nrows, ncols = self.data.shape
+
+        mask_raster = gdal.GetDriverByName('MEM').Create('', nrows, ncols, 1, gdal.GDT_Byte)
+        mask_raster.SetProjection(self.projection)
+        mask_raster.SetGeoTransform(self.transform)
+        mask_raster.GetRasterBand(1).Fill(0)
+
+        #this function burns the polygons onto the raster
+        #NOTE: this freezes with in memory raster (use temp file?)
+        gdal.RasterizeLayer(mask_raster, [1], layer, None, None, [1], ['ALL_TOUCHED=TRUE'])
+
+        mask = mask_raster.ReadAsArray()
+
+        if operation == 'outside': 
+            mask = np.absolute(mask - 1)
+
+        self.data.mask = mask
+
+    def coarsen(self, pixel_size, func='average'):
         """
         Constructs new field with lower granularity.
+
+        NOTES: 
+
+        1) Should this technically be called "resample"?
+
+        2) Resampling seems unnecessarily complicated using the GDAL python wrapper.
+        The command-line 'gdalwarp' is the C++ option, but there is no similar function in 
+        python.  This approach is inspired by:
+
+        http://gis.stackexchange.com/questions/139906/replicating-result-of-gdalwarp-using-gdal-python-bindings
         
-        Default strategy: mean
-        @param granularity a FieldGranularity
-        @param aggregation strategy func
-        @return a new coarser field
+        @param pixel_size - the desired pixel size (use FieldGranularity in future?)
+        @param func - the name of the function used t aggergate
+        @return - a new coarser field
         """
-        pass
-        # TODO: implement with 'aggregate' in GDAL
-        # default strategy: mean
-        # http://gis.stackexchange.com/questions/110769/gdal-python-aggregate-raster-into-lower-resolution 
         
+        if func in ('average', 'mean'):
+            func = gdal.GRA_Average
+        elif func == 'bilinear':
+            func = gdal.GRA_Bilinear
+        elif func == 'cubic':
+            func = gdal.GRA_Cubic
+        elif func == 'cubic_spline':
+            func = gdal.GRA_CubicSpline
+        elif func == 'lanczos': 
+            func = gdal.GRA_Lanczos
+        elif func == 'mode':
+            func = gdal.GRA_Mode
+        elif func == 'nearest_neighbor':
+            func = gdal.GRA_NearestNeighbour
+        else:
+            raise ValueError("Error: 'func' not a valid value.")
+
+        #get bounds of current raster
+        minx, miny, maxx, maxy = self.bounds()
+
+        dst_nrows = abs(int((maxx - minx) / float(pixel_size)))
+        dst_ncols = abs(int((maxy - miny) / float(pixel_size)))
+
+        #note: seems like there is a maximum number of rows X columns (if exceeded, will return None)
+        driver = gdal.GetDriverByName('MEM')
+        dst = driver.Create('', dst_nrows, dst_ncols, 1, gdal.GDT_Byte)
+
+        dst_transform = (minx, pixel_size, 0, maxy, 0, -pixel_size)
+        dst.SetGeoTransform(dst_transform)
+        dst.SetProjection(self.projection)
         
+        orig_dataset = self.to_gdal_dataset()
+
+        gdal.ReprojectImage(orig_dataset, dst, self.projection, self.projection, func)
+
+        return from_gdal_dataset(dst)
+
+    def bounds(self):
+        """
+        Returns the bounds (in defined units) of the current object.
+
+        @return - Bounds of current object in format: (minx, maxy, maxx, miny)
+        """
+
+        minx, pixelx, _, maxy, _, pixely = self.transform
+        nrows, ncols = self.data.shape
+        maxx, miny = minx + (ncols * pixelx), maxy - (nrows * pixely)
+
+        return (minx, miny, maxx, maxy)
+
+    def local(self, func):
+        """
+        Unary local operation.
+        """
+
+        if isinstance(func, types.FunctionType):
+            #if @func is function, use np.vectorize to make sure it's a universal function
+            func = np.vectorize(func)
+        else:
+            raise ValueError("Error: @func must be a function.")
+
+
+        #NOTE: How to deal with pixels outside the domain?  Perform local function but keep domain?
+        newArray = func(self.data)
+        projection = self.projection
+        transform = self.transform
+        domain = self.domain
+        nodata = self.nodata
+
+        return GeoTiffField(newArray, projection, transform, nodata)
+
+    def to_gdal_dataset(self):
+        """
+        Returns a GDAL DataSet object.
+        """
+
+        nrows, ncols = self.data.shape
+
+        #assuming we are saving a GeoTIFF...
+        driver = gdal.GetDriverByName('MEM')
+        dataset = driver.Create('', ncols, nrows, 1, gdal.GDT_Byte)
+
+        dataset.SetProjection(self.projection)
+        dataset.SetGeoTransform(self.transform)
+        
+        band = dataset.GetRasterBand(1)
+
+        if self.nodata:
+            band.SetNoDataValue(self.nodata)
+
+        band.WriteArray(self.data)
+        band.FlushCache()
+
+        return dataset
+
+    def to_file(self, filepath):
+        nrows, ncols = self.data.shape
+
+        #assuming we are saving a GeoTIFF...
+        driver = gdal.GetDriverByName('GTiff')
+        dataset = driver.Create(filepath, ncols, nrows, 1, gdal.GDT_Byte)
+
+        dataset.SetProjection(self.projection)
+        dataset.SetGeoTransform(self.transform)
+        
+        band = dataset.GetRasterBand(1)
+
+        if self.nodata:
+            band.SetNoDataValue(self.nodata)
+
+        band.WriteArray(self.data)
+        band.FlushCache()
+
+        #should clean up on its own, but delete just in case
+        del dataset
+
+
+
+
+if __name__ == '__main__':
+    #example usage:
+
+    import os, objects
+
+    cur_path = os.path.dirname(os.path.realpath(__file__))
+
+    #should these input methods be part of 'fields' (ie, fields.from_file()?)
+    china_lights1 = from_file(china_lights1_filepath)
+    china_lights2 = from_file(china_lights2_filepath)
+    china_boundary = objects.from_file(china_boundary_filepath)
+
+    #dealing with objects or layer?
+    gas_flares = objects.from_file(gas_flares_filepath)
+
+    china_lights1 = china_lights1.restrict_domain(china_boundary, 'inside')    
+    china_lights2 = china_lights2.restrict_domain(china_boundary, 'inside')
+
+    average_luminosity = fields.local([china_lights1, china_lights2], 'average')
+
+    #remove gas flares
+    luminosity = average_luminosity.restrict_domain(gas_flares, 'outside')
+
+    #create roads buffer
+    roads = objects.from_file(china_roads_filepath)
+
+    #buffer roads
+    roads_buffered = roads.buffer(0.5, 'DecimalDegrees') # TODO: updated function calling convention (exclude object)
+
+    # restrict domain of luminosity to road buffer
+    luminosity_around_roads = luminosity.restrict_domain(roads_buffered, 'inside')
+
+    # aggregate previous information
+    results = luminosity_around_roads.coarsen(0.1, 0.1)
+
+
+
+
+
+
+
