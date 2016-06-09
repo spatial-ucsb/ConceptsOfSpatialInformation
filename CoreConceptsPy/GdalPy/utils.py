@@ -176,3 +176,27 @@ def _coords_to_pixel(y, x, transform):
     row = int((x - transform[3]) / transform[5])
 
     return col, row
+
+def _rasterize_geometry(geometry, canvas=None, ncols=None, nrows=None, projection=None, transform=None):
+    """Returns a 2d numpy array of the rasterized geometry."""
+    
+    import gdal
+
+    if canvas:
+        ncols = canvas.RasterYSize
+        nrows = canvas.RasterXSize
+        projection = canvas.GetProjection()
+        transform = canvas.GetGeoTransform()
+    elif not all([ncols, nrows, projection, transform]):
+        raise ValueError("Must specify either a canvas onto which the geometry will be polygonized or the nrows, ncols, projection, and transform parameters.")
+
+    if 
+
+    raster = gdal.GetDriverByName('MEM').Create('', nrows, ncols, 1, gdal.GDT_Byte)
+    raster.SetProjection(projection)
+    raster.SetGeoTransform(transform)
+    raster.GetRasterBand(1).Fill(0)
+
+    gdal.RasterizeLayer(raster, [1], layer, None, None, [1], ['ALL_TOUCHED=TRUE'])
+
+    return raster.ReadAsArray()
