@@ -238,9 +238,14 @@ class GeoTiffField(CcField):
         outBand.WriteArray(newArray)
         outBand.FlushCache()
 
-    def zonal( self, fields, zoneFunc, newGtiffPath ):
+    def zonal(self, zones, func):
         """
-        Assign a new value to self based on zonal map algebra. Return a new GeoTiff at filepath newGtiffPath.
+        Assign a new value to self based on zonal map algebra. Return a new numpy array with the results
+
+        NOTES:
+        * Return a numpy array or GDAL raster (or field object)?
+        * Also accept a list of polygons as zones?  Is this a common use case?
+        * Give the option to return zone-aggregated summaries, rather than a raster? Eg, {'1': .34, '2': 1.23, ... }
 
         "Zonal operations
 
@@ -253,26 +258,26 @@ class GeoTiffField(CcField):
         2. Compute the values of the field function f applied to each point in Zi.
         3. Derive a single value zeta(x) of the new field from the values computed in step 2." (Ibid. 149-50)
 
-        @param newGtiffPath - the filepath of the output GeoTiff
-        @param zoneFunc - the zonal function, which returns a new value for each pixel based on zonal operation
-        @return N/A; write new raster to newGtiffPath
+        @param zones - a numpy array or GDAL dataset representing zones
+        @param func - the zonal function, which returns a new value for each pixel based on zonal operation
+        @return - a new numpy array with the results
         """
 
-        oldArray = self.gField.ReadAsArray()
-        newArray = oldArray.copy()
-        rows = oldArray.shape[0]
-        cols = oldArray.shape[1]
-        for i in range (0, rows):
-            for j in range (0, cols):
-                newVal = zoneFunc(oldArray, (i,j))
-                newArray.itemset((i,j), newVal)
-        driver = self.gField.GetDriver()
-        newRaster = driver.CreateCopy(newGtiffPath, self.gField)
-        outBand = newRaster.GetRasterBand(1)
-        newArray = np.around(newArray.astype(np.double), 3)
-        outBand.WriteArray(newArray)
-        outBand.FlushCache()
-        
+        if isinstance(zones, gdal.Dataset):
+            zones = zones.ReadAsArray()
+
+        result = np.empty(self.data.shape)
+        result.fill(np.nan)
+
+        classes = np.unique(zones)
+
+        #is there a better option than doing a for-loop?
+        for c in classes:
+            indices = (zones==c)
+            result[indices] = func(self.data[indices])
+
+        return result
+
     def domain(self):
         """
         Return mask or actual geometries?
@@ -484,10 +489,3 @@ if __name__ == '__main__':
 
     # aggregate previous information
     results = luminosity_around_roads.coarsen(0.1, 0.1)
-
-
-
-
-
-
-
