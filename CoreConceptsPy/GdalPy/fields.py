@@ -415,8 +415,7 @@ class GeoTiffField(CcField):
         nrows, ncols = self.data.shape
 
         #assuming we are saving a GeoTIFF...
-        driver = gdal.GetDriverByName('MEM')
-        dataset = driver.Create('', ncols, nrows, 1, gdal.GDT_Byte)
+        driver = gdal.GetDriverByName('MEM').Create('', ncols, nrows, 1, gdal.GDT_Byte)
 
         dataset.SetProjection(self.projection)
         dataset.SetGeoTransform(self.transform)

@@ -89,7 +89,13 @@ class ArcShpObject(CcObject):
         else:
             return False
 
-    def buffer(self, val):
+    def buffer(self, val, units=None):
+        """
+        NOTES:
+        * Not dealing with units yet. OGR doesn't perform geodesic buffering, so need to reproject
+        if data is in unprojected coordinate system (eg, WGS84) in order to specify miles, kilometers, etc.?
+        """
+
         geom = self.sObj.GetGeometryRef()
 
         return geom.Buffer(val)
@@ -117,7 +123,10 @@ class ArcShpObjectSet(CcObjectSet):
         """
         Buffer all objects in this set.
 
-        NOTE: Return self or new ObjectSet?
+        NOTES: 
+        * Return self or new ObjectSet?
+        * Not dealing with units yet. OGR doesn't perform geodesic buffering, so need to reproject
+        if data is in unprojected coordinate system (eg, WGS84) in order to specify miles, kilometers, etc.?
         """
 
         for indx in xrange(self.layer.GetFeatureCount()):
