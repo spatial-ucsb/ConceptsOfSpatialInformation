@@ -299,18 +299,7 @@ class GeoTiffField(CcField):
         if operation not in VALID_DOMAIN_OPS:
             raise ValueError("Error: %s is not a valid operation on restrict_domain." % operation)
 
-        nrows, ncols = self.data.shape
-
-        mask_raster = gdal.GetDriverByName('MEM').Create('', nrows, ncols, 1, gdal.GDT_Byte)
-        mask_raster.SetProjection(self.projection)
-        mask_raster.SetGeoTransform(self.transform)
-        mask_raster.GetRasterBand(1).Fill(0)
-
-        #this function burns the polygons onto the raster
-        #NOTE: this freezes with in memory raster (use temp file?)
-        gdal.RasterizeLayer(mask_raster, [1], layer, None, None, [1], ['ALL_TOUCHED=TRUE'])
-
-        mask = mask_raster.ReadAsArray()
+        mask = _rasterize_layer(layer, reference=self)
 
         if operation == 'outside': 
             mask = np.absolute(mask - 1)
@@ -323,9 +312,7 @@ class GeoTiffField(CcField):
 
         NOTES: 
 
-        1) Should this technically be called "resample"?
-
-        2) Resampling seems unnecessarily complicated using the GDAL python wrapper.
+        * Resampling seems unnecessarily complicated using the GDAL python wrapper.
         The command-line 'gdalwarp' is the C++ option, but there is no similar function in 
         python.  This approach is inspired by:
 
@@ -351,21 +338,20 @@ class GeoTiffField(CcField):
         elif func == 'nearest_neighbor':
             func = gdal.GRA_NearestNeighbour
         else:
-            raise ValueError("Error: 'func' not a valid value.")
+            raise ValueError("@func not a valid value.")
 
         #get bounds of current raster
         minx, miny, maxx, maxy = self.bounds()
 
-        dst_nrows = abs(int((maxx - minx) / float(pixel_size)))
-        dst_ncols = abs(int((maxy - miny) / float(pixel_size)))
+        dest_nrows = abs(int((maxx - minx) / float(pixel_size)))
+        dest_ncols = abs(int((maxy - miny) / float(pixel_size)))
 
         #note: seems like there is a maximum number of rows X columns (if exceeded, will return None)
-        driver = gdal.GetDriverByName('MEM')
-        dst = driver.Create('', dst_nrows, dst_ncols, 1, gdal.GDT_Byte)
+        driver = gdal.GetDriverByName('MEM').Create('', dest_nrows, dest_ncols, 1, gdal.GDT_Byte)
 
-        dst_transform = (minx, pixel_size, 0, maxy, 0, -pixel_size)
-        dst.SetGeoTransform(dst_transform)
-        dst.SetProjection(self.projection)
+        dest_transform = (minx, pixel_size, 0, maxy, 0, -pixel_size)
+        dest.SetGeoTransform(dest_transform)
+        dest.SetProjection(self.projection)
         
         orig_dataset = self.to_gdal_dataset()
 
@@ -458,8 +444,6 @@ if __name__ == '__main__':
     #example usage:
 
     import os, objects
-
-    cur_path = os.path.dirname(os.path.realpath(__file__))
 
     #should these input methods be part of 'fields' (ie, fields.from_file()?)
     china_lights1 = from_file(china_lights1_filepath)
