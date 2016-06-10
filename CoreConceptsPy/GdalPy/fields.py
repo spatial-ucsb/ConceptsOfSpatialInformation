@@ -52,10 +52,10 @@ def local(fields, func, domain=None):
     unique_transforms = set(field.transform for field in fields)
 
     if len(unique_projections) > 1:
-        raise ValueError("Error: each field in @fields must have the same projection.") 
+        raise ValueError("Each field in @fields must have the same projection.") 
 
     if len(unique_transforms) > 1:
-        raise ValueError("Error: each field in @fields mut have the same geotransform.")
+        raise ValueError("Each field in @fields mut have the same geotransform.")
 
     if isinstance(func, types.FunctionType):
         #if @func is function, use np.vectorize to make sure it's a universal function
@@ -64,7 +64,7 @@ def local(fields, func, domain=None):
         #if @func is a string specifying a numpy function (eg, 'min')
         func = getattr(np, func)
     else:
-        raise ValueError("Error: @func must be either a function or one of the following strings: %s" 
+        raise ValueError("@func must be either a function or one of the following strings: %s" 
             % ', '.join(VALID_LOCAL_OPS))
 
     #stack the rasters (is this less memory-efficient than a loop? need to build an extra array)
@@ -164,8 +164,9 @@ class GeoTiffField(CcField):
         self.transform = transform
         self.nodata = nodata or -1
         self.domain = domain or np.ones(data.shape)
-        self.data = ma.array(data, mask=domain==1)
-        
+        self.data = ma.array(data, mask=0)
+        self.restrict_domain(self.domain)
+
     def value_at(self, x, y):
         """
         Returns the value of a raster pixel at an input position.
@@ -282,28 +283,28 @@ class GeoTiffField(CcField):
         """
         Return mask or actual geometries?
         """
-        # TODO: implement
-        raise NotImplementedError("domain")
+        return self.domain
     
-    def restrict_domain(self, layer, operation='inside'):
+    def restrict_domain(self, domain, op='inside'):
         """
         Restricts current instance's domain based on object's domain
 
-        NOTES: Should @layer be a single Object or a set of Objects? How to handle the fact that we need an OGR
+        NOTES: Should @domain be a single Object or a set of Objects? How to handle the fact that we need an OGR
         object to call RasterizeLayer?  Implement layer.to_ogr_object()? 
 
         @param layer - The layer (allow objects?) that defines the domain
-        @param operation - inside or outside
+        @param op - inside or outside
         """
 
-        if operation not in VALID_DOMAIN_OPS:
-            raise ValueError("Error: %s is not a valid operation on restrict_domain." % operation)
+        if op not in VALID_DOMAIN_OPS:
+            raise ValueError("Error: %s is not a valid operation on restrict_domain." % op)
 
-        mask = _rasterize_layer(layer, reference=self)
+        mask = _rasterize_layer(domain, reference=self)
 
-        if operation == 'outside': 
+        if op == 'outside': 
             mask = np.absolute(mask - 1)
 
+        self.domain = domain
         self.data.mask = mask
 
     def coarsen(self, pixel_size, func='average'):
@@ -385,7 +386,7 @@ class GeoTiffField(CcField):
 
 
         #NOTE: How to deal with pixels outside the domain?  Perform local function but keep domain?
-        newArray = func(self.data)
+        newArray = func(self.data.data)
         projection = self.projection
         transform = self.transform
         domain = self.domain
@@ -419,7 +420,7 @@ class GeoTiffField(CcField):
     def to_file(self, filepath):
         nrows, ncols = self.data.shape
 
-        #assuming we are saving a GeoTIFF...
+        #assuming we are saving a GeoTIFF for now...
         driver = gdal.GetDriverByName('GTiff')
         dataset = driver.Create(filepath, ncols, nrows, 1, gdal.GDT_Byte)
 
