@@ -177,18 +177,22 @@ def _coords_to_pixel(y, x, transform):
 
     return col, row
 
-def _rasterize_layer(layer, canvas=None, ncols=None, nrows=None, projection=None, transform=None):
-    """Returns a 2d numpy array of the rasterized geometry."""
+def _rasterize_layer(layer, reference=None, ncols=None, nrows=None, projection=None, transform=None):
+    """Returns a 2d numpy array of the rasterized layer."""
 
-    import gdal
+    import gdal, fields
 
-    if canvas:
-        ncols = canvas.RasterYSize
-        nrows = canvas.RasterXSize
-        projection = canvas.GetProjection()
-        transform = canvas.GetGeoTransform()
+    if isinstance(reference, gdal.Dataset):
+        ncols = reference.RasterYSize
+        nrows = reference.RasterXSize
+        projection = reference.GetProjection()
+        transform = reference.GetGeoTransform()
+    elif isintance(reference, fields.GeoTiffField):
+        nrows, ncols = reference.data.shape
+        projection = reference.projection
+        transform = reference.transform
     elif not all([ncols, nrows, projection, transform]):
-        raise ValueError("Must specify either a canvas onto which the geometry will be polygonized or the nrows, ncols, projection, and transform parameters.")
+        raise ValueError("Must specify either a reference raster/field or pass the nrows, ncols, projection, and transform parameters.")
 
     raster = gdal.GetDriverByName('MEM').Create('', nrows, ncols, 1, gdal.GDT_Byte)
     raster.SetProjection(projection)

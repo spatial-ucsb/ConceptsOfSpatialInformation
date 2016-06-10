@@ -22,15 +22,16 @@ from coreconcepts import CcObject, CcObjectSet
 
 log = _init_log("objects")
 
+VALID_RELATIONS = ('Intersects','Equals','Disjoint','Touches','Crosses','Within','Contains','Overlaps')
 
 def from_file(filepath):
     shp = ogr.Open(filepath)
     layer = shp.GetLayer(0)
 
-    ArcShpObjectSet(layer)
+    return OgrShpObjectSet(layer)
 
 
-class ArcShpObject(CcObject):
+class OgrShpObject(CcObject):
     """
     Subclass of Abstract Object (CcObject) in the ArcMap Shapefile format
     """
@@ -48,23 +49,20 @@ class ArcShpObject(CcObject):
 
     def relation( self, obj, relType ):
         
-        if relType not in ['Intersects','Equals','Disjoint','Touches','Crosses','Within','Contains','Overlaps']:
-            raise ValueError("Error: {0} is not a valid value for 'relType'.".format(relType))
+        if relType not in VALID_RELATIONS:
+            raise ValueError("{0} is not a valid value for 'relType'.".format(relType))
         
         #Get geometeries
         geom1 = self.sObj.GetGeometryRef()
         geom2 = obj.sObj.GetGeometryRef()
-        if getattr(geom1,relType)(geom2): #getattr is equivalent to geom1.relType
-            return True
-        else:
-            return False
+        return getattr(geom1,relType)(geom2) #getattr is equivalent to geom1.relType
 
     def property( self, prop ):
         #Get index of property - note: index 13 is building name
         index = self.sObj.GetFieldIndex(prop)
 
         if index == -1:
-            raise ValueError("Error: {0} is not a valid property.".format(prop))
+            raise ValueError("{0} is not a valid property.".format(prop))
 
         propDefn = self.sObj.GetFieldDefnRef(index)
         propType = propDefn.GetType()
@@ -84,10 +82,7 @@ class ArcShpObject(CcObject):
         return value
 
     def identity( self, obj ):
-        if self.relation( obj, 'Equals' ):
-            return True
-        else:
-            return False
+        return self.relation( obj, 'Equals' )
 
     def buffer(self, val, units=None):
         """
@@ -105,7 +100,7 @@ class ArcShpObject(CcObject):
 
 
         
-class ArcShpObjectSet(CcObjectSet):
+class OgrShpObjectSet(CcObjectSet):
     def __init__(self, layer):
         """
         NOTE: Should this class contain a list of ArcShpObjects, or just refer to the ogr layer?

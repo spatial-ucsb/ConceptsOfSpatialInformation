@@ -22,7 +22,7 @@ import numpy.ma as ma
 import gdal
 from gdalconst import *
 
-from utils import _init_log, _pixel_to_coords, _coords_to_pixel
+from utils import _init_log, _pixel_to_coords, _coords_to_pixel, _rasterize_layer
 from coreconcepts import CcField
 
 VALID_LOCAL_OPS = ('average', 'mean', 'median', 'min', 'minimum', 'max', 'maximum')
@@ -162,10 +162,12 @@ class GeoTiffField(CcField):
         """
         self.projection = projection
         self.transform = transform
+        self.domain = domain
         self.nodata = nodata or -1
-        self.domain = domain or np.ones(data.shape)
         self.data = ma.array(data, mask=0)
-        self.restrict_domain(self.domain)
+
+        if domain:
+            self.restrict_domain(self.domain)
 
     def value_at(self, x, y):
         """
@@ -277,6 +279,7 @@ class GeoTiffField(CcField):
             indices = (zones==c)
             result[indices] = func(self.data[indices])
 
+        #TODO: mask value not in domain...
         return result
 
     def domain(self):
@@ -299,7 +302,7 @@ class GeoTiffField(CcField):
         if op not in VALID_DOMAIN_OPS:
             raise ValueError("Error: %s is not a valid operation on restrict_domain." % op)
 
-        mask = _rasterize_layer(domain, reference=self)
+        mask = _rasterize_layer(domain.layer, reference=self)
 
         if op == 'outside': 
             mask = np.absolute(mask - 1)
@@ -381,8 +384,12 @@ class GeoTiffField(CcField):
         if isinstance(func, types.FunctionType):
             #if @func is function, use np.vectorize to make sure it's a universal function
             func = np.vectorize(func)
+        elif func in VALID_LOCAL_OPS:
+            #if @func is a string specifying a numpy function (eg, 'min')
+            func = getattr(np, func)
         else:
-            raise ValueError("Error: @func must be a function.")
+            raise ValueError("@func must be either a function or one of the following strings: %s" 
+                % ', '.join(VALID_LOCAL_OPS))
 
 
         #NOTE: How to deal with pixels outside the domain?  Perform local function but keep domain?
