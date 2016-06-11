@@ -26,9 +26,8 @@ VALID_RELATIONS = ('Intersects','Equals','Disjoint','Touches','Crosses','Within'
 
 def from_file(filepath):
     shp = ogr.Open(filepath)
-    layer = shp.GetLayer(0)
 
-    return OgrShpObjectSet(layer)
+    return OgrShpObjectSet(shp)
 
 
 class OgrShpObject(CcObject):
@@ -101,11 +100,12 @@ class OgrShpObject(CcObject):
 
         
 class OgrShpObjectSet(CcObjectSet):
-    def __init__(self, layer):
+    def __init__(self, shp):
         """
         NOTE: Should this class contain a list of ArcShpObjects, or just refer to the ogr layer?
         """
-        self.layer = layer
+        self.shp = shp
+        self.layer = shp.GetLayer(0)
         
     def bounds(self):
         """ 
