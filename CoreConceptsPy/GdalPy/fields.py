@@ -176,12 +176,11 @@ class GeoTiffField(CcField):
         @param position the coordinate pair in self's coordinate system
         @return the raw value of the pixel at input position in self or None if it is outside of the domain
         """
-        if self._is_in_domain(position):
-            col, row = _coords_to_pixel(x, y, self.transform)
-            val = self.data[col, row]
-            
-            return val
-        
+        col, row = _coords_to_pixel(x, y, self.transform)
+
+        if self._is_in_domain(col, row):
+            return self.data[row, col]
+
         return None
     
     def _is_in_domain(self, col, row):
@@ -190,7 +189,7 @@ class GeoTiffField(CcField):
         @return True if position is in the current domain or False otherwise 
         """
         
-        return bool(self.data[col, row])
+        return bool(self.data[row, col])
 
     def zone( self, position ):
         """
@@ -292,8 +291,11 @@ class GeoTiffField(CcField):
         """
         Restricts current instance's domain based on object's domain
 
-        NOTES: Should @domain be a single Object or a set of Objects? How to handle the fact that we need an OGR
-        object to call RasterizeLayer?  Implement layer.to_ogr_object()? 
+        NOTES: 
+        * Currently, it's assumed that @domain is an OgrShpObjectSet, but in the future
+        should accept OgrShpObject also.
+        * This function is rasterizing geometries in the domain, but in the future it 
+        should be doign point-in-polygon 
 
         @param layer - The layer (allow objects?) that defines the domain
         @param op - inside or outside
@@ -304,7 +306,7 @@ class GeoTiffField(CcField):
 
         mask = _rasterize_layer(domain.layer, reference=self)
 
-        if op == 'outside': 
+        if op == 'inside': 
             mask = np.absolute(mask - 1)
 
         self.domain = domain
@@ -439,12 +441,8 @@ class GeoTiffField(CcField):
         if self.nodata:
             band.SetNoDataValue(self.nodata)
 
-        band.WriteArray(self.data)
+        band.WriteArray(self.data.data)
         band.FlushCache()
-
-        #should clean up on its own, but delete just in case
-        del dataset
-
 
 
 

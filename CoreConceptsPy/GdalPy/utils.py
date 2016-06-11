@@ -201,6 +201,4 @@ def _rasterize_layer(layer, reference=None, ncols=None, nrows=None, projection=N
 
     gdal.RasterizeLayer(raster, [1], layer, None, None, [1], ['ALL_TOUCHED=TRUE'])
 
-    mask = raster.ReadAsArray()
-
-    return mask
+    return raster.ReadAsArray()
