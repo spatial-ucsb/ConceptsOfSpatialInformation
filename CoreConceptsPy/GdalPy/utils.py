@@ -187,18 +187,20 @@ def _rasterize_layer(layer, reference=None, ncols=None, nrows=None, projection=N
         nrows = reference.RasterXSize
         projection = reference.GetProjection()
         transform = reference.GetGeoTransform()
-    elif isintance(reference, fields.GeoTiffField):
+    elif isinstance(reference, fields.GeoTiffField):
         nrows, ncols = reference.data.shape
         projection = reference.projection
         transform = reference.transform
     elif not all([ncols, nrows, projection, transform]):
         raise ValueError("Must specify either a reference raster/field or pass the nrows, ncols, projection, and transform parameters.")
 
-    raster = gdal.GetDriverByName('MEM').Create('', nrows, ncols, 1, gdal.GDT_Byte)
+    raster = gdal.GetDriverByName('MEM').Create('', ncols, nrows, 1, gdal.GDT_Byte)
     raster.SetProjection(projection)
     raster.SetGeoTransform(transform)
     raster.GetRasterBand(1).Fill(0)
 
-    gdal.RasterizeLayer(layer, [1], layer, None, None, [1], ['ALL_TOUCHED=TRUE'])
+    gdal.RasterizeLayer(raster, [1], layer, None, None, [1], ['ALL_TOUCHED=TRUE'])
 
-    return raster.ReadAsArray()
+    mask = raster.ReadAsArray()
+
+    return mask
