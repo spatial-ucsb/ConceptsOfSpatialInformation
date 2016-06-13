@@ -295,7 +295,8 @@ class GeoTiffField(CcField):
         * Currently, it's assumed that @domain is an OgrShpObjectSet, but in the future
         should accept OgrShpObject also.
         * This function is rasterizing geometries in the domain, but in the future it 
-        should be doign point-in-polygon 
+        should possibly be doing point-in-polygon operations to determine if a point is in 
+        the domain. 
 
         @param layer - The layer (allow objects?) that defines the domain
         @param op - inside or outside
@@ -451,7 +452,11 @@ if __name__ == '__main__':
 
     import os, objects
 
-    #should these input methods be part of 'fields' (ie, fields.from_file()?)
+    china_lights1_filepath = 'path\to\file'
+    china_lights2_filepath = 'path\to\file'
+    gas_flares_filepath = 'path\to\file'
+    china_roads_filepath = 'path\to\file'
+
     china_lights1 = from_file(china_lights1_filepath)
     china_lights2 = from_file(china_lights2_filepath)
     china_boundary = objects.from_file(china_boundary_filepath)
@@ -478,3 +483,4 @@ if __name__ == '__main__':
 
     # aggregate previous information
     results = luminosity_around_roads.coarsen(0.1, 0.1)
+
