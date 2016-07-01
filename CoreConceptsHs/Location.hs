@@ -1,24 +1,26 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
 -- the base concept of location
--- spatial properties and relations 
--- places are objects, not location values (i.e. they do not belong here)
--- vector geometry could be represented as well-known text (http://en.wikipedia.org/wiki/Well-known_text)
--- better encoding would be GeoJSON (http://www.macwright.org/2015/03/23/geojson-second-bite.html)
--- or just use http://hackage.haskell.org/package/hgeometry 
+-- spatial entities, properties, and relations for instances of content concepts
+-- using the term "location" for the relation, "extent" for the noun (where it is a value, not an object)
+-- spaces can be vector, raster, or network
 -- (c) Werner Kuhn
--- latest change: March 7, 2016
+-- latest change: July 1, 2016
+
+-- TO DO
+-- import a geometry library: http://hackage.haskell.org/package/hgeometry ?
 
 module Location where
 
--- coordinates 
+-- coordinates are distances from hyperplanes, as unit counts
+-- covering vector, raster, and embedded network nodes
 -- all implementations are necessarily discrete
--- conceptualizations can still be continuous!
--- Haskell Integers can be of arbitrary precision
--- thus, there should be no need for any other coordinate type!
+-- conceptualizations can be continuous, if desired
+-- Haskell Integers can have arbitrary fine precision
+-- thus, no need for any other coordinate type!
 type Coord = Integer
 	
--- the number of dimensions
+-- the number of spatial dimensions
 -- Int is too general, but simplifies dimension tests
 type Dimension = Int 
 errorDim = "different dimensions"
@@ -29,8 +31,8 @@ errorDim = "different dimensions"
 data SRS = WGS84 | Local deriving (Eq, Show)
 errorSRS = "different spatial reference systems"
 
--- positions  
--- a list of coordinates controlled for dimension and given a reference system
+-- positions are lists of coordinates, controlled for dimension and given a reference system
+-- called "locations" in Galton 2004, but position agrees better with ordinary use
 data Position = Position [Coord] Dimension SRS deriving (Eq, Show)
 dim (Position clist dim srs) = dim
 srs (Position clist dim srs) = srs
@@ -39,20 +41,25 @@ coord (Position clist dim srs) dimension
 	| dim < dimension = error "insufficient dimensions"
 	| otherwise = clist!!dimension 
 
+-- distance
+-- should they be discrete as well?
 distance :: Position -> Position -> Double 
 distance p1 p2 = error "not yet implemented"
 
 -- converting positions to tuples 
 -- so far, only 2-tuples needed (for field arrays) 
--- SRID intentionally dropped, can be added if needed
+-- SRS intentionally dropped, can be added if needed
 pos2Tup2 :: Position -> (Coord, Coord) 
 pos2Tup2 (Position c 2 s) = (c!!0,c!!1)
 
--- extents 
--- unifying vector and raster geometries (including graphs)
--- extents are sub-spaces or regions in any (specified) dimension
--- they are not boundaries, but may have boundaries
+-- extents are sub-spaces (regions) in any dimension
+-- unifying vector, raster, and graph geometries
+-- they may have boundaries
 -- their behavior is defined by spatial relations (add more as needed)
+-- primarily: positionIn, as set membership of positions in extents
+-- vector geometry could be represented as well-known text (http://en.wikipedia.org/wiki/Well-known_text)
+-- better encoding would be GeoJSON (http://www.macwright.org/2015/03/23/geojson-second-bite.html)
+-- TO DO: go to 3-valued logic for positionIn
 class EXTENTS extent where
 	positionIn :: Position -> extent -> Bool
 --	boundary :: extent coord -> Maybe MultiPoly -- needs a geometry package to implement
@@ -90,3 +97,5 @@ mbr = MBR p11 [1,1]
 
 lt1 = positionIn p11 mbr
 lt2 = positionIn p22 mbr
+
+

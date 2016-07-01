@@ -8,6 +8,9 @@
 -- (c) Werner Kuhn
 -- latest change: Mar 7, 2016
 
+-- TO DO
+-- think of boundedness by upper hierarchy level of a tesselation (AURIN does that?)
+
 module Object where
 
 import Location
