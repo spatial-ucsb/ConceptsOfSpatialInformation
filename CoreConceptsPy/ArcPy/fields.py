@@ -28,7 +28,6 @@ class GeoTiffField(CcField):
         """
 
         operation = "\_operation_"
-        outputLocation = "-"
 
         if operation == 'inside':
             ## arcpy.env.snapRaster = self.filepath
