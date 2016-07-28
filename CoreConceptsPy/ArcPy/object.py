@@ -38,4 +38,3 @@ class ArcShpObject(CcObject):
 
     def identity( self, obj ):
     pass
-

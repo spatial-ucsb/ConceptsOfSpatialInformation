@@ -1,3 +1,6 @@
+"""
+Temporary bulk file for testing
+"""
 # -*- coding: utf-8 -*-
 import os
 

@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
-# TODO: refactor so that following arc implementations aren't called unless arc processing is needed
-import arcpy
-from arcpy import env
+from arcpy import * # TODO: limit import
 from arcpy.sa import *
 
 # Set working directory
@@ -20,6 +18,10 @@ class CcField(object):
     Based on Field.hs
     """
     def __init__(self, filepath, geo_object):
+        """
+        :param: filepath
+        :param: geo_object
+        """
         self.filepath = filepath
         self.domain = geo_object
         # TODO: restrict value pairs to geoObject
@@ -27,7 +29,7 @@ class CcField(object):
 
     def value_at(self, position):
         """
-        :param: grid cell position
+        :param: position grid cell position
         :returns: the value of field at position, or None if it is outside of the domain.
         """
         # TODO: check if position falls within value

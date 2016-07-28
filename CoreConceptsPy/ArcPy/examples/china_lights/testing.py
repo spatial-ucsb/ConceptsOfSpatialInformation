@@ -1,8 +1,5 @@
-__author__ = ""
-__date__ = ""
-__status__ = ""
-
 from coreconcepts import * # TODO: Package up Cc
+
 
 china_boundary_filepath = r"C:\Users\lafia\Documents\GitHub\ConceptsOfSpatialInformation\CoreConceptsPy\ArcPy\data\China.shp"
 china_lights_1_filepath = r"C:\Users\lafia\Documents\GitHub\ConceptsOfSpatialInformation\CoreConceptsPy\ArcPy\data\F101994.tif"

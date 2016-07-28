@@ -3,7 +3,7 @@ Core Concepts of Spatial Information - Haskell
 
 Abstract: Specifications and implementation of the core concepts in Haskell.
 
-See the [Readme](../README.md) in the parent directory for more information about the core concepts itself.
+See the [Readme](../README.md) in the parent directory for general information about the Core Concepts.
 
 Right now the implementation is in a proof of concept state and should not be considered stable for a production environment.
 

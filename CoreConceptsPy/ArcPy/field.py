@@ -33,6 +33,7 @@ class GeoTiffField(CcField):
 
             # extract by mask
             output = arcpy.sa.ExtractByMask(self.filename, domain_obj.filename)
+
             # determine save credentials
             (nfilepath, nfilename) = os.path.split(self.filepath)
             outputLocation = nfilepath + "\_masked_" + nfilename
@@ -78,4 +79,3 @@ class GeoTiffField(CcField):
             print 'the input function is not defined'
 
         #return output
-
