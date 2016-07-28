@@ -4,9 +4,9 @@ Core Concepts of Spatial Information
 The goal of this work is to provide a high-level language for spatial computing that is executable
 on existing commercial and open source spatial computing platforms,
 particularly Geographic Information Systems (GIS).
-The key idea of the approach is to target an abstraction level higher
+The key idea of the approach is to target and implement an abstraction level higher
 than that of GIS commands and data formats, yet meaningful within and across
-application domains. The paper describes the underlying theory of spatial
+application domains. The associated papers describe the underlying theory of spatial
 information and shows its evolving formal specification. An embedding in Python
 exemplifies access to commonly available implementations of spatial computations.
 For details, see references (Kuhn 2012; Kuhn & Ballatore 2015).
@@ -19,6 +19,15 @@ Members & contributors:
 * Eric Ahlgren
 * Marc Thiemann
 * Michel Zimmer ([home](https://www.mzimmer.net))
+* Behzad Vahedi
+* Thomas Hervey ([home](http://www.thervey.me))
+
+
+Contents
+----------------------
+- `CoreConceptsHs`: The Haskell specifications of the core concepts.
+- `CoreConceptsPy`: A Python implementation of the core concepts.
+- `CoreConceptsRdf`: An RDF(S) implementation of the core concepts.
 
 
 Architecture
@@ -30,13 +39,6 @@ The Core Concepts Cube
 [ ![Core Concepts Cube](figures/CoreConceptsCube_thumbnail.png "Core Concepts Cube") ](https://github.com/spatial-ucsb/ConceptsOfSpatialInformation/raw/master/figures/CoreConceptsCube.pdf "PDF Cube")
 
 The cube can be printed from the [pdf](https://github.com/spatial-ucsb/ConceptsOfSpatialInformation/raw/master/figures/CoreConceptsCube.pdf) version.
-
-
-Contents
-----------------------
-- `CoreConceptsHs`: The Haskell specifications of the core concepts.
-- `CoreConceptsPy`: A Python implementation of the core concepts.
-- `CoreConceptsRdf`: An RDF(S) implementation of the core concepts.
 
 Status
 ------
@@ -57,5 +59,7 @@ Misc
 
 References
 ----------
+- Allen, C., Hervey, T., Lafia, S., Phillips, D., Vahedi, B., Kuhn, W. (2016). *Exploring the Notion of Spatial Data Lenses* (accepted)
+- Vahedi, B., Kuhn, W., Ballatore A. (2016). *Question-Based Spatial Computing - A Case Study.* In T. Sarjakoski, M. Y. Santos, & L. T. Sarjakoski (Eds.), Lecture Notes in Geoinformation and Cartography (AGILE 2016) (pp. 37 - 50). Berlin: Springer. <[PDF](https://link.springer.com/chapter/10.1007/978-3-319-33783-8_3)>
 - Kuhn, W. & Ballatore, A. (2015). *Designing a Language for Spatial Computing.* Lecture Notes in Geoinformation and Cartography 2015, AGILE, Lisbon, Portugal, pp 309-326. Best Paper Award. <[PDF](http://escholarship.org/uc/item/04q9q6wm)>
 - Kuhn, W. (2012). *Core concepts of spatial information for transdisciplinary research.* International Journal of Geographical Information Science, 26(12), 2267-2276. <[PDF](http://ifgi.uni-muenster.de/~kuhn/research/publications/pdfs/refereed%20journals/IJGIS%202012.pdf)>
