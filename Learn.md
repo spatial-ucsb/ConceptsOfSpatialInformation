@@ -1,7 +1,8 @@
 How to use Git & GitHub
 =======================
-- [Cheat sheet](https://training.github.com/kit/downloads/github-git-cheat-sheet.pdf) (including links to software)
+- [Cheat sheet](https://services.github.com/resources/) (including links to software)
 - [Straight forward explanation of the main concepts and tasks in Git](https://rogerdudler.github.io/git-guide/)
+- [GitHub: Fork & pull](https://help.github.com/articles/using-pull-requests/#fork--pull) workflow
 - [Official Git documentation](http://git-scm.com/doc) (use as reference)
 - [Guides](https://guides.github.com/) for a lot of day to day Git(Hub) operations
 - [Help with specific problems](https://help.github.com/)

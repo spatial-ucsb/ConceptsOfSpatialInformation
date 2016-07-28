@@ -1,4 +1,5 @@
-from utils import *  # TODO: Package up Cc
+from ../utils import *  # TODO: Package up Cc
+from ../coreconcepts import *
 
 china_boundary_filepath = r"China.shp"
 china_lights_1_filepath = r"F101994.tif"

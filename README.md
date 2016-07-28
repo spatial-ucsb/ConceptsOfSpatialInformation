@@ -25,9 +25,9 @@ Members & contributors:
 
 Contents
 ----------------------
-- `CoreConceptsHs`: The Haskell specifications of the core concepts.
-- `CoreConceptsPy`: A Python implementation of the core concepts.
-- `CoreConceptsRdf`: An RDF(S) implementation of the core concepts.
+- [CoreConceptsHs](CoreConceptsHs): The Haskell specifications of the core concepts.
+- [CoreConceptsPy](CoreConceptsPy): A Python implementation of the core concepts.
+- [CoreConceptsRdf](CoreConceptsRdf): An RDF(S) implementation of the core concepts.
 
 
 Architecture
