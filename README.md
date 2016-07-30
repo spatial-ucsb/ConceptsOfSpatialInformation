@@ -25,9 +25,9 @@ Members & contributors:
 
 Contents
 ----------------------
-- `CoreConceptsHs`: The Haskell specifications of the core concepts.
-- `CoreConceptsPy`: A Python implementation of the core concepts.
-- `CoreConceptsRdf`: An RDF(S) implementation of the core concepts.
+- [CoreConceptsHs](CoreConceptsHs): The Haskell specifications of the core concepts.
+- [CoreConceptsPy](CoreConceptsPy): A Python implementation of the core concepts.
+- [CoreConceptsRdf](CoreConceptsRdf): An RDF(S) implementation of the core concepts.
 
 
 Architecture
@@ -44,14 +44,14 @@ Status
 ------
 Haskell: Locations, fields, networks, objects and events are specified. Only networks are implemented. No unit tests exist yet. Only networks have examples.
 
-Python: Locations, fields, networks, objects and events have an abstract class. Except locations all of them have an implementation. Unit tests exist for everything except locations, but the tests for fields and objects should not be considered full unit tests and are more like examples. Only events and networks have examples.
+Python: Versions leveraging ArcPy and GDAL processing are progressing separately. In each case, content and quality concepts have abstract classes, while object and field have concrete implementations. Unit tests exist for previous GDAL versions, but the tests for fields and objects should not be considered full unit tests and are more like examples. Several content concepts have examples under the example folder.
 
-RDF: Two thorough ontologies written in owl and one basic ontology written in RDFS for the event core concept. For every event ontology there are use cases including example RDF data and SPARQL queries. Apart from that, there is a basic, preliminary ontology written in RDFS for all core concepts.
+RDF: There are two thorough ontologies written in owl and one basic ontology written in RDFS for the event core concept. For every event ontology there are use cases including example RDF data and SPARQL queries. Apart from that, there is a basic, preliminary ontology written in RDFS for all core concepts.
 There are still thorough ontologies needed for the core concepts location, field, network and object.
 
-TODO
-----
-- [Haskell] Rewrite NetworkImpl.Edge as a combination of ID, source, target and weight
+<!-- TODO -->
+<!-- ---- -->
+<!-- - [Haskell] Rewrite NetworkImpl.Edge as a combination of ID, source, target and weight -->
 
 Misc
 ----------------------
