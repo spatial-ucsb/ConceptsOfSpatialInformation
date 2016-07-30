@@ -5,7 +5,7 @@ Abstract: Specifications and implementation of the core concepts in Haskell.
 
 See the [Readme](../README.md) in the parent directory for general information about the Core Concepts.
 
-Right now the implementation is in a proof of concept state and should not be considered stable for a production environment.
+Currently, the implementation is in a proof of concept state and should not be considered stable for a production environment.
 
 Contents
 ----------------------
@@ -31,7 +31,7 @@ Dependencies
 ----------------------
 - [FGL](https://hackage.haskell.org/package/fgl) (Version: latest*)
 
-\* Most recent stable release on hackage
+\* Most recent stable release on package
 
 ### Unix/Linux platforms
 To install the dependencies execute: `make install-dependencies`
