@@ -36,7 +36,7 @@ Architecture
 
 The Core Concepts Lenses
 ----------------------
-![Core Concepts Lenses](figures/CoreConceptsLenses.png=250x "Core Concepts Lenses")
+<img src="https://github.com/spatial-ucsb/ConceptsOfSpatialInformation/figures/CoreConceptsLenses.png=250x" width="300">
 
 Status
 ------
