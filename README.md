@@ -36,7 +36,7 @@ Architecture
 
 The Core Concepts Lenses
 ----------------------
-![Core Concepts lenses](figures/CoreConceptsLenses.png =300x "Core Concepts Lenses")
+![Core Concepts lenses](figures/CoreConceptsLenses_thumbnail.png "Core Concepts lenses")
 
 Status
 ------
