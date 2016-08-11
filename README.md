@@ -34,9 +34,9 @@ Architecture
 ----------------------
 ![Core Concepts architecture](figures/CoreConceptsArchitecture.png "Core Concepts architecture")
 
-The Core Concepts Cube
+The Core Concepts Lenses
 ----------------------
-![Core Concepts Lenses](figures/CoreConceptsLenses.png "Core Concepts Lenses")
+![Core Concepts Lenses](figures/CoreConceptsLenses.png=250x "Core Concepts Lenses")
 
 Status
 ------
