@@ -1,62 +1,69 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE TypeSynonymInstances #-}
-{-# LANGUAGE FlexibleInstances #-}
 
 -- the content concept of field
--- core question: what is the value of an attribute at a position? (not at a location, as locations are aggregated positions)
--- positions (not locations) define the spatial (Worboys) or locational (Galton) framework
--- they need to fall within the field domain (defined by locations) to return values
+-- core question: what is the value of an attribute at a position? 
+-- positions define the spatial (Worboys) or locational (Galton) framework
+-- they need to fall within the field's domain (defined by a location) to return values
+-- the domain can be any geometry (e.g., also just a set of nodes)
 -- field constructors can take a time parameter (constructing a snapshot field at that time)
--- continuity (of the field function, or of space, time, and value) is optional - as it is in Galton 2004
--- coverage simply means that the field function is total (but the domain can be a set of nodes, e.g., capital cities)
+-- continuity (of the field function, or of space, time, or value) is optional - as it is in Galton 2004
 -- (c) Werner Kuhn
--- latest change: July 11, 2016
+-- latest change: July 24, 2016
 
 -- TO DO
 -- make sure the field concept accomodates networks as domains (including embedded edges)
 -- generalize map algebra operations to a single operation on multiple fields, taking a function as input (TH idea)
--- look at the toolbox of QGIS whether it does all map algebra with one underlying operator! 
 -- import qualified Data.Array.Repa as Repa (to implement fields with more computations, richer index types, and IO formats)
 -- consider using https://hackage.haskell.org/package/grid-7.8.5/docs/Math-Geometry-Grid.html for tesselations
 
 module Field where
 
 import Location
+import Object
 import Data.Array 
 import Data.Time  -- Haskell's time library, see http://two-wrongs.com/haskell-time-library-tutorial   
 
 type TimeStamp = UTCTime
 ts1 = (read "2016-07-01 19:16 UTC") :: TimeStamp -- an arbitrary time stamp
 
--- thematic values are taken from extended measurement scales
+-- thematic values are taken from (extended) measurement scales
 -- modeled as a sum type (until we need more)
--- admitting "object fields" (Cova) as fields with polygon values 
+-- admitting "object fields" (Cova) as fields with locations as values 
+-- also admitting value vectors and time series
 -- are there Haskell packages for measurement scales?
-data Value = Boolean Bool | Nominal String | Ordinal String | Interval Integer | Ratio Float | TimeSeries [(TimeStamp, Value)] | Region Location deriving (Eq, Show)
+data Value = Boolean Bool | Nominal String | Ordinal String | Interval Integer | Ratio Float | Region Location | Vector [Value] | TimeSeries [(TimeStamp, Value)] deriving (Eq, Show)
 
 -- the class of all field types
--- a field restricts the domain of a function (from Positions to Values) to a set of Locations
--- its granularity can be different from that of the domain (coarser as well as finer?)
+-- a field restricts the domain of a function (from Positions to Values) to a Location
+-- the field's granularity can be different from that of the domain (coarser as well as finer?)
+-- how do we admit multiple kinds of geometries (raster, vector) in the domain?
+-- the class seems to have all OGC Coverages as valid models (check)
 class FIELDS field where
 	valueAt :: field -> Position -> Value -- implementations need to check whether position is in domain
-	domain :: field -> [Location] -- this allows multiple kinds of geometries!
+	domain :: field -> Location -- this allows multiple kinds of geometries!
+	changeDomain :: field -> Location -> field -- the location replaces the old domain
 	grain :: field -> Length 
-{-	insideOf, outsideOf :: field -> extent -> field -- cutting or masking the domain by another extent
-	local :: [field position value] -> ([value] -> value') -> field position value' extent
-	focal :: field position value extent -> (neighborhood -> value') -> field position value' extent -- with a kernel function to compute the new values based on the values in the neighborhood of the position
-	zonal :: field position value extent -> (zones -> value') -> field position value' extent -- map algebra's zonal operations, with a function to compute the new values based on zones containing the positions
+	local :: field -> (Value -> Value) -> field 
+{-	focal :: field position value extent -> (neighborhood -> value') -> field position value' extent -- with a kernel function to compute the new values based on the values in the neighborhood of the position
+-}
+
+-- tesselations are fields with a partition into a set of zones
+-- partitions can be regular or irregular (triangular or otherwise)
+class (FIELDS field, OBJECTS zones) => TESSELATION field zones --where
+--	zonal :: field position value extent -> (zones -> value') -> field position value' extent -- map algebra's zonal operations, with a function to compute the new values based on zones containing the positions
+{- Worboys on zonal operations:
+A zonal operation results in the following kind of derivation of a newfield. For each location x:1. Find the zone Zi in which x is contained.2. Compute the values of the field function f applied to each point in Zi.3. Derive a single value of the new field from the values computed in step 2, possiblytaking special account of the value of the field at x.For example, given a layer of temperatures and a zoning into administrative regions,a zonal operation is required to create a layer of average temperatures for each region.
 -}
 
 -- a raster model of a field function
 type FieldArray2d = Array (Coord, Coord) Value
 
--- the simplest domain definition is a set of raster positions (MBR would be an alternative)
-data RasterField2d = RasterField2d FieldArray2d [Position] TimeStamp
+data RasterField2d = RasterField2d FieldArray2d Location TimeStamp
 
 instance FIELDS RasterField2d where
-	valueAt (RasterField2d a pList t) p = if positionIn p pList then a!(pos2pair p) else error "position outside field domain"
-	domain (RasterField2d a pList t) = [pList]
-	grain (RasterField2d a pList t) = 1 -- the index resolution of the array sets the granularity
+	valueAt (RasterField2d a loc t) p = if positionIn p loc then a!(pos2pair p) else error "position outside field domain"
+	domain (RasterField2d a loc t) = loc
+	grain (RasterField2d a loc t) = 1 -- the index resolution of the array sets the granularity
 	
 -- a set of point observations
 type FieldPoints = [(Position, Value)]
@@ -67,7 +74,7 @@ interpolate fp p = snd (fp!!0)
 
 -- vector fields
 -- constructed from point observations, interpolation function, granularity, and time stamp
-data VectorField = VectorField FieldPoints (FieldPoints -> Position -> Value) [Location] Length TimeStamp
+data VectorField = VectorField FieldPoints (FieldPoints -> Position -> Value) Location Length TimeStamp
 
 instance FIELDS VectorField where
 	valueAt (VectorField fp interpolate d g t) p = interpolate fp p -- should check if p in d
@@ -77,10 +84,10 @@ instance FIELDS VectorField where
 -- TESTS
 a2 :: FieldArray2d
 a2 = array (p11p, p22p) [(p11p, Boolean True), (p21p, Boolean False), (p12p, Boolean True), (p22p, Boolean False)]
-rf = RasterField2d a2 pList ts1
+rf = RasterField2d a2 loc ts1
 fieldPoints :: FieldPoints
 fieldPoints = [(p11, Boolean True), (p21, Boolean False), (p12, Boolean True), (p22, Boolean False)]
-vf = VectorField fieldPoints interpolate [pList] 1 ts1
+vf = VectorField fieldPoints interpolate loc 1 ts1
 ft1 = valueAt rf p11
 ft2 = valueAt vf p11
 ft3 = domain rf

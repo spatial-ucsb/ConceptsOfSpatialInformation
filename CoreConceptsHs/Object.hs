@@ -1,15 +1,15 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FlexibleInstances #-}
 
 -- the content concept of an object
 -- core questions: where is this object? is it the same as that object?
 -- collections of objects are objects too (consistent with feature collections being features in OGC)
 -- objects have temporal state (manifested in their spatial and thematic properties and relations)
 -- (c) Werner Kuhn
--- latest change: July 13, 2016
+-- latest change: July 24, 2016
 
 -- TO DO
 -- consider boundedness by upper hierarchy level of a tesselation (AURIN does that?)
+-- make FIELDS a subclass of OBJECTS
 
 module Object where
 
@@ -30,7 +30,7 @@ data POI = POI Id Position deriving Show
 instance Eq POI where 
 	POI i p == POI j q = i == j
 instance OBJECTS POI where
-	bounds (POI i p) = [p]
+	bounds (POI i p) = Location p []
 
 -- tests
 poi1, poi2 :: POI
