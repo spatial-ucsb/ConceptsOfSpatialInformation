@@ -1,17 +1,17 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
 -- the base concept of location
--- spatial properties and relations for content concepts
+-- spatial properties and relations for all other core concepts
 -- including spatial reference systems
 -- spaces can be vector, raster, or network
--- all entities modeled as single types (at most sum type)
--- type classes are possible (with type dependencies), but not yet needed
+-- all entities are modeled as single types (at most as sum types)
+-- type classes are possible (with type dependencies), but not (yet) needed
 -- (c) Werner Kuhn
--- latest change: July 24, 2016
+-- latest change: August 15, 2016
 
 -- TO DO
--- define bounding boxes by a position and coordinate shifts (2 positions would be ambiguous on the sphere)
 -- import a geometry library: http://hackage.haskell.org/package/hgeometry ?
+-- define bounding boxes by a position and coordinate shifts (2 positions would be ambiguous on the sphere)
 -- vector geometry could be represented as well-known text: http://en.wikipedia.org/wiki/Well-known_text 
 -- better encoding would be GeoJSON http://www.macwright.org/2015/03/23/geojson-second-bite.html 
 -- use a 3-valued (check Kleene) or a fuzzy logic for positionIn
@@ -19,7 +19,7 @@
 
 module Location where
 
-import Data.List -- for set membership
+import Data.List -- for set membership (elem) 
 
 type Length = Integer -- one-dimensional size measure
 
@@ -44,7 +44,7 @@ data SRS = WGS84 | Local deriving (Eq, Show)
 errorSRS = "spatial reference system error"
 
 -- positions are point-like locations in any space
--- called "locations" in Galton 2004, but position agrees better with ordinary use
+-- called "locations" in Galton 2004, but "position" agrees better with ordinary and technical use
 -- implemented as lists of coordinates, with reference system and dimension
 data Position = Position CoordList Dimension SRS deriving (Eq, Show)
 dim (Position clist dim srs) = dim
@@ -63,10 +63,10 @@ distance p1 p2 = error "not yet implemented" -- could easily do manhattan
 pos2pair :: Position -> (Coord, Coord) 
 pos2pair (Position c 2 s) = (c!!0,c!!1)
 
--- locations are extents (spatial footprints) in any dimension, including Positions and Networks
+-- locations are extents (spatial footprints) in any dimension, including Positions and (parts of) networks
 -- they are bounded, with or without a boundary
 -- they can have multiple unconnected parts 
--- currently implemented as Position (setting the reference system and dimension) plus a list of coordinate lists 
+-- currently implemented as a Position (setting the reference system and dimension) plus a list of coordinate lists 
 -- this implementation needs to be refined, based on actual footprints (is a position list best, with srs from head?)
 -- behavior is defined by spatial relations, such as positionIn (add more as needed)
 data Location = Location Position [CoordList] deriving (Eq, Show) -- the position sets the dimension and reference system 

@@ -4,17 +4,17 @@
 -- core question: what is the value of an attribute at a position? 
 -- positions define the spatial (Worboys) or locational (Galton) framework
 -- they need to fall within the field's domain (defined by a location) to return values
--- the domain can be any geometry (e.g., also just a set of nodes)
+-- the domain can be any location (e.g., also just a set of located nodes)
 -- field constructors can take a time parameter (constructing a snapshot field at that time)
 -- continuity (of the field function, or of space, time, or value) is optional - as it is in Galton 2004
+-- tesselations are a subclass of fields (not an alternative where zones instead of positions have values!)
 -- (c) Werner Kuhn
--- latest change: July 24, 2016
+-- latest change: September 21, 2016
 
 -- TO DO
--- make sure the field concept accomodates networks as domains (including embedded edges)
 -- generalize map algebra operations to a single operation on multiple fields, taking a function as input (TH idea)
--- import qualified Data.Array.Repa as Repa (to implement fields with more computations, richer index types, and IO formats)
 -- consider using https://hackage.haskell.org/package/grid-7.8.5/docs/Math-Geometry-Grid.html for tesselations
+-- are there Haskell packages for measurement scales?
 
 module Field where
 
@@ -30,7 +30,6 @@ ts1 = (read "2016-07-01 19:16 UTC") :: TimeStamp -- an arbitrary time stamp
 -- modeled as a sum type (until we need more)
 -- admitting "object fields" (Cova) as fields with locations as values 
 -- also admitting value vectors and time series
--- are there Haskell packages for measurement scales?
 data Value = Boolean Bool | Nominal String | Ordinal String | Interval Integer | Ratio Float | Region Location | Vector [Value] | TimeSeries [(TimeStamp, Value)] deriving (Eq, Show)
 
 -- the class of all field types
@@ -41,7 +40,7 @@ data Value = Boolean Bool | Nominal String | Ordinal String | Interval Integer |
 class FIELDS field where
 	valueAt :: field -> Position -> Value -- implementations need to check whether position is in domain
 	domain :: field -> Location -- this allows multiple kinds of geometries!
-	changeDomain :: field -> Location -> field -- the location replaces the old domain
+	newDomain :: field -> Location -> field -- Location replaces the old domain
 	grain :: field -> Length 
 	local :: field -> (Value -> Value) -> field 
 {-	focal :: field position value extent -> (neighborhood -> value') -> field position value' extent -- with a kernel function to compute the new values based on the values in the neighborhood of the position
