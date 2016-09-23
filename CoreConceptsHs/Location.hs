@@ -1,13 +1,13 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
 -- the base concept of location
--- spatial properties and relations for all other core concepts
+-- defining spatial properties and relations for all other core concepts
 -- including spatial reference systems
--- spaces can be vector, raster, or network
+-- spaces can have vector, raster, or network geometries
 -- all entities are modeled as single types (at most as sum types)
--- type classes are possible (with type dependencies), but not (yet) needed
+-- type classes would be possible (with type dependencies), if needed
 -- (c) Werner Kuhn
--- latest change: August 15, 2016
+-- latest change: September 21, 2016
 
 -- TO DO
 -- import a geometry library: http://hackage.haskell.org/package/hgeometry ?
@@ -43,7 +43,7 @@ errorDim = "dimension error"
 data SRS = WGS84 | Local deriving (Eq, Show)
 errorSRS = "spatial reference system error"
 
--- positions are point-like locations in any space
+-- positions are point-like extents in any space
 -- called "locations" in Galton 2004, but "position" agrees better with ordinary and technical use
 -- implemented as lists of coordinates, with reference system and dimension
 data Position = Position CoordList Dimension SRS deriving (Eq, Show)
@@ -63,17 +63,17 @@ distance p1 p2 = error "not yet implemented" -- could easily do manhattan
 pos2pair :: Position -> (Coord, Coord) 
 pos2pair (Position c 2 s) = (c!!0,c!!1)
 
--- locations are extents (spatial footprints) in any dimension, including Positions and (parts of) networks
+-- extents are spatial footprints in any dimension, including positions and networks (or parts of them)
 -- they are bounded, with or without a boundary
 -- they can have multiple unconnected parts 
--- currently implemented as a Position (setting the reference system and dimension) plus a list of coordinate lists 
+-- currently implemented as a position (setting the reference system and dimension) plus a list of coordinate lists 
 -- this implementation needs to be refined, based on actual footprints (is a position list best, with srs from head?)
 -- behavior is defined by spatial relations, such as positionIn (add more as needed)
-data Location = Location Position [CoordList] deriving (Eq, Show) -- the position sets the dimension and reference system 
-positionIn :: Position -> Location -> Bool
-positionIn pos (Location p cs) = (pos == p) || (elem (coords pos) cs)
-boundary :: Location -> Maybe Location
-boundary location = Just location -- dummy implementation!
+data Extent = Extent Position [CoordList] deriving (Eq, Show) -- the position sets the dimension and reference system 
+positionIn :: Position -> Extent -> Bool
+positionIn pos (Extent p cs) = (pos == p) || (elem (coords pos) cs)
+boundary :: Extent -> Maybe Extent -- should this be a specialized result type? multipolygon is not enough, need raster case too
+boundary extent = Just extent -- dummy implementation!
 
 
 -- TESTS
@@ -87,9 +87,9 @@ p12p = pos2pair p12
 p21p = pos2pair p21
 p22p = pos2pair p22
 
-loc = Location p11 [coords p12, coords p21, coords p22]
+ext = Extent p11 [coords p12, coords p21, coords p22]
 
-lt1 = positionIn p11 loc
-lt2 = positionIn p22 loc
+lt1 = positionIn p11 ext
+lt2 = positionIn p22 ext
 
 

@@ -19,7 +19,6 @@
 module Field where
 
 import Location
-import Object
 import Data.Array 
 import Data.Time  -- Haskell's time library, see http://two-wrongs.com/haskell-time-library-tutorial   
 
@@ -28,7 +27,7 @@ ts1 = (read "2016-07-01 19:16 UTC") :: TimeStamp -- an arbitrary time stamp
 
 -- thematic values are taken from (extended) measurement scales
 -- modeled as a sum type (until we need more)
--- admitting "object fields" (Cova) as fields with locations as values 
+-- admitting "object fields" (Cova) in the sense of fields with extents as values 
 -- also admitting value vectors and time series
 data Value = Boolean Bool | Nominal String | Ordinal String | Interval Integer | Ratio Float | Region Location | Vector [Value] | TimeSeries [(TimeStamp, Value)] deriving (Eq, Show)
 
@@ -43,16 +42,16 @@ class FIELDS field where
 	newDomain :: field -> Location -> field -- Location replaces the old domain
 	grain :: field -> Length 
 	local :: field -> (Value -> Value) -> field 
-{-	focal :: field position value extent -> (neighborhood -> value') -> field position value' extent -- with a kernel function to compute the new values based on the values in the neighborhood of the position
+--	focal :: field -> (Extent -> Value) -> field -- with a kernel function to compute the new values based on the values in the neighborhood of the position
+--	zonal :: field -> ([Extent] -> Value) -> field  -- map algebra's zonal operations, with a function to compute the new values based on zones containing the positions
+{- Worboys on zonal operations:
+"A zonal operation results in the following kind of derivation of a new field. For each location x:1. Find the zone Zi in which x is contained.2. Compute the values of the field function f applied to each point in Zi.3. Derive a single value of the new field from the values computed in step 2, possibly taking special account of the value of the field at x.For example, given a layer of temperatures and a zoning into administrative regions, a zonal operation is required to create a layer of average temperatures for each region."
+Thus, zonal is a constructor for tesselations!
 -}
 
+
 -- tesselations are fields with a partition into a set of zones
--- partitions can be regular or irregular (triangular or otherwise)
-class (FIELDS field, OBJECTS zones) => TESSELATION field zones --where
---	zonal :: field position value extent -> (zones -> value') -> field position value' extent -- map algebra's zonal operations, with a function to compute the new values based on zones containing the positions
-{- Worboys on zonal operations:
-A zonal operation results in the following kind of derivation of a newfield. For each location x:1. Find the zone Zi in which x is contained.2. Compute the values of the field function f applied to each point in Zi.3. Derive a single value of the new field from the values computed in step 2, possiblytaking special account of the value of the field at x.For example, given a layer of temperatures and a zoning into administrative regions,a zonal operation is required to create a layer of average temperatures for each region.
--}
+class FIELDS field => TESSELATION field --where
 
 -- a raster model of a field function
 type FieldArray2d = Array (Coord, Coord) Value
