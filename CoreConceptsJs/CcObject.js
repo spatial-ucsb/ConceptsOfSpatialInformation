@@ -1,5 +1,6 @@
 /**
- * JavaScript implementation of the content concept of object
+ * JavaScript implementation of the core concept 'object'
+ * version: 0.1.0
  * (c) Liangcun Jiang
  * latest change: Feb 17, 2017.
  */
@@ -46,7 +47,7 @@ define(["dojo/_base/declare",
          *Return type: Deferred
          *Uses the callback function to receive the object's geometry (an array of Geometry).
          */
-        geometry: function () {
+        getGeometry: function () {
             var query = new Query();
             query.where = "1=1"; // Query for all records
             query.outFields = ["*"];

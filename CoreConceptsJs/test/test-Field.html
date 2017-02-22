@@ -11,16 +11,15 @@
 
     <!-- Configure Dojo first -->
     <script>var dojoConfig = {
-        parseOnLoad: true,
         async: true,
         packages: [{
             name: "CoreConceptsJs",
-            location: "/CoreConceptsJs" //The "location" is relative to your server path.
+            location: "/CoreConceptsJs" //The "location" is relative to your server.
         }]
     };
     </script>
     <!--Load the ArcGIS API for JavaScript resources from CDN-->
-    <script src="https://js.arcgis.com/3.18/"></script>
+    <script src="https://js.arcgis.com/3.19/"></script>
 
     <script>
         require(["esri/map", "CoreConceptsJs/CcField"],

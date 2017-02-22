@@ -1,8 +1,8 @@
 /**
- * Modified by Liangcun Jiang on 2017/01/06.
- */
-/**
- * Defines CcField module
+ * JavaScript implementation of the core concept 'field'
+ * version: 0.1.0
+ * (c) Liangcun Jiang
+ * latest change: Feb 17, 2017.
  */
 define([
     "dojo/_base/declare",
