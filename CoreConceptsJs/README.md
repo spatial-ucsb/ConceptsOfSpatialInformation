@@ -33,7 +33,7 @@ Use the API
 ```
 Keep in mind you must set the dojoConfig variable before loading ArcGIS JS API
 #### 2. Reference the ArcGIS API for JavaScript
-Use a second <script> to load the ArcGIS API for JavaScript from CDN
+Use a second \<script\> to load the ArcGIS API for JavaScript from CDN
 ```
 <script src="https://js.arcgis.com/3.19/"></script>
 ```
