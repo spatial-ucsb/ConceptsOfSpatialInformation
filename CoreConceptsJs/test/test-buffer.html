@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Test for buffer function</title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="css/test1.css">
+
+    <!-- Configure Dojo first -->
+    <script>var dojoConfig = {
+//        parseOnLoad:true,
+//        async:true,
+        packages: [{
+            name: "CoreConceptsJs",
+            location: "/CoreConceptsJs" //The "location" is relative to your server path.
+        }]
+    };
+    </script>
+    <!--Load the ArcGIS API for JavaScript resources from CDN-->
+    <script src="https://js.arcgis.com/3.19/"></script>
+
+    <script>
+        require(["esri/map",
+                    "dojo/_base/array",
+                    "esri/Color",
+                    "esri/graphic",
+                    "esri/symbols/SimpleLineSymbol",
+                    "esri/symbols/SimpleFillSymbol",
+                    "CoreConceptsJs/CcObject"],
+                function (Map, array, Color, Graphic, SimpleLineSymbol, SimpleFillSymbol, CcObject) {
+                    var url = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/china/MapServer/0";
+                    //var url = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/China_Roads/MapServer/0";
+                    var obj = new CcObject(url);
+                    var map = new Map("map", {
+                        basemap: "gray",
+                        center: [160, 43.64],
+                        zoom: 3
+                    });
+                    map.addLayer(obj.layer);
+
+                    obj.buffer(0.5, "degree").then(function (bufferedGeo) {
+                        console.log(bufferedGeo);
+                        //show the buffer
+                        console.log("Showing the buffer...");
+                        var symbol = new SimpleFillSymbol(
+                                SimpleFillSymbol.STYLE_SOLID,
+                                new SimpleLineSymbol(
+                                        SimpleLineSymbol.STYLE_SOLID,
+                                        new Color([255, 0, 0, 0.65]), 2
+                                ),
+                                new Color([255, 0, 0, 0.35])
+                        );
+
+                        array.forEach(bufferedGeo, function (geometry) {
+                            var graphic = new Graphic(geometry, symbol);
+                            map.graphics.add(graphic);
+                        });
+                    });
+
+                    console.log("This statement is executed first!");
+                })
+    </script>
+</head>
+<body class="claro">
+<div id="map"></div>
+</body>
+</html>

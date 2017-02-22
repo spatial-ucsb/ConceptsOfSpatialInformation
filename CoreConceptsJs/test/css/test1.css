@@ -1,0 +1,14 @@
+html, body, #map {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+#leftPanel {
+    margin: 5px;
+    background: #fff;
+    color: #444;
+    font-family: arial;
+    width: 200px;
+    border-right: solid 1px #888;
+}

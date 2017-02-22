@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>coarsen function test</title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/3.18/esri/css/esri.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.18/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="css/test1.css">
+
+    <!-- Configure Dojo first -->
+    <script>var dojoConfig = {
+        parseOnLoad: true,
+        async: true,
+        packages: [{
+            name: "CoreConceptsJs",
+            location: "/CoreConceptsJs" //The "location" is relative to your server path.
+        }]
+    };
+    </script>
+    <!--Load the ArcGIS API for JavaScript resources from CDN-->
+    <script src="https://js.arcgis.com/3.18/"></script>
+
+    <script>
+        var app;
+        require(["esri/map",
+                    "esri/tasks/query",
+                    "esri/layers/RasterFunction",
+                    "esri/layers/FeatureLayer",
+                    "CoreConceptsJs/CcField",
+                    "dojo/dom",
+                    "dojo/parser",
+                    "dijit/layout/BorderContainer",
+                    "dijit/layout/ContentPane"],
+                function (Map,
+                          Query,
+                          RasterFunction,
+                          FeatureLayer,
+                          Field,
+                          dom,
+                          parser) {
+                    parser.parse();
+                    var url = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/F101994_v4b_web_stable_lights_avg_vis/ImageServer";
+                    var field1 = new Field(url);
+                    var map = new Map("map", {
+                        basemap: "gray",
+                        center: [119.2, 38.15],
+                        logo: false,
+                        zoom: 11
+                    });
+                    map.addLayer(field1.layer);
+
+                    function executeCoarsen() {
+                        var cWidth = dom.byId("inputWidth").value;
+                        var cHeight = dom.byId("inputHeight").value;
+                        field1.coarsen(cWidth, cHeight);
+                        //field1.layer.setRenderingRule(field1.rasterFunction);
+                    }
+
+                    app = {
+                        executeCoarsen: executeCoarsen
+                    };
+                });
+    </script>
+
+</head>
+
+<body class="claro">
+<div data-dojo-type="dijit.layout.BorderContainer"
+     data-dojo-props="design:'headline',gutters:false"
+     style="width: 100%; height: 100%; margin: 0;">
+
+    <div id="map" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'center'">
+    </div>
+
+    <div id="leftPanel" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'left'">
+        <div id="info">
+            <b>Cell Width：</b><br/>
+            <input type="text" id="inputWidth" size="10" value="0.1"/><br/>
+            <b>Cell Height：</b><br/>
+            <input type="text" id="inputHeight" size="10" value="0.1"/><br/><br/>
+            <button id="btnCoarsen" style="width:80px" onclick="app.executeCoarsen();">Coarsen</button>
+            <br/><br/>
+        </div>
+        <div id='legendDiv' style='display:none;margin-top:15px;'></div>
+    </div>
+</div>
+</body>
+</html>

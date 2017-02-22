@@ -1,0 +1,201 @@
+/**
+ * Modified by Liangcun Jiang on 2017/01/06.
+ */
+/**
+ * Defines CcField module
+ */
+define([
+    "dojo/_base/declare",
+    "esri/layers/ArcGISImageServiceLayer",
+    "esri/tasks/query",
+    "esri/layers/FeatureLayer",
+    "esri/layers/ImageServiceParameters",
+    "esri/layers/RasterFunction",
+    "dojo/domReady!"
+], function (declare,
+             ArcGISImageServiceLayer,
+             Query,
+             FeatureLayer,
+             ImageServiceParameters,
+             RasterFunction) {
+    //null signifies that this class has no classes to inherit from
+    return declare(null, {
+        /**
+         *Field constructor: Constructs a field instance from an image service
+         *@param url: URL to the ArcGIS Server REST resource that represents an image service.
+         */
+        constructor: function (url) {
+            if (url === null || url === "" || url === undefined) {
+                alert("Please enter a valid URL for the field data");
+                return;
+            }
+            var rf = new RasterFunction();
+            rf.functionName = "Stretch";
+            //StretchType: 0 = None, 3 = StandardDeviation, 4 = Histogram Equalization,
+            // 5 = MinMax, 6 = PercentClip, 9 = Sigmoid
+            rf.functionArguments = {
+                //"StretchType": 0
+                "StretchType": 6, //6 = PercentClip
+                "MinPercent": 0.5,
+                "MaxPercent": 0.5,
+                "UseGamma": true,
+                "Gamma": [3.81464485861804, 3.81464485861804, 3.81464485861804],
+                "DRA": true
+            };
+            var params = new ImageServiceParameters();
+            params.renderingRule = rf;
+
+            var imageLayer = new ArcGISImageServiceLayer(url, {imageServiceParameters: params});
+            this.layer = imageLayer;
+            this.rasterFunction = rf;
+            this.domain = {"inside": [], "outside": []};
+            console.log("A new Field is instantiated");
+        },
+
+        getDomain: function () {
+            return this.domain;
+        },
+
+        /**
+         *Field function: Restricts current field's domain based on object's domain
+         *@param object: an object to be subtracted to the current domain
+         *@param type: operation type on object, can be either "inside" or "outside"
+         */
+        restrictDomain: function (field, object, type) {
+            console.log("Field operation restrictDomain is called");
+            if (this.domain.inside.length === 0) {
+                this.domain.inside.push(this.layer.extent);
+            }
+            ;
+            var rfClip = new RasterFunction();
+            rfClip.functionName = "Clip";
+            rfClip.variableName = "Raster";
+            var functionArguments = {};
+            if (type !== "inside" && type !== "outside") {
+                alert("Please input valid argument for restrictDomain operation");
+                return;
+            }
+            //int (1= clippingOutside, 2=clippingInside), use 1 to keep image inside of the geometry
+            functionArguments.ClippingType = (type === "inside" ? 1 : 2);
+
+            var query = new Query();
+            //query.text = "%";
+            //query.where = "NAME = 'China'";
+            query.where = "FID >= 0";
+            query.returnGeometry = true;
+            var polygon;
+            // Query for the features
+            object.queryFeatures(query,
+                function (featureSet) {
+                    polygon = featureSet.features[0].geometry;
+                    for (var i = 1; i < featureSet.features.length; i++) {
+                        var rings = featureSet.features[i].geometry.rings;
+                        for (var r = 0; r < rings.length; r++) {
+                            polygon.addRing(rings[r]);
+                            //console.log("Feature " + i + " polygon ring " + r + " :" +  rings[r].length);
+                        }
+                    }
+                    functionArguments.ClippingGeometry = polygon;
+                    functionArguments.Raster = field.rasterFunction;
+                    rfClip.functionArguments = functionArguments;
+                    field.rasterFunction = rfClip;
+                    field.layer.setRenderingRule(field.rasterFunction);
+                    //console.log("render over!");
+                });
+        },
+
+        /**
+         * Field function: Performs bitwise, conditional, logical, mathematical,
+         * and statistical operations on a pixel-by-pixel basis.
+         *@param field: another field or a scalar/number
+         *@param operation: valid option -- "average", "max", "min", "plus", "minus" (extended as needed)
+         */
+        local: function (field, operation) {
+            //Operations: 1 = Plus, 2 = Minus, 3 = Times, 67= MaxIgnoreNoData, 70 = MinIgnoreNoData,
+            //23 = Divide ..., 68 = MeanIgnoreNoData(extremely time-consuming)
+            //http://resources.arcgis.com/en/help/arcobjects-net/componenthelp/index.html#//004000000149000000
+            //Defines valid local operations here
+            var ops = {
+                "average": 1, //For the "average" operation: uses "Plus" first and uses "Divide" later
+                "plus": 1,
+                "minus": 2,
+                "max": 67,
+                "min": 70
+            };
+
+            if (!(operation in ops)) {
+                alert("The operation argument for local function is not valid!");
+                return;
+            }
+
+            var rfLocal = new RasterFunction();
+            rfLocal.functionName = "Local";
+            rfLocal.variableName = "Rasters";
+            var functionArguments = {};
+            functionArguments.Operation = ops[operation];
+            if (isNaN(field)) {
+                //if the input is Not a Number
+                functionArguments.Rasters = [this.rasterFunction, field.rasterFunction];
+            } else {
+                //if the input is a number/scalar
+                functionArguments.Rasters = [this.rasterFunction, field];
+            }
+            rfLocal.functionArguments = functionArguments;
+
+            //For the "average" operation, divide the previous result by 2
+            if (operation === "average") {
+                var rfLocal2 = new RasterFunction();
+                rfLocal2.functionName = "Local";
+                rfLocal2.variableName = "Rasters";
+                rfLocal2.functionArguments = {
+                    "Operation": 23, //23 = Divide
+                    "Rasters": [rfLocal, 2]
+                };
+                rfLocal = rfLocal2;
+            }
+
+            this.rasterFunction = rfLocal;
+            this.layer.setRenderingRule(rfLocal);
+        },
+
+        /**
+         * Field function: calculates focal statistics for each pixel of an image based on a defined focal neighborhood.
+         *@param kernelColumns: defines neighbour by columns, it should be an int (e.g. 3)
+         *@param kernelRows: defines neighbour by rows, it should be an int (e.g. 3)
+         *@param type: Min | Max | Mean | StandardDeviation
+         */
+        focal: function (kernelColumns, kernelRows, type) {
+            var rfFocal = new RasterFunction();
+            rfFocal.functionName = "Local";
+            rfFocal.variableName = "Rasters";
+            var functionArguments = {
+                "Type": type,
+                "KernelColumns": kernelColumns,
+                "KernelRows": kernelRows
+            };
+            this.rasterFunction = rfFocal;
+            this.layer.setRenderingRule(rfFocal);
+        },
+
+        /**
+         * Field function: Resamples pixel values to a lower granularity
+         *@param cellW: cell width
+         *@param callH: cell height
+         */
+        coarsen: function (cellW, cellH) {
+            var rfResample = new RasterFunction();
+            rfResample.functionName = "Resample";
+            rfResample.variableName = "Raster";
+            var functionArguments = {};
+            // ResamplingType: 0=NearestNeighbor,2=Cubic,3=Majority,
+            // 1=Bilinear, 4=BilinearInterpolationPlus, 5=BilinearGaussBlur,
+            // 6=BilinearGaussBlurPlus, 7=Average, 8=Minimum, 9=Maximum,10=VectorAverage(require two bands)
+            functionArguments.ResamplingType = 0;
+            functionArguments.InputCellsize = {"x": cellW, "y": cellH};
+            functionArguments.Raster = this.rasterFunction;
+            rfResample.functionArguments = functionArguments;
+            this.rasterFunction = rfResample;
+            this.layer.setRenderingRule(rfResample);
+        }
+    });
+});

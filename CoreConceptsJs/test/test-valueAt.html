@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test for valueAt function</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.18/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.18/esri/css/esri.css">
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        h3 {
+            margin: 0 0 5px 0;
+            border-bottom: 1px solid #444;
+        }
+
+        .shadow {
+            -moz-box-shadow: 0 0 5px #888;
+            -webkit-box-shadow: 0 0 5px #888;
+            box-shadow: 0 0 5px #888;
+        }
+
+        #map {
+            margin: 0;
+            padding: 0;
+        }
+
+        #leftPanel {
+            margin: 5px;
+            background: #fff;
+            color: #444;
+            font-family: arial;
+            width: 200px;
+            border-right: solid 1px #888;
+        }
+
+        #status {
+            background-color: #E0E0E0;
+            color: #707070;
+            font-weight: bold;
+            padding: 3px;
+            border: solid 1px #707070;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border-radius: 5px;
+            position: absolute;
+            top: 50%;
+            right: 50%;
+            z-index: 100;
+            display: none;
+            height: 20px;
+        }
+    </style>
+    <!-- Configure Dojo first -->
+    <script>var dojoConfig = {
+        parseOnLoad: true,
+        async: true,
+        packages: [{
+            name: "CoreConceptsJs",
+            location: "/CoreConceptsJs" //The "location" is relative to your server path.
+        }]
+    };
+    </script>
+    <!--Load the ArcGIS API for JavaScript resources from CDN-->
+    <script src="https://js.arcgis.com/3.18/"></script>
+
+    <script>
+        var app;
+        var field;
+        require(["CoreConceptsJs/CcField",
+                    "esri/map",
+                    "dojo/dom", "dojo/parser",
+                    "dijit/layout/BorderContainer",
+                    "dijit/layout/ContentPane"],
+                function (Field,
+                          Map,
+                          dom, parser) {
+                    parser.parse();
+                    var url = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/F101994_v4b_web_stable_lights_avg_vis/ImageServer";
+                    field = new Field(url);
+                    var map = new Map("map", {
+                        basemap: "topo",
+                        zoom: 2
+                    });
+                    map.addLayer(field.layer);
+
+                    function executeGP() {
+                        var z = map.getZoom();
+                        dom.byId("outputZoom").value = z;
+                        var inLong = dom.byId("inputLong").value;
+                        var inLat = dom.byId("inputLat").value;
+                        var value = field.valueAt(inLong, inLat);
+                        dom.byId("outputValue").value = value;
+                        console.log("The value at position (0,0)is " + value);
+                    }
+
+                    app = {
+                        executeGP: executeGP
+                    };
+                });
+    </script>
+    <title></title>
+</head>
+
+<body class="claro">
+<div data-dojo-type="dijit.layout.BorderContainer"
+     data-dojo-props="design:'headline',gutters:false"
+     style="width: 100%; height: 100%; margin: 0;">
+
+    <div id="map" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'center'">
+    </div>
+
+    <div id="leftPanel" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'left'">
+        <div id="info">
+            <b>Longitude：</b><br/>
+            <input type="text" id="inputLong" size="10" value="120"/><br/>
+            <b>Latitude：</b><br/>
+            <input type="text" id="inputLat" size="10" value="30"/><br/><br/>
+            <button id="bufferButton" onclick="app.executeGP();">Get Value</button>
+            <br/>
+            <hr/>
+            <b>Zoom Level：</b><br/>
+            <textarea id="outputZoom"></textarea><br/>
+
+            <div><b>The value at input position is:</b></div>
+            <textarea id="outputValue"></textarea>
+        </div>
+        <div id='legendDiv' style='display:none;margin-top:15px;'></div>
+    </div>
+</div>
+</body>
+</html>
+

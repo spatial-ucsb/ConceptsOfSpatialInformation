@@ -1,0 +1,48 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+h3 {
+    margin: 0 0 5px 0;
+    border-bottom: 1px solid #444;
+}
+
+.shadow {
+    -moz-box-shadow: 0 0 5px #888;
+    -webkit-box-shadow: 0 0 5px #888;
+    box-shadow: 0 0 5px #888;
+}
+
+#map {
+    margin: 0;
+    padding: 0;
+}
+
+#leftPanel {
+    margin: 5px;
+    background: #fff;
+    color: #444;
+    font-family: arial;
+    width: 250px;
+    border-right: solid 1px #888;
+}
+
+#status {
+    background-color: #E0E0E0;
+    color: #707070;
+    font-weight: bold;
+    padding: 3px;
+    border: solid 1px #707070;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    z-index: 100;
+    display: none;
+    height: 20px;
+}
