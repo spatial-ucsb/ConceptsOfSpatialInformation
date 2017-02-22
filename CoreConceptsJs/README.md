@@ -25,7 +25,8 @@ Use the API
         packages: [
             {
                 name: "CoreConcepts",
-                location: "/CoreConceptsJs" //the location of the package; can either be a path relative to your server or an absolute path.
+                //the location of the package; can either be a path relative to your server or an absolute path.
+                location: "/CoreConceptsJs"
             }
         ]
     };
