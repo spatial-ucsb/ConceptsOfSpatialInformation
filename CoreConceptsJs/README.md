@@ -11,7 +11,7 @@ Contents
 ----------------------
 
 - `CcField.js`: Implementations of fields.
-- `CcObjects.js`: Implementations of objects.
+- `CcObject.js`: Implementations of objects.
 - `test/`: Unit tests.
 
 Use the API
