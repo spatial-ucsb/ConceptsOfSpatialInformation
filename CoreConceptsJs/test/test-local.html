@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>local function test</title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/3.18/esri/css/esri.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.18/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="css/test1.css">
+
+    <!-- Configure Dojo first -->
+    <script>var dojoConfig = {
+        parseOnLoad: true,
+        async: true,
+        packages: [{
+            name: "CoreConceptsJs",
+            location: "/CoreConceptsJs" //The "location" is relative to your server path.
+        }]
+    };
+    </script>
+    <!--Load the ArcGIS API for JavaScript resources from CDN-->
+    <script src="https://js.arcgis.com/3.18/"></script>
+
+    <script>
+        var app;
+        require(["esri/map",
+                    "esri/tasks/query",
+                    "esri/layers/RasterFunction",
+                    "esri/layers/FeatureLayer",
+                    "CoreConceptsJs/CcField",
+                    "dojo/dom",
+                    "dijit",
+                    "dojo/parser",
+                    "dijit/layout/BorderContainer",
+                    "dijit/layout/ContentPane"],
+                function (Map,
+                          Query,
+                          RasterFunction,
+                          FeatureLayer,
+                          Field,
+                          dom,
+                          dijit,
+                          parser) {
+                    parser.parse();
+                    //var url = "https://sampleserver6.arcgisonline.com/arcgis/rest/services/ScientificData/MODIS_Landcover/ImageServer";
+                    //var url = "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Toronto/ImageServer";
+                    //var url = "https://sampleserver6.arcgisonline.com/arcgis/rest/services/ScientificData/SeaTemperature/ImageServer";
+                    var url = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/F101994_v4b_web_stable_lights_avg_vis/ImageServer";
+                    var field1 = new Field(url);
+                    var map = new Map("map", {
+                        basemap: "gray",
+                        center: [120, 30],
+                        logo: false,
+                        zoom: 4
+                    });
+                    map.addLayer(field1.layer);
+
+//                    var url2 = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/F182013_v4c_web_stable_lights_avg_vis/ImageServer";
+//                    var field2 = new Field(url2);
+
+                    function executeLocal() {
+                        var field = dom.byId("inputField").value;
+                        var op = dijit.byId("operation").get("displayedValue");
+                        field1.local(parseInt(field), op);
+
+                        var remapRF = new RasterFunction();
+                        remapRF.functionName = "Remap";
+                        remapRF.functionArguments = {
+                            InputRanges: [0, 64, 64, 256, 256, 1000], // remap pixels with values -3 to 10 to now have value of 1 (red)
+                            OutputValues: [1, 2, 3],    // remap pixel values from 11 to 37 to have a value of 2 (green)
+                            Raster: field1.rasterFunction  // Apply remap to the image service
+                        };
+                        remapRF.outputPixelType = "u8";
+
+                        var colorRF = new RasterFunction();
+                        colorRF.functionName = "Colormap";
+                        colorRF.functionArguments = {
+                            Colormap: [
+                                [1, 255, 0, 0],  // Symbolize pixels with value of 1 using red color
+                                [2, 0, 255, 0],  // Symbolize pixels with value of 2 using green color
+                                [3, 0, 0, 255]   // Symbolize pixels with value of 2 using blue color
+                            ],
+                            Raster: remapRF  // Apply Colormap to output raster from the remap rasterFunction
+                        };
+                        field1.layer.setRenderingRule(colorRF);
+                        console.log("local over!");
+                    }
+
+                    app = {
+                        executeLocal: executeLocal
+                    };
+                });
+    </script>
+
+</head>
+
+<body class="claro">
+<div data-dojo-type="dijit.layout.BorderContainer"
+     data-dojo-props="design:'headline',gutters:false"
+     style="width: 100%; height: 100%; margin: 0;">
+
+    <div id="map" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'center'">
+    </div>
+
+    <div id="leftPanel" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'left'">
+        <div id="info">
+            <b>Input a scalar</b><br/>
+            <input type="text" id="inputField" size="20" value=100><br/>
+            <br><label>Operation:</label>
+            <select id="operation" data-dojo-type="dijit/form/FilteringSelect" data-dojo-props='style:"width:80px;"'>
+                <option value="plus" selected>plus</option>
+                <option value="minus">minus</option>
+                <option value="average">average</option>
+                <option value="max">max</option>
+                <option value="min">min</option>
+            </select>
+            <hr/>
+            <button id="btnClip" style="width:80px" onclick="app.executeLocal()">local</button>
+            <br/><br/>
+            <!--<button  id="btnLocal" style="width:80px" onclick="app.executeLocal();">Local</button><br/><br/>-->
+            <p>Original value: 0 - 63</p>
+
+            <p>Stretched value: 0 - 255</p>
+
+            <p>To test the local function, pixels are remaped and a color map are applied:</p>
+
+            <p>0 - 63: Red</p>
+
+            <p>64 - 255: Green</p>
+
+            <p>255 - 1000: Blue</p>
+        </div>
+        <div id='legendDiv' style='display:none;margin-top:15px;'></div>
+    </div>
+</div>
+</body>
+</html>

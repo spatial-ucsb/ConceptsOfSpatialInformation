@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>CcObject test</title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="css/test1.css">
+
+    <!-- Configure Dojo first -->
+    <script>var dojoConfig = {
+        //parseOnLoad:true,
+        //async:true,
+        packages: [{
+            name: "CoreConceptsJs",
+            location: "/CoreConceptsJs" //The "location" is relative to your server path.
+        }]
+    };
+    </script>
+    <!--Load the ArcGIS API for JavaScript resources from CDN-->
+    <script src="https://js.arcgis.com/3.19/"></script>
+
+    <script>
+        require(["esri/map", "CoreConceptsJs/CcObject"],
+                function (Map, CcObject) {
+                    var url = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/china/MapServer/0";
+                    var obj = new CcObject(url);
+                    var map = new Map("map", {
+                        basemap: "topo",
+                        center: [160, 43.64],
+                        zoom: 3
+                    });
+                    map.addLayer(obj.layer);
+
+                    //object's geometries
+                    obj.geometry().then(function (geo) {
+                        console.log(geo);
+                    });
+
+                    //object's bounds
+                    obj.bounds().then(function (extent) {
+                        console.log(extent);
+                    });
+
+                    console.log("This statement is executed first!");
+                })
+    </script>
+</head>
+<body class="claro">
+<div id="map"></div>
+</body>
+</html>
