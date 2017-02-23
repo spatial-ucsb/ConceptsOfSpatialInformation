@@ -32,7 +32,7 @@ Use the API
     };
 </script>
 ```
-Keep in mind you must set the dojoConfig variable before loading ArcGIS JS API
+\* Keep in mind you must set the dojoConfig variable before loading ArcGIS JS API
 #### 2. Reference the ArcGIS API for JavaScript
 Use a second \<script\> to load the ArcGIS API for JavaScript from CDN
 ```
@@ -46,6 +46,7 @@ Use `require` to load specific modules from the API. The first parameter to `req
   require(["CoreConcepts/CcField"], function(CcField) { ... });
 </script>
 ```
+\* You can also get started by taking a look at test files or examples.
 
 Dependencies
 ----------------------
