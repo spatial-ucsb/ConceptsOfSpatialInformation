@@ -44,7 +44,7 @@ Status
 ------
 Haskell: Locations, fields, networks, objects and events are specified. Only networks are implemented. No unit tests exist yet. Only networks have examples.
 
-JavaScript: The development is ongoing. Currently fields and objects are being implemented. A couple of functions will be refactored.
+JavaScript: The development is ongoing. Currently fields and objects are implemented. But a couple of functions will be refactored.
 
 Python: Versions leveraging ArcPy and GDAL processing are progressing separately. In each case, content and quality concepts have abstract classes, while object and field have concrete implementations. Unit tests exist for previous GDAL versions, but the tests for fields and objects should not be considered full unit tests and are more like examples. Several content concepts have examples under the example folder.
 
