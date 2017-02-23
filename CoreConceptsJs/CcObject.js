@@ -14,8 +14,8 @@ define(["dojo/_base/declare",
 ], function (declare, Deferred, Query, FeatureLayer, BufferParameters, RelationParameters, GeometryService) {
     return declare(null, {
         /**
-         *CcObject constructor: Constructs an object instance from either a Map Service or Feature Service
-         *@param url: URL to the ArcGIS Server REST resource that represents an feature service.
+         * CcObject constructor: Constructs an object instance from either a Map Service or Feature Service
+         * @param url: URL to the ArcGIS Server REST resource that represents an feature service.
          */
         constructor: function (url) {
             if (url === null || url === "" || url === undefined) {
@@ -27,9 +27,9 @@ define(["dojo/_base/declare",
         },
 
         /**
-         *CcObject function: gets CcObject's bounds in form of a bounding box(xmin, ymin, xmax, ymax)
-         *Return type: Deferred
-         *Uses the callback function to receive the object's extent.
+         * CcObject function: gets CcObject's bounds in form of a bounding box(xmin, ymin, xmax, ymax)
+         * Return type: Deferred
+         * Uses the callback function to receive the object's extent.
          */
         bounds: function () {
             var query = new Query();
@@ -43,9 +43,9 @@ define(["dojo/_base/declare",
         },
 
         /**
-         *CcObject function: gets CcObject's geometry
-         *Return type: Deferred
-         *Uses the callback function to receive the object's geometry (an array of Geometry).
+         * CcObject function: gets CcObject's geometry
+         * Return type: Deferred
+         * Uses the callback function to receive the object's geometry (an array of Geometry).
          */
         getGeometry: function () {
             var query = new Query();
@@ -72,12 +72,12 @@ define(["dojo/_base/declare",
         },
 
         /**
-         *CcObject function: Creates buffer polygons at a specified distance around the given object.
-         *@param distance: the distance the input object are buffered.
-         *@param unitType: the unit for calculating each buffer distance.(case insensitive: kilometer = Kilometer)
+         * CcObject function: Creates buffer polygons at a specified distance around the given object.
+         * @param distance: the distance the input object are buffered.
+         * @param unitType: the unit for calculating each buffer distance.(case insensitive: kilometer = Kilometer)
          *                 Units can be singular or plural forms: e.g. Foot = feet
-         *Return type: Deferred
-         *Uses the callback function to receive an array of Geometry that contains the buffer polygons.
+         * Return type: Deferred
+         * Uses the callback function to receive an array of Geometry that contains the buffer polygons.
          */
         buffer: function (distance, unitType) {
             //This service provided by ESRI is for development and testing purposes only.
@@ -146,11 +146,11 @@ define(["dojo/_base/declare",
         },
 
         /**
-         *CcObject function: returns true if self and obj are in a relationship of type relType.
-         *@param obj:
-         *@param relType: The spatial relationship to be tested between the two CcObject.
-         *Return type: Deferred
-         *Uses the callback function to receive the result.
+         * CcObject function: returns true if self and obj are in a relationship of type relType.
+         * @param obj:
+         * @param relType: The spatial relationship to be tested between the two CcObject.
+         * Return type: Deferred
+         * Uses the callback function to receive the result.
          */
         relation: function (obj, relType) {
             var gsUrl = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/Utilities/Geometry/GeometryServer";
@@ -164,6 +164,12 @@ define(["dojo/_base/declare",
             });
         },
 
+        /**
+         * CcObject function: returns value of property in obj
+         * @param prop: the property name
+         * Return type: Deferred
+         * Uses the callback function to receive the result.
+         */
         property: function (prop) {
 
         }
