@@ -5,16 +5,16 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>Test for makeField function</title>
 
-    <link rel="stylesheet" href="https://js.arcgis.com/3.18/esri/css/esri.css">
-    <link rel="stylesheet" href="https://js.arcgis.com/3.18/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="css/test1.css">
 
     <!-- Configure Dojo first -->
     <script>var dojoConfig = {
         async: true,
         packages: [{
-            name: "CoreConceptsJs",
-            location: "/CoreConceptsJs" //The "location" is relative to your server.
+            name: "CoreConcepts",
+            location: "/CoreConceptsJs" //assume that js files are deployed under "www.yourserver.com/CoreConceptsJs/"
         }]
     };
     </script>
@@ -22,7 +22,7 @@
     <script src="https://js.arcgis.com/3.19/"></script>
 
     <script>
-        require(["esri/map", "CoreConceptsJs/CcField"],
+        require(["esri/map", "CoreConcepts/CcField"],
                 function (Map, Field) {
                     //var url = "https://sampleserver6.arcgisonline.com/arcgis/rest/services/ScientificData/MODIS_Landcover/ImageServer";
                     //var url = "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Toronto/ImageServer";
