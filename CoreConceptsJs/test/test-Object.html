@@ -11,10 +11,8 @@
 
     <!-- Configure Dojo first -->
     <script>var dojoConfig = {
-        //parseOnLoad:true,
-        //async:true,
         packages: [{
-            name: "CoreConceptsJs",
+            name: "CoreConcepts",
             location: "/CoreConceptsJs" //The "location" is relative to your server path.
         }]
     };
@@ -23,19 +21,19 @@
     <script src="https://js.arcgis.com/3.19/"></script>
 
     <script>
-        require(["esri/map", "CoreConceptsJs/CcObject"],
+        require(["esri/map", "CoreConcepts/CcObject"],
                 function (Map, CcObject) {
                     var url = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/china/MapServer/0";
                     var obj = new CcObject(url);
                     var map = new Map("map", {
                         basemap: "topo",
-                        center: [160, 43.64],
+                        center: [120, 35],
                         zoom: 3
                     });
                     map.addLayer(obj.layer);
 
                     //object's geometries
-                    obj.geometry().then(function (geo) {
+                    obj.getGeometry().then(function (geo) {
                         console.log(geo);
                     });
 

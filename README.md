@@ -21,11 +21,13 @@ Members & contributors:
 * Michel Zimmer ([home](https://www.mzimmer.net))
 * Behzad Vahedi
 * Thomas Hervey ([home](http://www.thervey.me))
+* Liangcun Jiang
 
 
 Contents
 ----------------------
 - [CoreConceptsHs](CoreConceptsHs): The Haskell specifications of the core concepts.
+- [CoreConceptsJs](CoreConceptsJs): A JavaScript implementation of the core concepts.
 - [CoreConceptsPy](CoreConceptsPy): A Python implementation of the core concepts.
 - [CoreConceptsRdf](CoreConceptsRdf): An RDF(S) implementation of the core concepts.
 
@@ -41,6 +43,8 @@ The Core Concepts Lenses
 Status
 ------
 Haskell: Locations, fields, networks, objects and events are specified. Only networks are implemented. No unit tests exist yet. Only networks have examples.
+
+JavaScript: The development is ongoing. Currently fields and objects are implemented. But a couple of functions will be refactored.
 
 Python: Versions leveraging ArcPy and GDAL processing are progressing separately. In each case, content and quality concepts have abstract classes, while object and field have concrete implementations. Unit tests exist for previous GDAL versions, but the tests for fields and objects should not be considered full unit tests and are more like examples. Several content concepts have examples under the example folder.
 
