@@ -11,8 +11,6 @@
 
     <!-- Configure Dojo first -->
     <script>var dojoConfig = {
-        //parseOnLoad:true,
-        //async:true,
         packages: [{
             name: "CoreConcepts",
             location: "/CoreConceptsJs" //The "location" is relative to your server path.
@@ -29,13 +27,13 @@
                     var obj = new CcObject(url);
                     var map = new Map("map", {
                         basemap: "topo",
-                        center: [160, 43.64],
+                        center: [120, 35],
                         zoom: 3
                     });
                     map.addLayer(obj.layer);
 
                     //object's geometries
-                    obj.geometry().then(function (geo) {
+                    obj.getGeometry().then(function (geo) {
                         console.log(geo);
                     });
 

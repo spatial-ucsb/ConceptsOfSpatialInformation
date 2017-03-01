@@ -1,8 +1,8 @@
 /**
  * JavaScript implementation of the core concept 'object'
- * version: 0.1.0
+ * version: 0.2.1
  * (c) Liangcun Jiang
- * latest change: Feb 17, 2017.
+ * latest change: Feb 28, 2017.
  */
 define(["dojo/_base/declare",
     "dojo/Deferred",
@@ -43,9 +43,9 @@ define(["dojo/_base/declare",
         },
 
         /**
-         * CcObject function: gets CcObject's geometry
+         * CcObject function: gets CcObject's geometry (can be Point, Curve, Surface, or GeometryCollection)
          * Return type: Deferred
-         * Uses the callback function to receive the object's geometry (an array of Geometry).
+         * Uses the callback function to receive the object's geometry.
          */
         getGeometry: function () {
             var query = new Query();
@@ -53,21 +53,53 @@ define(["dojo/_base/declare",
             query.outFields = ["*"];
             query.returnGeometry = true;
             var process = this.layer.queryFeatures(query);
-            //function _getGeometry(featureSet){
-            //    var geometry = [];
-            //    for (var i = 0; i < featureSet.features.length; i++  ) {
-            //        geometry.push(featureSet.features[i].geometry);
-            //    }
-            //    var deferred = new Deferred();
-            //    deferred.resolve(geometry);
-            //    return deferred.promise;
-            //}
             return process.then(function (featureSet) {
-                var geometryArray = [];
-                for (var i = 0; i < featureSet.features.length; i++) {
-                    geometryArray.push(featureSet.features[i].geometry);
+                //Subclasses of Geometry in ArcGIS JavaScript API: Extent, Multipoint, Point, Polygon, and Polyline.
+                var geometry;
+                switch (featureSet.geometryType) {
+                    case "esriGeometryPolygon":
+                        //A collection of rings ordered by their containment relationship.
+                        //This may refer to Polygon or MultiPolygon in OGC terms
+                        geometry = featureSet.features[0].geometry;
+                        for (var i = 1; i < featureSet.features.length; i++) {
+                            var rings = featureSet.features[i].geometry.rings;
+                            for (var r = 0; r < rings.length; r++) {
+                                geometry.addRing(rings[r]);
+                            }
+                        }
+                        break;
+                    case "esriGeometryPolyline":
+                        //An ordered collection of paths.
+                        //This may refer to LineRing or MultiLineRing in OGC terms
+                        geometry = featureSet.features[0].geometry;
+                        for (var i = 1; i < featureSet.features.length; i++) {
+                            var paths = featureSet.features[i].geometry.paths;
+                            for (var p = 0; p < paths.length; p++) {
+                                geometry.addPath(paths[p]);
+                            }
+                        }
+                        break;
+                    //case "esriGeometryRing":
+                    //    //An area bounded by one closed path.
+                    //    break;
+                    //case "esriGeometryPath":
+                    //    //A connected sequence of segments.
+                    //    break;
+                    //case "esriGeometryLine":
+                    //    //A straight line segment between two points.
+                    //    break;
+                    case "esriGeometryMultipoint":
+                        //An ordered collection of points.
+                        break;
+                    case "esriGeometryPoint":
+                        break;
+                    case "esriGeometryEnvelope":
+                        //A rectangle indicating the spatial extent of another geometry.
+                        break;
+                    default:
+                        console.log("This FeatureSet does not contain geometry");
                 }
-                return geometryArray;
+                return geometry;
             });
         },
 
@@ -109,12 +141,23 @@ define(["dojo/_base/declare",
             //a single (possibly multipart) polygon, and the unioned geometry is placed in the output array.
             params.unionResults = true;
 
-            //Get the object geometries and do the buffer
-            return this.geometry().then(function (geometries) {
+            var query = new Query();
+            query.where = "1=1"; // Query for all records
+            query.outFields = ["*"];
+            query.returnGeometry = true;
+            var process = this.layer.queryFeatures(query).then(function (featureSet) {
+                var geometryArray = [];
+                for (var i = 0; i < featureSet.features.length; i++) {
+                    geometryArray.push(featureSet.features[i].geometry);
+                }
+                return geometryArray;
+            });
+            //Get <Geometry[]> geometries of the CcObject and do the buffer
+            return process.then(function (geoArray) {
                 //The Geometry Service allows a maxBufferCount of 12500.
                 // The maxBufferCount property establishes the maximum number of features that can be buffered
-                if (geometries.length <= 12500) {
-                    params.geometries = geometries;
+                if (geoArray.length <= 12500) {
+                    params.geometries = geoArray;
                     //do the buffer
                     console.log("Doing the buffer...");
                     //buffer function returns a "<Polygon[]> geometries" Array[1]
@@ -122,12 +165,12 @@ define(["dojo/_base/declare",
                 } else {
                     //if the number of features exceeds the maxBufferCount, then executes buffer operation in two parts.
                     //Needs to extend this code snippet if the number of features > 250000.
-                    params.geometries = geometries.slice(0, 12500)
+                    params.geometries = geoArray.slice(0, 12500)
                     //do the buffer
                     console.log("Buffering part 1...");
                     return gs.buffer(params).then(function (bufferedGeometries1) {
                         console.log("Buffering part 2...");
-                        params.geometries = geometries.slice(12500);
+                        params.geometries = geoArray.slice(12500);
                         var gs2 = new GeometryService("https://utility.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
                         return gs2.buffer(params).then(function (bufferedGeometries2) {
                             //console.log([bufferedGeometries1, bufferedGeometries2]);

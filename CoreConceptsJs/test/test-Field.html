@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>Test for makeField function</title>
+    <title>CcField test</title>
 
     <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
     <link rel="stylesheet" href="https://js.arcgis.com/3.19/dijit/themes/claro/claro.css">
@@ -23,20 +23,19 @@
 
     <script>
         require(["esri/map", "CoreConcepts/CcField"],
-                function (Map, Field) {
+                function (Map, CcField) {
                     //var url = "https://sampleserver6.arcgisonline.com/arcgis/rest/services/ScientificData/MODIS_Landcover/ImageServer";
                     //var url = "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Toronto/ImageServer";
                     //var url = "https://sampleserver6.arcgisonline.com/arcgis/rest/services/ScientificData/SeaTemperature/ImageServer";
                     //var url = "https://sampleserver6.arcgisonline.com/arcgis/rest/services/ScientificData/NDFD_model/ImageServer";
                     var url = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/F101994_v4b_web_stable_lights_avg_vis/ImageServer";
-                    var field = new Field(url);
+                    var field = new CcField(url);
                     var map = new Map("map", {
                         basemap: "topo",
-                        center: [160, 43.64],
+                        center: [160, 30],
                         zoom: 3
                     });
                     map.addLayer(field.layer);
-
                 })
     </script>
 </head>

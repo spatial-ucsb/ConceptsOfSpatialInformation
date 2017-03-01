@@ -12,10 +12,8 @@
 
     <!-- Configure Dojo first -->
     <script>var dojoConfig = {
-        parseOnLoad: true,
-        async: true,
         packages: [{
-            name: "CoreConceptsJs",
+            name: "CoreConcepts",
             location: "/CoreConceptsJs" //The "location" is relative to your server path.
         }]
     };
@@ -29,7 +27,8 @@
                     "esri/tasks/query",
                     "esri/layers/RasterFunction",
                     "esri/layers/FeatureLayer",
-                    "CoreConceptsJs/CcField",
+                    "CoreConcepts/CcField",
+                    "CoreConcepts/CcObject",
                     "dojo/dom",
                     "dijit",
                     "dojo/parser",
@@ -40,13 +39,14 @@
                           Query,
                           RasterFunction,
                           FeatureLayer,
-                          Field,
+                          CcField,
+                          CcObject,
                           dom,
                           dijit,
                           parser) {
                     parser.parse();
                     var url = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/F101994_v4b_web_stable_lights_avg_vis/ImageServer";
-                    var field1 = new Field(url);
+                    var field1 = new CcField(url);
                     var map = new Map("map", {
                         basemap: "gray",
                         center: [120, 35],
@@ -56,22 +56,23 @@
                     map.addLayer(field1.layer);
 
                     function executeClip1() {
-                        //var urlCountries = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/countries/MapServer/0";
                         //var urlChina = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/china/MapServer/0";
                         var urlChina = dom.byId("urlChina").value;
-                        var chinaBoundary = new FeatureLayer(urlChina);
+                        var chinaBoundary = new CcObject(urlChina);
                         var clipType1 = dijit.byId("type1").get("displayedValue");
-                        field1.restrictDomain(field1, chinaBoundary, clipType1);
-                        //field1.layer.setRenderingRule(field1.rasterFunction);
+                        chinaBoundary.getGeometry().then(function (geom) {
+                            field1.restrictDomain(geom, clipType1);
+                        });
                     }
 
                     function executeClip2() {
                         //var urlGasFlaring = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/gas_flares_China/MapServer/0";
                         var urlGasFlaring = dom.byId("urlGas").value;
-                        var gasFlares = new FeatureLayer(urlGasFlaring);
+                        var gasFlares = new CcObject(urlGasFlaring);
                         var clipType2 = dijit.byId("type2").get("displayedValue");
-                        field1.restrictDomain(field1, gasFlares, clipType2);
-                        //field1.layer.setRenderingRule(field1.rasterFunction);
+                        gasFlares.getGeometry().then(function (geom) {
+                            field1.restrictDomain(geom, clipType2);
+                        });
                     }
 
                     app = {
@@ -80,7 +81,6 @@
                     };
                 });
     </script>
-
 </head>
 
 <body class="claro">
@@ -91,8 +91,8 @@
     <div id="map" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'center'">
     </div>
 
-    <div id="leftPanel" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'left'">
-        <div id="info">
+    <div data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'left'">
+        <div>
             <b>Domain1 -- China mainland</b><br/>
             <input type="text" id="urlChina" size="20"
                    value="https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/china/MapServer/0"/><br/>
@@ -116,7 +116,6 @@
             <button id="btnClip2" style="width:80px" onclick="app.executeClip2()">Clip2</button>
             <br/><br/>
         </div>
-        <div id='legendDiv' style='display:none;margin-top:15px;'></div>
     </div>
 </div>
 </body>

@@ -1,8 +1,8 @@
 /**
  * JavaScript implementation of the core concept 'field'
- * version: 0.1.0
+ * version: 0.2.0
  * (c) Liangcun Jiang
- * latest change: Feb 17, 2017.
+ * latest change: Feb 28, 2017.
  */
 define([
     "dojo/_base/declare",
@@ -58,50 +58,27 @@ define([
 
         /**
          *Field function: Restricts current field's domain based on object's domain
-         *@param object: an object to be subtracted to the current domain
+         *@param geometry: a geometry applied to the current domain
          *@param type: operation type on object, can be either "inside" or "outside"
          */
-        restrictDomain: function (field, object, type) {
-            console.log("Field operation restrictDomain is called");
-            if (this.domain.inside.length === 0) {
-                this.domain.inside.push(this.layer.extent);
+        restrictDomain: function (geometry, type) {
+            if (type !== "inside" && type !== "outside") {
+                console.error("invalid type parameter for restrictDomain function");
+                return;
             }
-            ;
+            (type === "inside") ? this.domain.inside.push(geometry) : this.domain.outside.push(geometry);
+
             var rfClip = new RasterFunction();
             rfClip.functionName = "Clip";
             rfClip.variableName = "Raster";
             var functionArguments = {};
-            if (type !== "inside" && type !== "outside") {
-                alert("Please input valid argument for restrictDomain operation");
-                return;
-            }
             //int (1= clippingOutside, 2=clippingInside), use 1 to keep image inside of the geometry
             functionArguments.ClippingType = (type === "inside" ? 1 : 2);
-
-            var query = new Query();
-            //query.text = "%";
-            //query.where = "NAME = 'China'";
-            query.where = "FID >= 0";
-            query.returnGeometry = true;
-            var polygon;
-            // Query for the features
-            object.queryFeatures(query,
-                function (featureSet) {
-                    polygon = featureSet.features[0].geometry;
-                    for (var i = 1; i < featureSet.features.length; i++) {
-                        var rings = featureSet.features[i].geometry.rings;
-                        for (var r = 0; r < rings.length; r++) {
-                            polygon.addRing(rings[r]);
-                            //console.log("Feature " + i + " polygon ring " + r + " :" +  rings[r].length);
-                        }
-                    }
-                    functionArguments.ClippingGeometry = polygon;
-                    functionArguments.Raster = field.rasterFunction;
-                    rfClip.functionArguments = functionArguments;
-                    field.rasterFunction = rfClip;
-                    field.layer.setRenderingRule(field.rasterFunction);
-                    //console.log("render over!");
-                });
+            functionArguments.ClippingGeometry = geometry;
+            functionArguments.Raster = this.rasterFunction;
+            rfClip.functionArguments = functionArguments;
+            this.rasterFunction = rfClip;
+            this.layer.setRenderingRule(this.rasterFunction);
         },
 
         /**
