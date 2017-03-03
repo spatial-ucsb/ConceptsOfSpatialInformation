@@ -13,31 +13,20 @@ Contents
 Core concepts solutions
 -----------------------------------------
 
-Example 1: Night lights
+### Example 1: Night lights
 Lowe's question can be summarised as "What was the night time luminosity for the year 1994, near roads in mainland China,
 excluding gas flares, on a 0.1 degree grid?" The problem-solving process involves translating spatial questions into the
 core concepts of spatial information and operations applied to them.
-- Conceptualize luminosity as a **field**
-- state the field **domain**: "inside* 0.5 degrees from China roads, *outside* gas flares
+- Conceptualize luminosity as a **`field`**
+- state the field **domain**: *inside* 0.5 degrees from China roads, *outside* gas flares
 - state the field **granularity**: 0.1 degree
 
 Data involved in this example: (1)two global nocturnal luminosity maps (url_lights_F10, and url_lights_F12); (2) a map of roads
 in mainland China(url_china_roads); (3)a map of gas flares (url_china_flares).
 
-#### (1). Configure Dojo with dojoConfig
+#### (1) load input data
 ```
-<!-- Configure Dojo first -->
-<script>
-    dojoConfig = {
-        packages: [
-            {
-                name: "CoreConcepts",
-                //the location of the package; can either be a path relative to your server or an absolute path.
-                location: "/CoreConceptsJs"
-            }
-        ]
-    };
-</script>
+
 ```
 \* Keep in mind you must set the dojoConfig variable before loading ArcGIS JS API
 #### 2. Reference the ArcGIS API for JavaScript
