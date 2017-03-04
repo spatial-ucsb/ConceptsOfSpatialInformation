@@ -32,17 +32,17 @@ lights_F12 = new CcField(url_lights_F12);
 roads = new CcObject(url_china_roads);
 gas_flares = new CcObject(url_china_flares);
 ```
-#####(2)What is the luminosity for the year 1994, within 0.5 degrees from China roads, excluding gas flares?
+#####(2) What is the luminosity for the year 1994, within 0.5 degrees from China roads, excluding gas flares?
 ```
 average_luminosity = lights_F10.local(lights_F12, "average");
 roads.buffer(0.5, "degree").then(function(buffered_geometry){
-   average_luminosity.restrictDomain(buffered_geometry,"inside");
-});
+       average_luminosity.restrictDomain(buffered_geometry,"inside");
+   });
 gas_flares.getGeometry().then(function(flares_geometry）{
-   average_luminosity.restrictDomain(flares_geometry,"outside");
-});
+       average_luminosity.restrictDomain(flares_geometry,"outside");
+   });
 ```
-#####(3)What is the mean luminosity in a 0.1 by 0.1 degree area?
+#####(3) What is the mean luminosity in a 0.1 by 0.1 degree area?
 ```
 average_luminosity.coarsen(0.1, 0.1);
 ```
