@@ -13,7 +13,7 @@ Contents
 Core concepts solutions
 -----------------------------------------
 
-### Example 1: Night lights
+### Example 1: Night lights (TODO)
 #### Problem statement:
 Lowe's question can be summarised as "What was the night time luminosity for the year 1994, near roads in mainland China,
 excluding gas flares, on a 0.1 degree grid?"
@@ -52,4 +52,4 @@ average_luminosity.coarsen(0.1, 0.1);
 ```
 References
 ----------
-- Lowe, M. (2014). *Night lights and ArcGIS: A brief guide.* Avaliable online: http://economics. mit. edu/files/8945 (accessed on 3 March 2017).
+- Lowe, M. (2014). *Night lights and ArcGIS: A brief guide.* Avaliable online: http://economics.mit.edu/files/8945 (accessed on 3 March 2017).
