@@ -52,4 +52,4 @@ average_luminosity.coarsen(0.1, 0.1);
 ```
 References
 ----------
-- Lowe, M. (2014). *Night lights and ArcGis: A brief guide.* Avaliable online: http://economics. mit. edu/files/8945 (accessed on 3 March 2017).
+- Lowe, M. (2014). *Night lights and ArcGIS: A brief guide.* Avaliable online: http://economics. mit. edu/files/8945 (accessed on 3 March 2017).
