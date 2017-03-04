@@ -24,14 +24,15 @@ core concepts of spatial information and operations applied to them.
 - Conceptualize luminosity as a **`field`**
 - restrict the field **`domain`**: *inside* 0.5 degrees from China roads, *outside* gas flares
 - state the field **`granularity`**: 0.1 degree
-####(1) interpret luminosity data as fields; roads and gas flares as objects
+
+#####(1) interpret luminosity data as fields; roads and gas flares as objects
 ```
 lights_F10 = new CcField(url_lights_F10);
 lights_F12 = new CcField(url_lights_F12);
 roads = new CcObject(url_china_roads);
 gas_flares = new CcObject(url_china_flares);
 ```
-##(2)What is the luminosity for the year 1994, within 0.5 degrees from China roads, excluding gas flares?
+#####(2)What is the luminosity for the year 1994, within 0.5 degrees from China roads, excluding gas flares?
 ```
 average_luminosity = lights_F10.local(lights_F12, "average");
 roads.buffer(0.5, "degree").then(function(buffered_geometry){
