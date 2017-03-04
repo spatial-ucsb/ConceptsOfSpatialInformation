@@ -14,18 +14,21 @@ Core concepts solutions
 -----------------------------------------
 
 ### Example 1: Night lights
+#### Problem statement:
+Lowe's question can be summarised as "What was the night time luminosity for the year 1994, near roads in mainland China,
+excluding gas flares, on a 0.1 degree grid?"
+- Conceptualize luminosity as a **`field`**
+- restrict the field **`domain`**: *inside* 0.5 degrees from China roads, *outside* gas flares
+- state the field **`granularity`**: 0.1 degree
+
 #### Spatial data involved in this example:
 - two global night lights maps (url_lights_F10, and url_lights_F12);
 - a map of roads in mainland China(url_china_roads);
 - a map of gas flares (url_china_flares).
 
-Lowe's question can be summarised as "What was the night time luminosity for the year 1994, near roads in mainland China,
-excluding gas flares, on a 0.1 degree grid?" The problem-solving process involves translating spatial questions into the
+#### Problem solving:
+The problem-solving process involves translating spatial questions into the
 core concepts of spatial information and operations applied to them.
-- Conceptualize luminosity as a **`field`**
-- restrict the field **`domain`**: *inside* 0.5 degrees from China roads, *outside* gas flares
-- state the field **`granularity`**: 0.1 degree
-
 #####(1) Interpret luminosity data as fields; roads and gas flares as objects
 ```
 lights_F10 = new CcField(url_lights_F10);
