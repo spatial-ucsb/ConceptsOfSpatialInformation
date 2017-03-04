@@ -18,7 +18,7 @@ Lowe's question can be summarised as "What was the night time luminosity for the
 excluding gas flares, on a 0.1 degree grid?" The problem-solving process involves translating spatial questions into the
 core concepts of spatial information and operations applied to them.
 - Conceptualize luminosity as a **`field`**
-- state the field **domain**: *inside* 0.5 degrees from China roads, *outside* gas flares
+- state the field `**domain**`: *inside* 0.5 degrees from China roads, *outside* gas flares
 - state the field **granularity**: 0.1 degree
 
 Data involved in this example: (1)two global nocturnal luminosity maps (url_lights_F10, and url_lights_F12); (2) a map of roads
