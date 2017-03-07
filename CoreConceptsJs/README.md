@@ -9,8 +9,8 @@ See the [Readme](../README.md) in the parent directory for general information a
 
 Contents
 ----------------------
-- [`examples/ `](examples)`: Usage examples of implementations.
-- [`test/](test)`: Unit tests.
+- [`examples/ `](examples): Usage examples of implementations.
+- [`test/](test): Unit tests.
 - `CcField.js`: Implementations of fields.
 - `CcObject.js`: Implementations of objects.
 
