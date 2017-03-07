@@ -42,7 +42,7 @@ average_luminosity = lights_F10.local(lights_F12, "average");
 roads.buffer(0.5, "degree").then(function(buffered_geometry){
        average_luminosity.restrictDomain(buffered_geometry,"inside");
    });
-gas_flares.getGeometry().then(function(flares_geometry）{
+gas_flares.getGeometry().then(function(flares_geometry){
        average_luminosity.restrictDomain(flares_geometry,"outside");
    });
 ```
