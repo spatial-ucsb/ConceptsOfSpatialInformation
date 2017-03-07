@@ -67,7 +67,7 @@
                         map.removeAllLayers();
                         map.setBasemap("gray");
                         map.addLayer(lights_F10.layer);
-                        //lights_F10.local(lights_F12, "average");
+                        lights_F10.local(lights_F12, "average");
                         roads_buffer.then(function (buffered_geometry) {
                             lights_F10.restrictDomain(buffered_geometry[0], "inside");
                         });
@@ -146,7 +146,7 @@
             <label for="flares">Gas flares in mainland China</label>
             <br/>
             <hr/>
-            <p><b>Step 2: restrict the field domain</b></p>
+            <p><b>Step 2: Restrict the field domain</b></p>
             <label>Type:</label>
             <select id="type1" data-dojo-type="dijit/form/FilteringSelect" data-dojo-props='style:"width:80px;"'>
                 <option value="in" selected>inside</option>
