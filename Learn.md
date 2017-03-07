@@ -12,6 +12,12 @@ Haskell
 - [Full Haskell learning guide](https://github.com/bitemyapp/learnhaskell)
 - [*What I Wish I Knew When Learning Haskell*](http://dev.stephendiehl.com/hask/) (read: Quick start guide for experienced programmers)
 
+JavaScript
+==========
+- [JavaScript Tutorial](https://www.w3schools.com/js/)
+- [Dojo Toolkit](https://dojotoolkit.org/): A JavaScript toolkit.
+- [ArcGIS API for JavaScript](https://developers.arcgis.com/javascript/): A JavaScript library supporting Web mapping and geoprocessing tasks.
+
 Python
 ======
 - [Python learning guide for every skill level](http://www.learnpython.org/)
