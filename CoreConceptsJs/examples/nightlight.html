@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>nighttime lights in 1994</title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="css/ex1.css">
+
+    <!-- Configure Dojo first -->
+    <script>var dojoConfig = {
+        packages: [{
+            name: "CoreConcepts",
+            location: "/CoreConceptsJs" //The "location" is relative to your server path.
+        }]
+    };
+    </script>
+    <!--Load the ArcGIS API for JavaScript resources from CDN-->
+    <script src="https://js.arcgis.com/3.19/"></script>
+
+    <script>
+        var app;
+        require(["esri/map",
+                    "CoreConcepts/CcField",
+                    "CoreConcepts/CcObject",
+                    "dojo/dom",
+                    "dojo/on",
+                    "dojo/parser",
+                    "dijit/layout/BorderContainer",
+                    "dijit/layout/ContentPane",
+                    "dojo/domReady!"],
+                function (Map, CcField, CcObject, dom, on, parse) {
+                    parse.parse();
+                    var map = new Map("map", {
+                        basemap: "gray",
+                        center: [120, 35],
+                        logo: false,
+                        zoom: 4
+                    });
+
+                    //input data
+                    var url_lights_F10 = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/F101994_v4b_web_stable_lights_avg_vis/ImageServer";
+                    var url_lights_F12 = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/F121994_v4b_web_stable_lights_avg_vis/ImageServer";
+                    var url_china_roads = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/China_Roads/MapServer/0";
+                    var url_china_flares = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/gas_flares_China/MapServer/0";
+                    //Step 1. Interpret luminosity data as fields；roads and gas flares data as objects
+                    var lights_F10 = new CcField(url_lights_F10);
+                    var lights_F12 = new CcField(url_lights_F12);
+                    var roads = new CcObject(url_china_roads);
+                    var gas_flares = new CcObject(url_china_flares);
+                    var gas_flares_geo = gas_flares.getGeometry();
+                    var roads_buffer = roads.buffer(0.5, "degree");
+
+                    //display layer
+                    map.addLayer(lights_F10.layer);
+                    on(dom.byId("DMSPF10"), "click", changeLayer);
+                    on(dom.byId("DMSPF12"), "click", changeLayer);
+                    on(dom.byId("roads"), "click", changeLayer);
+                    on(dom.byId("flares"), "click", changeLayer);
+
+                    //Step 2. What is the luminosity for the year 1994,
+                    // within 0.5 degrees from China roads,
+                    // excluding gas flares?
+                    function executeField() {
+                        map.removeAllLayers();
+                        map.setBasemap("gray");
+                        map.addLayer(lights_F10.layer);
+                        //lights_F10.local(lights_F12, "average");
+                        roads_buffer.then(function (buffered_geometry) {
+                            lights_F10.restrictDomain(buffered_geometry[0], "inside");
+                        });
+                        gas_flares_geo.then(function (flares_geometry) {
+                            lights_F10.restrictDomain(flares_geometry, "outside");
+                        });
+                    }
+
+                    //Step 3. What is the mean luminosity in a 0.1 by 0.1 degree area?
+                    function executeGranularity() {
+                        var cellW = dom.byId("cellWidth").value;
+                        var cellH = dom.byId("cellHeight").value;
+                        lights_F10.coarsen(0.1, 0.1);
+                    }
+
+                    //change layer
+                    function changeLayer() {
+                        var f10Checked = dom.byId("DMSPF10").checked;
+                        var f12Checked = dom.byId("DMSPF12").checked;
+                        var roadsChecked = dom.byId("roads").checked;
+                        var flaresChecked = dom.byId("flares").checked;
+                        if (f10Checked) {
+                            map.removeAllLayers();
+                            map.setBasemap("gray");
+                            map.addLayer(lights_F10.layer);
+                        }
+                        if (f12Checked) {
+                            map.removeAllLayers();
+                            map.setBasemap("gray");
+                            map.addLayer(lights_F12.layer);
+                        }
+                        if (roadsChecked) {
+                            map.removeAllLayers();
+                            map.setBasemap("gray");
+                            map.addLayer(roads.layer);
+                        }
+                        if (flaresChecked) {
+                            map.removeAllLayers();
+                            map.setBasemap("gray");
+                            map.addLayer(gas_flares.layer);
+                        }
+                    }
+
+                    app = {
+                        executeField: executeField,
+                        executeGranularity: executeGranularity
+                    };
+                });
+    </script>
+</head>
+
+<body class="claro">
+<div data-dojo-type="dijit.layout.BorderContainer"
+     data-dojo-props="design:'headline',gutters:false"
+     style="width: 100%; height: 100%; margin: 0;">
+
+    <div id="map" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'center'">
+    </div>
+
+    <div data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'left'">
+        <h3>Global nighttime lights for 1994</h3>
+        <hr/>
+        <div>
+            <p><b>Step 1: Load input data</b></p>
+            <input type="radio" name="DMSP" id="DMSPF10"
+                   data-dojo-props='checked:true' checked>
+            <label for="DMSPF10">DMSP satellite number F10</label>
+            <br/>
+            <input type="radio" name="DMSP" id="DMSPF12">
+            <label for="DMSPF12">DMSP satellite number F12</label>
+            <br/>
+            <input type="radio" name="DMSP" id="roads">
+            <label for="roads">Roads in mainland China</label>
+            <br/>
+            <input type="radio" name="DMSP" id="flares">
+            <label for="flares">Gas flares in mainland China</label>
+            <br/>
+            <hr/>
+            <p><b>Step 2: restrict the field domain</b></p>
+            <label>Type:</label>
+            <select id="type1" data-dojo-type="dijit/form/FilteringSelect" data-dojo-props='style:"width:80px;"'>
+                <option value="in" selected>inside</option>
+                <option value="out">outside</option>
+            </select>
+            <br/><br/>
+            <button id="btnField" style="width:80px" onclick="app.executeField()">Confirm</button>
+            <br/>
+            <hr/>
+            <p><b>Step 3: Set the field granularity </b></p>
+            <label size="10">Cell Width : </label>
+            <input type="text" id="cellWidth" size="5" value="0.1"/><br/>
+            <label size="10">Cell Height:</label>
+            <input type="text" id="cellHeight" size="5" value="0.1"/><br/>
+            <br/>
+            <button id="btnGranularity" style="width:80px" onclick="app.executeGranularity()">Confirm</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
