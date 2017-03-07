@@ -9,10 +9,10 @@ See the [Readme](../README.md) in the parent directory for general information a
 
 Contents
 ----------------------
-
+- `examples`: Usage examples of implementations.
+- `test/`: Unit tests.
 - `CcField.js`: Implementations of fields.
 - `CcObject.js`: Implementations of objects.
-- `test/`: Unit tests.
 
 Use the API
 -----------------------------------------
@@ -26,6 +26,7 @@ Use the API
             {
                 name: "CoreConcepts",
                 //the location of the package; can either be a path relative to your server or an absolute path.
+                //Suppose the package path is "http://hostname/CoreConceptsJs/"
                 location: "/CoreConceptsJs"
             }
         ]
