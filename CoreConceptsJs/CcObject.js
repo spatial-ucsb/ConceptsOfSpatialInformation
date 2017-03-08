@@ -1,6 +1,6 @@
 /**
  * JavaScript implementation of the core concept 'object'
- * version: 0.2.1
+ * version: 0.2.2
  * (c) Liangcun Jiang
  * latest change: Feb 28, 2017.
  */
@@ -24,6 +24,7 @@ define(["dojo/_base/declare",
             }
             var featureLayer = new FeatureLayer(url);
             this.layer = featureLayer; //return featureLayer instead?
+            console.log("A CcObject instance was created.");
         },
 
         /**
@@ -180,6 +181,7 @@ define(["dojo/_base/declare",
                             console.log("Unifying two parts...");
                             //union function returns a "<Geometry> geometry" Object, then converts it to an Array[1]
                             return gs3.union(bufferedGeometries1.concat(bufferedGeometries2)).then(function (geoUnion) {
+                                console.log("buffer finished!");
                                 return [geoUnion];
                             });
                         });
