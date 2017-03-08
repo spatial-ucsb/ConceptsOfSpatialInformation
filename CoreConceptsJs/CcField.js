@@ -1,8 +1,8 @@
 /**
  * JavaScript implementation of the core concept 'field'
- * version: 0.2.0
+ * version: 0.3.0
  * (c) Liangcun Jiang
- * latest change: Feb 28, 2017.
+ * latest change: March 8, 2017.
  */
 define([
     "dojo/_base/declare",
@@ -26,7 +26,7 @@ define([
          */
         constructor: function (url) {
             if (url === null || url === "" || url === undefined) {
-                alert("Please enter a valid URL for the field data");
+                console.error("Please enter a valid URL for the field data");
                 return;
             }
             var rf = new RasterFunction();
@@ -49,7 +49,7 @@ define([
             this.layer = imageLayer;
             this.rasterFunction = rf;
             this.domain = {"inside": [], "outside": []};
-            console.log("A new Field is instantiated");
+            console.log("A CcField instance was created.");
         },
 
         getDomain: function () {
@@ -78,7 +78,8 @@ define([
             functionArguments.Raster = this.rasterFunction;
             rfClip.functionArguments = functionArguments;
             this.rasterFunction = rfClip;
-            this.layer.setRenderingRule(this.rasterFunction);
+            //this.layer.setRenderingRule(this.rasterFunction);
+            console.log("restrictDomain operation was invoked!");
         },
 
         /**
@@ -93,7 +94,7 @@ define([
             //http://resources.arcgis.com/en/help/arcobjects-net/componenthelp/index.html#//004000000149000000
             //Defines valid local operations here
             var ops = {
-                "average": 1, //For the "average" operation: uses "Plus" first and uses "Divide" later
+                "average": 68,
                 "plus": 1,
                 "minus": 2,
                 "max": 67,
@@ -101,7 +102,7 @@ define([
             };
 
             if (!(operation in ops)) {
-                alert("The operation argument for local function is not valid!");
+                console.error("The operation argument for local function is not valid!");
                 return;
             }
 
@@ -119,20 +120,9 @@ define([
             }
             rfLocal.functionArguments = functionArguments;
 
-            //For the "average" operation, divide the previous result by 2
-            if (operation === "average") {
-                var rfLocal2 = new RasterFunction();
-                rfLocal2.functionName = "Local";
-                rfLocal2.variableName = "Rasters";
-                rfLocal2.functionArguments = {
-                    "Operation": 23, //23 = Divide
-                    "Rasters": [rfLocal, 2]
-                };
-                rfLocal = rfLocal2;
-            }
-
             this.rasterFunction = rfLocal;
-            this.layer.setRenderingRule(rfLocal);
+            //this.layer.setRenderingRule(rfLocal);
+            console.log("local operation was invoked!");
         },
 
         /**
@@ -151,7 +141,7 @@ define([
                 "KernelRows": kernelRows
             };
             this.rasterFunction = rfFocal;
-            this.layer.setRenderingRule(rfFocal);
+            //this.layer.setRenderingRule(rfFocal);
         },
 
         /**
@@ -172,7 +162,16 @@ define([
             functionArguments.Raster = this.rasterFunction;
             rfResample.functionArguments = functionArguments;
             this.rasterFunction = rfResample;
-            this.layer.setRenderingRule(rfResample);
+            //this.layer.setRenderingRule(rfResample);
+            console.log("coarsen operation was invoked!");
+        },
+
+        /**
+         * refreshes the field according to its current render rule.
+         */
+        show: function () {
+            this.layer.setRenderingRule(this.rasterFunction);
+            console.log("CcField was refreshed.");
         }
     });
 });
