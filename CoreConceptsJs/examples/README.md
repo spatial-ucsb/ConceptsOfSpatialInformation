@@ -15,38 +15,47 @@ Core concepts solutions
 
 ### Example 1: Night lights (TODO)
 #### Problem statement:
-Lowe's question can be summarised as "What was the night time luminosity for the year 1994, near roads in mainland China,
-excluding gas flares, on a 0.1 degree grid?"
+Lowe's question can be summarised as "What was the night time luminosity for the year 1994, in Mainland China,
+excluding gas flares, within 0.5 degrees from roads, on a 0.1 degree grid?"
 - Conceptualize luminosity as a **`field`**
-- restrict the field **`domain`**: *inside* 0.5 degrees from China roads, *outside* gas flares
+- restrict the field **`domain`**: *inside Mainland China*, *inside* 0.5 degrees buffer around roads, *outside* gas flares
 - state the field **`granularity`**: 0.1 degree
 
 #### Spatial data involved in this example:
 - two global night lights maps (url_lights_F10, and url_lights_F12);
-- a map of roads in mainland China(url_china_roads);
+- a boundary map of Mainland China (url_china)
+- a map of roads in mainland China (url_china_roads);
 - a map of gas flares (url_china_flares).
 
 #### Problem solving:
 The problem-solving process involves translating spatial questions into the
 core concepts of spatial information and operations applied to them.
-#####(1) Interpret luminosity data as fields; roads and gas flares as objects
+#####(1) Interpret luminosity data as fields; boundary, roads and gas flares as objects
 ```
 lights_F10 = new CcField(url_lights_F10);
 lights_F12 = new CcField(url_lights_F12);
+boundary = new CcObject(url_china);
 roads = new CcObject(url_china_roads);
 gas_flares = new CcObject(url_china_flares);
 ```
-#####(2) What is the luminosity for the year 1994, within 0.5 degrees from China roads, excluding gas flares?
+#####(2) What is the mean luminosity for the year 1994?
 ```
 average_luminosity = lights_F10.local(lights_F12, "average");
-roads.buffer(0.5, "degree").then(function(buffered_geometry){
-       average_luminosity.restrictDomain(buffered_geometry,"inside");
+```
+
+#####(3) What is the mean luminosity for the year 1994?, in Mainland China, excluding gas flares, within 0.5 degrees from roads?
+```
+boundary.getGeometry().then(function(boundary_geometry){
+       average_luminosity.restrictDomain(boundary_geometry,"inside");
    });
 gas_flares.getGeometry().then(function(flares_geometry){
        average_luminosity.restrictDomain(flares_geometry,"outside");
    });
+roads.buffer(0.5, "degree").then(function(buffered_geometry){
+       average_luminosity.restrictDomain(buffered_geometry,"inside");
+   });
 ```
-#####(3) What is the mean luminosity in a 0.1 by 0.1 degree area?
+#####(4) What is the mean luminosity in a 0.1 by 0.1 degree area?
 ```
 average_luminosity.coarsen(0.1, 0.1);
 ```
