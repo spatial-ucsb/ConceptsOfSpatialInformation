@@ -23,6 +23,7 @@
     <script>
         var app;
         require(["esri/map",
+                    "esri/domUtils",
                     "CoreConcepts/CcField",
                     "CoreConcepts/CcObject",
                     "dojo/dom",
@@ -31,7 +32,7 @@
                     "dijit/layout/BorderContainer",
                     "dijit/layout/ContentPane",
                     "dojo/domReady!"],
-                function (Map, CcField, CcObject, dom, on, parse) {
+                function (Map, domUtils, CcField, CcObject, dom, on, parse) {
                     parse.parse();
                     var map = new Map("map", {
                         basemap: "gray",
@@ -50,8 +51,6 @@
                     var lights_F12 = new CcField(url_lights_F12);
                     var roads = new CcObject(url_china_roads);
                     var gas_flares = new CcObject(url_china_flares);
-                    var gas_flares_geo = gas_flares.getGeometry();
-                    var roads_buffer = roads.buffer(0.5, "degree");
 
                     //display layer
                     map.addLayer(lights_F10.layer);
@@ -60,19 +59,32 @@
                     on(dom.byId("roads"), "click", changeLayer);
                     on(dom.byId("flares"), "click", changeLayer);
 
-                    //Step 2. What is the luminosity for the year 1994,
-                    // within 0.5 degrees from China roads,
-                    // excluding gas flares?
-                    function executeField() {
+                    //cache object geometry and do buffer in advance
+                    var gas_flares_geo = gas_flares.getGeometry();
+                    var roads_buffer = roads.buffer(0.5, "degree");
+
+                    //Step 1. What is the mean luminosity for the year 1994?
+                    function executeAverage() {
                         map.removeAllLayers();
                         map.setBasemap("gray");
                         map.addLayer(lights_F10.layer);
                         lights_F10.local(lights_F12, "average");
+                    }
+
+                    //Step 2. What is the mean luminosity for the year 1994,
+                    // within 0.5 degrees from China roads,
+                    // excluding gas flares?
+                    function executeField() {
+                        domUtils.show(dom.byId("status"));
+                        dom.byId("status").innerHTML = "Executing...";
+                        var clipType1 = dom.byId("type1").value;
+                        var clipType2 = dom.byId("type2").value;
                         roads_buffer.then(function (buffered_geometry) {
-                            lights_F10.restrictDomain(buffered_geometry[0], "inside");
+                            lights_F10.restrictDomain(buffered_geometry[0], clipType1);
+                            domUtils.hide(dom.byId("status"));
                         });
                         gas_flares_geo.then(function (flares_geometry) {
-                            lights_F10.restrictDomain(flares_geometry, "outside");
+                            lights_F10.restrictDomain(flares_geometry, clipType2);
                         });
                     }
 
@@ -112,6 +124,7 @@
                     }
 
                     app = {
+                        executeAverage: executeAverage,
                         executeField: executeField,
                         executeGranularity: executeGranularity
                     };
@@ -125,13 +138,14 @@
      style="width: 100%; height: 100%; margin: 0;">
 
     <div id="map" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'center'">
+        <span id="status" style='position:absolute;bottom:5px;'></span>
     </div>
 
     <div data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'left'">
         <h3>Global nighttime lights for 1994</h3>
         <hr/>
         <div>
-            <p><b>Step 1: Load input data</b></p>
+            <p><b>Input data</b></p>
             <input type="radio" name="DMSP" id="DMSPF10"
                    data-dojo-props='checked:true' checked>
             <label for="DMSPF10">DMSP satellite number F10</label>
@@ -140,27 +154,59 @@
             <label for="DMSPF12">DMSP satellite number F12</label>
             <br/>
             <input type="radio" name="DMSP" id="roads">
-            <label for="roads">Roads in mainland China</label>
+            <label for="roads">Roads in Mainland China</label>
             <br/>
             <input type="radio" name="DMSP" id="flares">
-            <label for="flares">Gas flares in mainland China</label>
+            <label for="flares">Gas flares in Mainland China</label>
             <br/>
             <hr/>
+        </div>
+        <div>
+            <p><b>Step 1: Average two fields</b></p>
+            <button id="btnAve" style="width:80px" onclick="app.executeAverage()">Confirm</button>
+            <hr/>
+        </div>
+        <div>
             <p><b>Step 2: Restrict the field domain</b></p>
-            <label>Type:</label>
-            <select id="type1" data-dojo-type="dijit/form/FilteringSelect" data-dojo-props='style:"width:80px;"'>
-                <option value="in" selected>inside</option>
-                <option value="out">outside</option>
-            </select>
-            <br/><br/>
+            <table>
+                <tr>
+                    <td><label>Domain: Roads Buffer</label></td>
+                    <td>
+                        <select id="type1" data-dojo-type="dijit/form/FilteringSelect"
+                                data-dojo-props='style:"width:80px;"'>
+                            <option value="inside" selected>inside</option>
+                            <option value="outside">outside</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Domain: Gas Flares</label></td>
+                    <td>
+                        <select id="type2" data-dojo-type="dijit/form/FilteringSelect"
+                                data-dojo-props='style:"width:80px;"'>
+                            <option value="inside">inside</option>
+                            <option value="outside" selected>outside</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <br/>
             <button id="btnField" style="width:80px" onclick="app.executeField()">Confirm</button>
             <br/>
             <hr/>
+        </div>
+        <div>
             <p><b>Step 3: Set the field granularity </b></p>
-            <label size="10">Cell Width : </label>
-            <input type="text" id="cellWidth" size="5" value="0.1"/><br/>
-            <label size="10">Cell Height:</label>
-            <input type="text" id="cellHeight" size="5" value="0.1"/><br/>
+            <table>
+                <tr>
+                    <td><label size="10">Cell Width: </label></td>
+                    <td><input type="text" id="cellWidth" size="5" value="0.1"/><br/></td>
+                </tr>
+                <tr>
+                    <td><label size="10">Cell Height:</label></td>
+                    <td><input type="text" id="cellHeight" size="5" value="0.1"/></td>
+                </tr>
+            </table>
             <br/>
             <button id="btnGranularity" style="width:80px" onclick="app.executeGranularity()">Confirm</button>
         </div>
