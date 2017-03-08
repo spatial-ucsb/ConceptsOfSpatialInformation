@@ -43,14 +43,17 @@ gas_flares = new CcObject(url_china_flares);
 average_luminosity = lights_F10.local(lights_F12, "average");
 ```
 
-#####(3) What is the mean luminosity for the year 1994?, in Mainland China, excluding gas flares, within 0.5 degrees from roads?
+#####(3) What is the mean luminosity for the year 1994, in Mainland China, excluding gas flares, within 0.5 degrees from roads?
 ```
+//in Mainland China
 boundary.getGeometry().then(function(boundary_geometry){
        average_luminosity.restrictDomain(boundary_geometry,"inside");
    });
+//excluding gas flares
 gas_flares.getGeometry().then(function(flares_geometry){
        average_luminosity.restrictDomain(flares_geometry,"outside");
    });
+//within 0.5 degrees from roads
 roads.buffer(0.5, "degree").then(function(buffered_geometry){
        average_luminosity.restrictDomain(buffered_geometry,"inside");
    });
