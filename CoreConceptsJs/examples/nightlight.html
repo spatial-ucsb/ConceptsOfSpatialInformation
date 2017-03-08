@@ -44,11 +44,13 @@
                     //input data
                     var url_lights_F10 = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/F101994_v4b_web_stable_lights_avg_vis/ImageServer";
                     var url_lights_F12 = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/F121994_v4b_web_stable_lights_avg_vis/ImageServer";
+                    var url_china = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/china/MapServer/0";
                     var url_china_roads = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/China_Roads/MapServer/0";
                     var url_china_flares = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/gas_flares_China/MapServer/0";
                     //Step 1. Interpret luminosity data as fields；roads and gas flares data as objects
                     var lights_F10 = new CcField(url_lights_F10);
                     var lights_F12 = new CcField(url_lights_F12);
+                    var boundary = new CcObject(url_china);
                     var roads = new CcObject(url_china_roads);
                     var gas_flares = new CcObject(url_china_flares);
 
@@ -56,15 +58,18 @@
                     map.addLayer(lights_F10.layer);
                     on(dom.byId("DMSPF10"), "click", changeLayer);
                     on(dom.byId("DMSPF12"), "click", changeLayer);
+                    on(dom.byId("boundary"), "click", changeLayer);
                     on(dom.byId("roads"), "click", changeLayer);
                     on(dom.byId("flares"), "click", changeLayer);
 
-                    //cache object geometry and do buffer in advance
-                    var gas_flares_geo = gas_flares.getGeometry();
+                    //cache objects geometries and do buffer in advance
                     var roads_buffer = roads.buffer(0.5, "degree");
+                    var boundary_geo = boundary.getGeometry();
+                    var gas_flares_geo = gas_flares.getGeometry();
 
                     //Step 1. What is the mean luminosity for the year 1994?
                     function executeAverage() {
+                        console.log("Execute local operation");
                         map.removeAllLayers();
                         map.setBasemap("gray");
                         map.addLayer(lights_F10.layer);
@@ -72,33 +77,63 @@
                     }
 
                     //Step 2. What is the mean luminosity for the year 1994,
-                    // within 0.5 degrees from China roads,
-                    // excluding gas flares?
-                    function executeField() {
-                        domUtils.show(dom.byId("status"));
-                        dom.byId("status").innerHTML = "Executing...";
+                    // in Mainland China,
+                    // excluding gas flares,
+                    // within 0.5 degrees from roads?
+                    function executeDomain() {
+                        console.log("Execute restrictDomain operation");
                         var clipType1 = dom.byId("type1").value;
                         var clipType2 = dom.byId("type2").value;
-                        roads_buffer.then(function (buffered_geometry) {
-                            lights_F10.restrictDomain(buffered_geometry[0], clipType1);
-                            domUtils.hide(dom.byId("status"));
-                        });
-                        gas_flares_geo.then(function (flares_geometry) {
-                            lights_F10.restrictDomain(flares_geometry, clipType2);
-                        });
+                        var clipType3 = dom.byId("type3").value;
+                        if (dom.byId("ckDomain3").checked) {
+                            domUtils.show(dom.byId("status"));
+                            dom.byId("status").innerHTML = "Restricting road buffer domain...";
+                            roads_buffer.then(function (buffered_geometry) {
+                                lights_F10.restrictDomain(buffered_geometry[0], clipType3);
+                                domUtils.hide(dom.byId("status"));
+                            });
+                        }
+                        if (dom.byId("ckDomain1").checked) {
+                            domUtils.show(dom.byId("status"));
+                            dom.byId("status").innerHTML = "Restricting boundary domain...";
+                            boundary_geo.then(function (boundary_geometry) {
+                                lights_F10.restrictDomain(boundary_geometry, clipType1);
+                                domUtils.hide(dom.byId("status"));
+                            });
+                        }
+                        if (dom.byId("ckDomain2").checked) {
+                            gas_flares_geo.then(function (flares_geometry) {
+                                lights_F10.restrictDomain(flares_geometry, clipType2);
+                            });
+                        }
                     }
 
                     //Step 3. What is the mean luminosity in a 0.1 by 0.1 degree area?
                     function executeGranularity() {
+                        console.log("Execute coarsen operation");
                         var cellW = dom.byId("cellWidth").value;
                         var cellH = dom.byId("cellHeight").value;
                         lights_F10.coarsen(0.1, 0.1);
+                    }
+
+                    //reload the image
+                    function executeReset() {
+                        map.removeAllLayers();
+                        map.setBasemap("gray");
+                        lights_F10 = new CcField(url_lights_F10);
+                        map.addLayer(lights_F10.layer);
+                    }
+
+                    //display result
+                    function executeShow() {
+                        lights_F10.show();
                     }
 
                     //change layer
                     function changeLayer() {
                         var f10Checked = dom.byId("DMSPF10").checked;
                         var f12Checked = dom.byId("DMSPF12").checked;
+                        var boundaryChecked = dom.byId("boundary").checked;
                         var roadsChecked = dom.byId("roads").checked;
                         var flaresChecked = dom.byId("flares").checked;
                         if (f10Checked) {
@@ -111,22 +146,29 @@
                             map.setBasemap("gray");
                             map.addLayer(lights_F12.layer);
                         }
-                        if (roadsChecked) {
+                        if (boundaryChecked) {
                             map.removeAllLayers();
                             map.setBasemap("gray");
-                            map.addLayer(roads.layer);
+                            map.addLayer(boundary.layer);
                         }
                         if (flaresChecked) {
                             map.removeAllLayers();
                             map.setBasemap("gray");
                             map.addLayer(gas_flares.layer);
                         }
+                        if (roadsChecked) {
+                            map.removeAllLayers();
+                            map.setBasemap("gray");
+                            map.addLayer(roads.layer);
+                        }
                     }
 
                     app = {
                         executeAverage: executeAverage,
-                        executeField: executeField,
-                        executeGranularity: executeGranularity
+                        executeDomain: executeDomain,
+                        executeGranularity: executeGranularity,
+                        executeReset: executeReset,
+                        executeShow: executeShow
                     };
                 });
     </script>
@@ -153,11 +195,14 @@
             <input type="radio" name="DMSP" id="DMSPF12">
             <label for="DMSPF12">DMSP satellite number F12</label>
             <br/>
-            <input type="radio" name="DMSP" id="roads">
-            <label for="roads">Roads in Mainland China</label>
+            <input type="radio" name="DMSP" id="boundary">
+            <label for="boundary">Boundary of Mainland China</label>
             <br/>
             <input type="radio" name="DMSP" id="flares">
             <label for="flares">Gas flares in Mainland China</label>
+            <br/>
+            <input type="radio" name="DMSP" id="roads">
+            <label for="roads">Roads in Mainland China</label>
             <br/>
             <hr/>
         </div>
@@ -170,7 +215,10 @@
             <p><b>Step 2: Restrict the field domain</b></p>
             <table>
                 <tr>
-                    <td><label>Domain: Roads Buffer</label></td>
+                    <td>
+                        <input id="ckDomain1" data-dojo-type="dijit/form/CheckBox">
+                        <label>Domain: Boundary</label>
+                    </td>
                     <td>
                         <select id="type1" data-dojo-type="dijit/form/FilteringSelect"
                                 data-dojo-props='style:"width:80px;"'>
@@ -180,7 +228,10 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><label>Domain: Gas Flares</label></td>
+                    <td>
+                        <input id="ckDomain2" data-dojo-type="dijit/form/CheckBox">
+                        <label>Domain: Gas Flares</label>
+                    </td>
                     <td>
                         <select id="type2" data-dojo-type="dijit/form/FilteringSelect"
                                 data-dojo-props='style:"width:80px;"'>
@@ -189,9 +240,22 @@
                         </select>
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        <input id="ckDomain3" data-dojo-type="dijit/form/CheckBox">
+                        <label>Domain: Roads Buffer</label>
+                    </td>
+                    <td>
+                        <select id="type3" data-dojo-type="dijit/form/FilteringSelect"
+                                data-dojo-props='style:"width:80px;"'>
+                            <option value="inside" selected>inside</option>
+                            <option value="outside">outside</option>
+                        </select>
+                    </td>
+                </tr>
             </table>
             <br/>
-            <button id="btnField" style="width:80px" onclick="app.executeField()">Confirm</button>
+            <button id="btnDomain" style="width:80px" onclick="app.executeDomain()">Confirm</button>
             <br/>
             <hr/>
         </div>
@@ -209,6 +273,17 @@
             </table>
             <br/>
             <button id="btnGranularity" style="width:80px" onclick="app.executeGranularity()">Confirm</button>
+            <br/><br/>
+            <table>
+                <tr>
+                    <td>
+                        <button id="btnRest" style="width:80px" onclick="app.executeReset()">Reset image</button>
+                    </td>
+                    <td>
+                        <button id="btnShow" style="width:80px" onclick="app.executeShow()">Display result</button>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 </div>
