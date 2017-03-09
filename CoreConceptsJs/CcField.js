@@ -39,7 +39,8 @@ define([
                 "MinPercent": 0.5,
                 "MaxPercent": 0.5,
                 "UseGamma": true,
-                "Gamma": [3.81464485861804, 3.81464485861804, 3.81464485861804],
+                "ComputeGamma": true,
+                //"Gamma": [3.81464485861804, 3.81464485861804, 3.81464485861804],
                 "DRA": true
             };
             var params = new ImageServiceParameters();
@@ -63,7 +64,7 @@ define([
          */
         restrictDomain: function (geometry, type) {
             if (type !== "inside" && type !== "outside") {
-                console.error("invalid type parameter for restrictDomain function");
+                console.error("Invalid or missing input parameters for restrictDomain function");
                 return;
             }
             (type === "inside") ? this.domain.inside.push(geometry) : this.domain.outside.push(geometry);
@@ -102,7 +103,7 @@ define([
             };
 
             if (!(operation in ops)) {
-                console.error("The operation argument for local function is not valid!");
+                console.error("Invalid or missing input parameters for local function.");
                 return;
             }
 
