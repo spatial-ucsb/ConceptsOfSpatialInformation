@@ -30,7 +30,7 @@ excluding gas flares, within 0.5 degrees from roads, on a 0.1 degree grid?"
 #### Problem solving:
 The problem-solving process involves translating spatial questions into the
 core concepts of spatial information and operations applied to them.
-#### - Solution A：
+#### --- Solution A：
 
 #####(1) Interpret luminosity data as fields; boundary, roads and gas flares as objects
 ```
@@ -64,7 +64,7 @@ roads.buffer(0.5, "degree").then(function(buffered_geometry){
 ```
 average_luminosity.coarsen(0.1, 0.1);
 ```
-#### - Solution B: (WIP)
+#### --- Solution B: (WIP)
 
 We could even take it a step further and treat Lowe's question as creating a **field** with a specific **domain**
 at a specific **granularity**.
