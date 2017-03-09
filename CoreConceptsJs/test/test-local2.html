@@ -71,8 +71,14 @@
                     }
 
                     function executeLocal() {
+                        var scalar = dom.byId("scalar").value;
+                        var input = dom.byId("input").value;
                         var op = dijit.byId("operation").get("displayedValue");
-                        lights_F10.local(lights_F12, op);
+                        if (input === "Scalar") {
+                            lights_F10.local(scalar, op);
+                        } else {//input is "F12"
+                            lights_F10.local(lights_F12, op);
+                        }
 
                         var remapRF = new RasterFunction();
                         remapRF.functionName = "Remap";
@@ -130,14 +136,37 @@
                 <input type="radio" name="DMSP" id="DMSPF12">
                 <label for="DMSPF12">DMSP satellite number F12</label>
             </div>
-            <br/><label>Operation:</label>
-            <select id="operation" data-dojo-type="dijit/form/FilteringSelect" data-dojo-props='style:"width:80px;"'>
-                <option value="plus" selected>plus</option>
-                <option value="minus">minus</option>
-                <option value="average">average</option>
-                <option value="max">max</option>
-                <option value="min">min</option>
-            </select>
+            <table>
+                <tr>
+                    <td><p>Scalar:</p></td>
+                    <td><input type="text" id="scalar" value=100 size="8"></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td><label>Local:</label></td>
+                    <td>
+                        <select id="input" data-dojo-type="dijit/form/FilteringSelect"
+                                data-dojo-props='style:"width:80px;"'>
+                            <option value="raster" selected>F12</option>
+                            <option value="scalar">Scalar</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Operation:</label></td>
+                    <td>
+                        <select id="operation" data-dojo-type="dijit/form/FilteringSelect"
+                                data-dojo-props='style:"width:80px;"'>
+                            <option value="plus" selected>plus</option>
+                            <option value="minus">minus</option>
+                            <option value="average">average</option>
+                            <option value="max">max</option>
+                            <option value="min">min</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
             <hr/>
             <table>
                 <tr>
