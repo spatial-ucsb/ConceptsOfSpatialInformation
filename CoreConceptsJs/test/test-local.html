@@ -79,6 +79,26 @@
                         } else {//input is "F12"
                             lights_F10.local(lights_F12, op);
                         }
+                        lights_F10.layer.setRenderingRule(lights_F10.rasterFunction);
+                        console.log("local is done!");
+                    }
+
+                    function executeReset() {
+                        map.removeAllLayers();
+                        lights_F10 = new CcField(url_lights_F10);
+                        map.addLayer(lights_F10.layer);
+                    }
+
+                    function executeColor() {
+                        var scalar = dom.byId("scalar").value;
+                        var input = dom.byId("input").value;
+                        var op = dijit.byId("operation").get("displayedValue");
+                        if (input === "Scalar") {
+                            lights_F10.local(scalar, op);
+                        } else {//input is "F12"
+                            lights_F10.local(lights_F12, op);
+                        }
+                        lights_F10.layer.setRenderingRule(lights_F10.rasterFunction);
 
                         var remapRF = new RasterFunction();
                         remapRF.functionName = "Remap";
@@ -100,18 +120,13 @@
                             Raster: remapRF  // Apply Colormap to output raster from the remap rasterFunction
                         };
                         lights_F10.layer.setRenderingRule(colorRF);
-                        console.log("local over!");
-                    }
-
-                    function executeReset() {
-                        map.removeAllLayers();
-                        lights_F10 = new CcField(url_lights_F10);
-                        map.addLayer(lights_F10.layer);
+                        console.log("Local, remap, and color map are done.");
                     }
 
                     app = {
                         executeLocal: executeLocal,
-                        executeReset: executeReset
+                        executeReset: executeReset,
+                        executeColor: executeColor
                     };
                 });
     </script>
@@ -178,6 +193,8 @@
                     </td>
                 </tr>
             </table>
+            <br/>
+            <button id="btnColor" style="width:80px" onclick="app.executeColor()">Local + Remap + ColorMap</button>
             <br/><br/>
             <!--<button  id="btnLocal" style="width:80px" onclick="app.executeLocal();">Local</button><br/><br/>-->
             <p>Original value: 0 - 63</p>
