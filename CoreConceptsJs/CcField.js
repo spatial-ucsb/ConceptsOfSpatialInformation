@@ -1,6 +1,6 @@
 /**
  * JavaScript implementation of the core concept 'field'
- * version: 0.3.0
+ * version: 0.3.1
  * (c) Liangcun Jiang
  * latest change: March 8, 2017.
  */
@@ -34,15 +34,23 @@ define([
             //StretchType: 0 = None, 3 = StandardDeviation, 4 = Histogram Equalization,
             // 5 = MinMax, 6 = PercentClip, 9 = Sigmoid
             rf.functionArguments = {
-                //"StretchType": 0
-                "StretchType": 6, //6 = PercentClip
-                "MinPercent": 0.5,
-                "MaxPercent": 0.5,
+                "StretchType": 9, //9 = Sigmoid
                 "UseGamma": true,
                 "ComputeGamma": true,
-                //"Gamma": [3.81464485861804, 3.81464485861804, 3.81464485861804],
                 "DRA": true
             };
+            //rf.functionArguments = {
+            //    "StretchType": 0
+            //};
+            //rf.functionArguments = {
+            //    "StretchType": 6, //6 = PercentClip
+            //    "MinPercent": 0.5,
+            //    "MaxPercent": 0.5,
+            //    "UseGamma": true,
+            //    "ComputeGamma": true,
+            //    //"Gamma": [3.81464485861804, 3.81464485861804, 3.81464485861804],
+            //    "DRA": true
+            //};
             var params = new ImageServiceParameters();
             params.renderingRule = rf;
 
