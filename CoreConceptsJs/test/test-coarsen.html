@@ -11,8 +11,6 @@
 
     <!-- Configure Dojo first -->
     <script>var dojoConfig = {
-        parseOnLoad: true,
-        async: true,
         packages: [{
             name: "CoreConceptsJs",
             location: "/CoreConceptsJs" //The "location" is relative to your server path.
@@ -25,18 +23,12 @@
     <script>
         var app;
         require(["esri/map",
-                    "esri/tasks/query",
-                    "esri/layers/RasterFunction",
-                    "esri/layers/FeatureLayer",
                     "CoreConceptsJs/CcField",
                     "dojo/dom",
                     "dojo/parser",
                     "dijit/layout/BorderContainer",
                     "dijit/layout/ContentPane"],
                 function (Map,
-                          Query,
-                          RasterFunction,
-                          FeatureLayer,
                           Field,
                           dom,
                           parser) {
@@ -55,7 +47,7 @@
                         var cWidth = dom.byId("inputWidth").value;
                         var cHeight = dom.byId("inputHeight").value;
                         field1.coarsen(cWidth, cHeight);
-                        //field1.layer.setRenderingRule(field1.rasterFunction);
+                        field1.layer.setRenderingRule(field1.rasterFunction);
                     }
 
                     app = {

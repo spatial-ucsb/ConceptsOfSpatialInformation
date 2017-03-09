@@ -56,6 +56,7 @@
                         var clipType1 = dijit.byId("type1").get("displayedValue");
                         chinaBoundary.getGeometry().then(function (geom) {
                             field1.restrictDomain(geom, clipType1);
+                            field1.layer.setRenderingRule(field1.rasterFunction);
                         });
                     }
 
@@ -66,6 +67,7 @@
                         var clipType2 = dijit.byId("type2").get("displayedValue");
                         gasFlares.getGeometry().then(function (geom) {
                             field1.restrictDomain(geom, clipType2);
+                            field1.layer.setRenderingRule(field1.rasterFunction);
                         });
                     }
 
