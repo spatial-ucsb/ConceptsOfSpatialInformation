@@ -99,7 +99,9 @@ define(["dojo/_base/declare",
                         break;
                     default:
                         console.log("This FeatureSet does not contain geometry");
+                        return;
                 }
+                console.log("geometry returned");
                 return geometry;
             });
         },
