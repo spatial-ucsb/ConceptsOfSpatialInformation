@@ -20,3 +20,4 @@ The following editors and integrated development environments have been used:
 - [PyCharm](https://www.jetbrains.com/pycharm/) [*Python IDE (recommended)*]
 - [Smultron](https://www.peterborgapps.com/smultron/) [*OSX Text editor*]
 - [Apatana](http://www.aptana.com/) [*Python IDE*]
+- [IntelliJ IDEA](https://www.jetbrains.com/idea/)

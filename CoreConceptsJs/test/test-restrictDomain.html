@@ -24,9 +24,6 @@
     <script>
         var app;
         require(["esri/map",
-                    "esri/tasks/query",
-                    "esri/layers/RasterFunction",
-                    "esri/layers/FeatureLayer",
                     "CoreConcepts/CcField",
                     "CoreConcepts/CcObject",
                     "dojo/dom",
@@ -36,9 +33,6 @@
                     "dijit/layout/BorderContainer",
                     "dijit/layout/ContentPane"],
                 function (Map,
-                          Query,
-                          RasterFunction,
-                          FeatureLayer,
                           CcField,
                           CcObject,
                           dom,
@@ -62,6 +56,7 @@
                         var clipType1 = dijit.byId("type1").get("displayedValue");
                         chinaBoundary.getGeometry().then(function (geom) {
                             field1.restrictDomain(geom, clipType1);
+                            field1.layer.setRenderingRule(field1.rasterFunction);
                         });
                     }
 
@@ -72,6 +67,7 @@
                         var clipType2 = dijit.byId("type2").get("displayedValue");
                         gasFlares.getGeometry().then(function (geom) {
                             field1.restrictDomain(geom, clipType2);
+                            field1.layer.setRenderingRule(field1.rasterFunction);
                         });
                     }
 
@@ -96,7 +92,7 @@
             <b>Domain1 -- China mainland</b><br/>
             <input type="text" id="urlChina" size="20"
                    value="https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/china/MapServer/0"/><br/>
-            <br><label>Type:</label>
+            <br/><label>Type:</label>
             <select id="type1" data-dojo-type="dijit/form/FilteringSelect" data-dojo-props='style:"width:80px;"'>
                 <option value="in" selected>inside</option>
                 <option value="out">outside</option>
@@ -107,7 +103,7 @@
             <b>Domain2 -- Gas flaring</b><br/>
             <input type="text" id="urlGas" size="20"
                    value="https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/gas_flares_China/MapServer/0"/><br/>
-            <br><label>Type:</label>
+            <br/><label>Type:</label>
             <select id="type2" data-dojo-type="dijit/form/FilteringSelect" data-dojo-props='style:"width:80px;"'>
                 <option value="in">inside</option>
                 <option value="out" selected>outside</option>

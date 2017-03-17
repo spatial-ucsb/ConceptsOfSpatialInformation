@@ -1,23 +1,17 @@
 /**
  * JavaScript implementation of the core concept 'field'
- * version: 0.2.0
+ * version: 0.3.2
+ * Dev Notes: coarsen() function need to be optimized.
  * (c) Liangcun Jiang
- * latest change: Feb 28, 2017.
+ * latest change: March 16, 2017.
  */
 define([
     "dojo/_base/declare",
     "esri/layers/ArcGISImageServiceLayer",
-    "esri/tasks/query",
-    "esri/layers/FeatureLayer",
     "esri/layers/ImageServiceParameters",
     "esri/layers/RasterFunction",
     "dojo/domReady!"
-], function (declare,
-             ArcGISImageServiceLayer,
-             Query,
-             FeatureLayer,
-             ImageServiceParameters,
-             RasterFunction) {
+], function (declare, ArcGISImageServiceLayer, ImageServiceParameters, RasterFunction) {
     //null signifies that this class has no classes to inherit from
     return declare(null, {
         /**
@@ -26,22 +20,26 @@ define([
          */
         constructor: function (url) {
             if (url === null || url === "" || url === undefined) {
-                alert("Please enter a valid URL for the field data");
+                console.error("Please enter a valid URL for the field data");
                 return;
             }
+            //var rf = new RasterFunction({
+            //    functionName: "None"
+            //});
             var rf = new RasterFunction();
             rf.functionName = "Stretch";
             //StretchType: 0 = None, 3 = StandardDeviation, 4 = Histogram Equalization,
             // 5 = MinMax, 6 = PercentClip, 9 = Sigmoid
             rf.functionArguments = {
-                //"StretchType": 0
-                "StretchType": 6, //6 = PercentClip
-                "MinPercent": 0.5,
-                "MaxPercent": 0.5,
+                "StretchType": 9, //9 = Sigmoid
                 "UseGamma": true,
-                "Gamma": [3.81464485861804, 3.81464485861804, 3.81464485861804],
+                "ComputeGamma": true,
                 "DRA": true
             };
+            //rf.functionArguments = {
+            //    "StretchType": 0
+            //};
+
             var params = new ImageServiceParameters();
             params.renderingRule = rf;
 
@@ -49,7 +47,7 @@ define([
             this.layer = imageLayer;
             this.rasterFunction = rf;
             this.domain = {"inside": [], "outside": []};
-            console.log("A new Field is instantiated");
+            console.log("A CcField instance was created.");
         },
 
         getDomain: function () {
@@ -63,14 +61,14 @@ define([
          */
         restrictDomain: function (geometry, type) {
             if (type !== "inside" && type !== "outside") {
-                console.error("invalid type parameter for restrictDomain function");
+                console.error("Invalid or missing input parameters for restrictDomain function");
                 return;
             }
             (type === "inside") ? this.domain.inside.push(geometry) : this.domain.outside.push(geometry);
 
             var rfClip = new RasterFunction();
             rfClip.functionName = "Clip";
-            rfClip.variableName = "Raster";
+            //rfClip.variableName = "Raster";
             var functionArguments = {};
             //int (1= clippingOutside, 2=clippingInside), use 1 to keep image inside of the geometry
             functionArguments.ClippingType = (type === "inside" ? 1 : 2);
@@ -78,7 +76,8 @@ define([
             functionArguments.Raster = this.rasterFunction;
             rfClip.functionArguments = functionArguments;
             this.rasterFunction = rfClip;
-            this.layer.setRenderingRule(this.rasterFunction);
+            //this.layer.setRenderingRule(this.rasterFunction);
+            console.log("restrictDomain operation was invoked!");
         },
 
         /**
@@ -93,7 +92,7 @@ define([
             //http://resources.arcgis.com/en/help/arcobjects-net/componenthelp/index.html#//004000000149000000
             //Defines valid local operations here
             var ops = {
-                "average": 1, //For the "average" operation: uses "Plus" first and uses "Divide" later
+                "average": 68,
                 "plus": 1,
                 "minus": 2,
                 "max": 67,
@@ -101,13 +100,13 @@ define([
             };
 
             if (!(operation in ops)) {
-                alert("The operation argument for local function is not valid!");
+                console.error("Invalid or missing input parameters for local function.");
                 return;
             }
 
             var rfLocal = new RasterFunction();
             rfLocal.functionName = "Local";
-            rfLocal.variableName = "Rasters";
+            //rfLocal.variableName = "Rasters";
             var functionArguments = {};
             functionArguments.Operation = ops[operation];
             if (isNaN(field)) {
@@ -119,20 +118,9 @@ define([
             }
             rfLocal.functionArguments = functionArguments;
 
-            //For the "average" operation, divide the previous result by 2
-            if (operation === "average") {
-                var rfLocal2 = new RasterFunction();
-                rfLocal2.functionName = "Local";
-                rfLocal2.variableName = "Rasters";
-                rfLocal2.functionArguments = {
-                    "Operation": 23, //23 = Divide
-                    "Rasters": [rfLocal, 2]
-                };
-                rfLocal = rfLocal2;
-            }
-
             this.rasterFunction = rfLocal;
-            this.layer.setRenderingRule(rfLocal);
+            //this.layer.setRenderingRule(rfLocal);
+            console.log("local operation was invoked!");
         },
 
         /**
@@ -151,7 +139,7 @@ define([
                 "KernelRows": kernelRows
             };
             this.rasterFunction = rfFocal;
-            this.layer.setRenderingRule(rfFocal);
+            //this.layer.setRenderingRule(rfFocal);
         },
 
         /**
@@ -160,19 +148,44 @@ define([
          *@param callH: cell height
          */
         coarsen: function (cellW, cellH) {
+            var rfStretch = new RasterFunction();
+            rfStretch.functionName = "Stretch";
+            //////StretchType: 0 = None, 3 = StandardDeviation, 4 = Histogram Equalization,
+            ////// 5 = MinMax, 6 = PercentClip, 9 = Sigmoid
+            rfStretch.functionArguments = {
+                "StretchType": 9, //9 = Sigmoid
+                "UseGamma": true,
+                "ComputeGamma": true,
+                "DRA": true,
+                "Raster": this.rasterFunction
+            };
+            //rfStretch.functionArguments = {
+            //    "StretchType": 0, //9 = Sigmoid
+            //    "Raster":this.rasterFunction
+            //};
+
             var rfResample = new RasterFunction();
             rfResample.functionName = "Resample";
-            rfResample.variableName = "Raster";
+            //rfResample.variableName = "Raster";
             var functionArguments = {};
             // ResamplingType: 0=NearestNeighbor,2=Cubic,3=Majority,
             // 1=Bilinear, 4=BilinearInterpolationPlus, 5=BilinearGaussBlur,
             // 6=BilinearGaussBlurPlus, 7=Average, 8=Minimum, 9=Maximum,10=VectorAverage(require two bands)
             functionArguments.ResamplingType = 0;
             functionArguments.InputCellsize = {"x": cellW, "y": cellH};
-            functionArguments.Raster = this.rasterFunction;
+            functionArguments.Raster = rfStretch;
             rfResample.functionArguments = functionArguments;
             this.rasterFunction = rfResample;
-            this.layer.setRenderingRule(rfResample);
+            //this.layer.setRenderingRule(rfResample);
+            console.log("coarsen operation was invoked!");
+        },
+
+        /**
+         * refreshes the field according to its current render rule.
+         */
+        show: function () {
+            this.layer.setRenderingRule(this.rasterFunction);
+            console.log("CcField was refreshed.");
         }
     });
 });

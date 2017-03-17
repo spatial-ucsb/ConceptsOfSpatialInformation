@@ -1,17 +1,16 @@
 /**
  * JavaScript implementation of the core concept 'object'
- * version: 0.2.1
+ * version: 0.2.3
  * (c) Liangcun Jiang
- * latest change: Feb 28, 2017.
+ * latest change: March 16, 2017.
  */
 define(["dojo/_base/declare",
-    "dojo/Deferred",
     "esri/tasks/query",
     "esri/layers/FeatureLayer",
     "esri/tasks/BufferParameters",
     "esri/tasks/RelationParameters",
     "esri/tasks/GeometryService"
-], function (declare, Deferred, Query, FeatureLayer, BufferParameters, RelationParameters, GeometryService) {
+], function (declare, Query, FeatureLayer, BufferParameters, RelationParameters, GeometryService) {
     return declare(null, {
         /**
          * CcObject constructor: Constructs an object instance from either a Map Service or Feature Service
@@ -24,6 +23,7 @@ define(["dojo/_base/declare",
             }
             var featureLayer = new FeatureLayer(url);
             this.layer = featureLayer; //return featureLayer instead?
+            console.log("A CcObject instance was created.");
         },
 
         /**
@@ -98,7 +98,9 @@ define(["dojo/_base/declare",
                         break;
                     default:
                         console.log("This FeatureSet does not contain geometry");
+                        return;
                 }
+                console.log("geometry returned");
                 return geometry;
             });
         },
@@ -180,6 +182,7 @@ define(["dojo/_base/declare",
                             console.log("Unifying two parts...");
                             //union function returns a "<Geometry> geometry" Object, then converts it to an Array[1]
                             return gs3.union(bufferedGeometries1.concat(bufferedGeometries2)).then(function (geoUnion) {
+                                console.log("buffer finished!");
                                 return [geoUnion];
                             });
                         });

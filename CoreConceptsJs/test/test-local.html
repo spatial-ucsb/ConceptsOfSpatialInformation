@@ -5,14 +5,12 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>local function test</title>
 
-    <link rel="stylesheet" href="https://js.arcgis.com/3.18/esri/css/esri.css">
-    <link rel="stylesheet" href="https://js.arcgis.com/3.18/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="css/test1.css">
 
     <!-- Configure Dojo first -->
     <script>var dojoConfig = {
-        parseOnLoad: true,
-        async: true,
         packages: [{
             name: "CoreConcepts",
             location: "/CoreConceptsJs" //The "location" is relative to your server path.
@@ -20,58 +18,96 @@
     };
     </script>
     <!--Load the ArcGIS API for JavaScript resources from CDN-->
-    <script src="https://js.arcgis.com/3.18/"></script>
+    <script src="https://js.arcgis.com/3.19/"></script>
 
     <script>
         var app;
         require(["esri/map",
-                    "esri/tasks/query",
                     "esri/layers/RasterFunction",
-                    "esri/layers/FeatureLayer",
                     "CoreConcepts/CcField",
                     "dojo/dom",
+                    "dojo/on",
                     "dijit",
                     "dojo/parser",
                     "dijit/layout/BorderContainer",
                     "dijit/layout/ContentPane"],
                 function (Map,
-                          Query,
                           RasterFunction,
-                          FeatureLayer,
-                          Field,
+                          CcField,
                           dom,
+                          on,
                           dijit,
                           parser) {
                     parser.parse();
-                    //var url = "https://sampleserver6.arcgisonline.com/arcgis/rest/services/ScientificData/MODIS_Landcover/ImageServer";
-                    //var url = "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Toronto/ImageServer";
-                    //var url = "https://sampleserver6.arcgisonline.com/arcgis/rest/services/ScientificData/SeaTemperature/ImageServer";
-                    var url = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/F101994_v4b_web_stable_lights_avg_vis/ImageServer";
-                    var field1 = new Field(url);
                     var map = new Map("map", {
                         basemap: "gray",
-                        center: [120, 30],
+                        center: [120, 25],
                         logo: false,
-                        zoom: 4
+                        zoom: 3
                     });
-                    map.addLayer(field1.layer);
+                    //input data
+                    var url_lights_F10 = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/F101994_v4b_web_stable_lights_avg_vis/ImageServer";
+                    var url_lights_F12 = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/F121994_v4b_web_stable_lights_avg_vis/ImageServer";
+                    var lights_F10 = new CcField(url_lights_F10);
+                    var lights_F12 = new CcField(url_lights_F12);
 
-//                    var url2 = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/F182013_v4c_web_stable_lights_avg_vis/ImageServer";
-//                    var field2 = new Field(url2);
+                    //display layer
+                    map.addLayer(lights_F10.layer);
+                    on(dom.byId("DMSPF10"), "click", changeLayer);
+                    on(dom.byId("DMSPF12"), "click", changeLayer);
+
+                    //change layer
+                    function changeLayer() {
+                        var f10Checked = dom.byId("DMSPF10").checked;
+                        var f12Checked = dom.byId("DMSPF12").checked;
+                        if (f10Checked) {
+                            map.removeAllLayers();
+                            map.addLayer(lights_F10.layer);
+                        }
+                        if (f12Checked) {
+                            map.removeAllLayers();
+                            map.addLayer(lights_F12.layer);
+                        }
+                    }
 
                     function executeLocal() {
-                        var field = dom.byId("inputField").value;
+                        var scalar = dom.byId("scalar").value;
+                        var input = dom.byId("input").value;
                         var op = dijit.byId("operation").get("displayedValue");
-                        field1.local(parseInt(field), op);
+                        if (input === "Scalar") {
+                            lights_F10.local(scalar, op);
+                        } else {//input is "F12"
+                            lights_F10.local(lights_F12, op);
+                        }
+                        lights_F10.layer.setRenderingRule(lights_F10.rasterFunction);
+                        console.log("local is done!");
+                    }
+
+                    function executeReset() {
+                        map.removeAllLayers();
+                        lights_F10 = new CcField(url_lights_F10);
+                        map.addLayer(lights_F10.layer);
+                    }
+
+                    function executeColor() {
+                        var scalar = dom.byId("scalar").value;
+                        var input = dom.byId("input").value;
+                        var op = dijit.byId("operation").get("displayedValue");
+                        if (input === "Scalar") {
+                            lights_F10.local(scalar, op);
+                        } else {//input is "F12"
+                            lights_F10.local(lights_F12, op);
+                        }
+                        lights_F10.layer.setRenderingRule(lights_F10.rasterFunction);
 
                         var remapRF = new RasterFunction();
                         remapRF.functionName = "Remap";
                         remapRF.functionArguments = {
-                            InputRanges: [0, 64, 64, 256, 256, 1000], // remap pixels with values -3 to 10 to now have value of 1 (red)
-                            OutputValues: [1, 2, 3],    // remap pixel values from 11 to 37 to have a value of 2 (green)
-                            Raster: field1.rasterFunction  // Apply remap to the image service
+                            InputRanges: [0, 64, 64, 256, 256, 1000], // remap pixels with values 0 to 63 to now have value of 1 (red)
+                            OutputValues: [1, 2, 3],    //
+                            Raster: lights_F10.rasterFunction  // Apply remap to the image service
                         };
-                        remapRF.outputPixelType = "u8";
+                        remapRF.outputPixelType = "U8";
 
                         var colorRF = new RasterFunction();
                         colorRF.functionName = "Colormap";
@@ -79,16 +115,18 @@
                             Colormap: [
                                 [1, 255, 0, 0],  // Symbolize pixels with value of 1 using red color
                                 [2, 0, 255, 0],  // Symbolize pixels with value of 2 using green color
-                                [3, 0, 0, 255]   // Symbolize pixels with value of 2 using blue color
+                                [3, 0, 0, 255]   // Symbolize pixels with value of 3 using blue color
                             ],
                             Raster: remapRF  // Apply Colormap to output raster from the remap rasterFunction
                         };
-                        field1.layer.setRenderingRule(colorRF);
-                        console.log("local over!");
+                        lights_F10.layer.setRenderingRule(colorRF);
+                        console.log("Local, remap, and color map are done.");
                     }
 
                     app = {
-                        executeLocal: executeLocal
+                        executeLocal: executeLocal,
+                        executeReset: executeReset,
+                        executeColor: executeColor
                     };
                 });
     </script>
@@ -105,18 +143,58 @@
 
     <div id="leftPanel" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'left'">
         <div id="info">
-            <b>Input a scalar</b><br/>
-            <input type="text" id="inputField" size="20" value=100><br/>
-            <br><label>Operation:</label>
-            <select id="operation" data-dojo-type="dijit/form/FilteringSelect" data-dojo-props='style:"width:80px;"'>
-                <option value="plus" selected>plus</option>
-                <option value="minus">minus</option>
-                <option value="average">average</option>
-                <option value="max">max</option>
-                <option value="min">min</option>
-            </select>
+            <div>
+                <input type="radio" name="DMSP" id="DMSPF10"
+                       data-dojo-props='checked:true' checked>
+                <label for="DMSPF10">DMSP satellite number F10</label>
+                <br/>
+                <input type="radio" name="DMSP" id="DMSPF12">
+                <label for="DMSPF12">DMSP satellite number F12</label>
+            </div>
+            <table>
+                <tr>
+                    <td><p>Scalar:</p></td>
+                    <td><input type="text" id="scalar" value=100 size="8"></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td><label>Local:</label></td>
+                    <td>
+                        <select id="input" data-dojo-type="dijit/form/FilteringSelect"
+                                data-dojo-props='style:"width:80px;"'>
+                            <option value="raster" selected>F12</option>
+                            <option value="scalar">Scalar</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Operation:</label></td>
+                    <td>
+                        <select id="operation" data-dojo-type="dijit/form/FilteringSelect"
+                                data-dojo-props='style:"width:80px;"'>
+                            <option value="plus" selected>plus</option>
+                            <option value="minus">minus</option>
+                            <option value="average">average</option>
+                            <option value="max">max</option>
+                            <option value="min">min</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
             <hr/>
-            <button id="btnClip" style="width:80px" onclick="app.executeLocal()">local</button>
+            <table>
+                <tr>
+                    <td>
+                        <button id="btnReset" style="width:80px" onclick="app.executeReset()">Reset</button>
+                    </td>
+                    <td>
+                        <button id="btnClip" style="width:80px" onclick="app.executeLocal()">local</button>
+                    </td>
+                </tr>
+            </table>
+            <br/>
+            <button id="btnColor" style="width:80px" onclick="app.executeColor()">Local + Remap + ColorMap</button>
             <br/><br/>
             <!--<button  id="btnLocal" style="width:80px" onclick="app.executeLocal();">Local</button><br/><br/>-->
             <p>Original value: 0 - 63</p>
