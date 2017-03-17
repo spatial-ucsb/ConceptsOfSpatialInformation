@@ -1,17 +1,16 @@
 /**
  * JavaScript implementation of the core concept 'object'
- * version: 0.2.2
+ * version: 0.2.3
  * (c) Liangcun Jiang
- * latest change: Feb 28, 2017.
+ * latest change: March 16, 2017.
  */
 define(["dojo/_base/declare",
-    "dojo/Deferred",
     "esri/tasks/query",
     "esri/layers/FeatureLayer",
     "esri/tasks/BufferParameters",
     "esri/tasks/RelationParameters",
     "esri/tasks/GeometryService"
-], function (declare, Deferred, Query, FeatureLayer, BufferParameters, RelationParameters, GeometryService) {
+], function (declare, Query, FeatureLayer, BufferParameters, RelationParameters, GeometryService) {
     return declare(null, {
         /**
          * CcObject constructor: Constructs an object instance from either a Map Service or Feature Service
