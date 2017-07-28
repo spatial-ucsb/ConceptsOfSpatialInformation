@@ -1,6 +1,6 @@
 /**
  * JavaScript implementation of the core concept 'object'
- * version: 0.2.3
+ * version: 1.0.0
  * (c) Liangcun Jiang
  * latest change: March 16, 2017.
  */

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>local function test</title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.4/esri/css/main.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/4.4/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="css/test1.css">
+
+    <!-- Configure Dojo first -->
+    <script>var dojoConfig = {
+        packages: [{
+            name: "CoreConcepts",
+            location: "/CoreConceptsJs" //The "location" is relative to your server path.
+        }]
+    };
+    </script>
+    <!--Load the ArcGIS API for JavaScript resources from CDN-->
+    <script src="https://js.arcgis.com/4.4/"></script>
+
+    <script>
+        var app;
+        require(["esri/Map", "esri/views/MapView",
+                    "CoreConcepts/CcField",
+                    "dojo/dom",
+                    "dojo/on",
+                    "dijit",
+                    "dojo/parser",
+                    "dijit/layout/BorderContainer",
+                    "dijit/layout/ContentPane"],
+                function (Map, MapView,
+                          CcField,
+                          dom,
+                          on,
+                          dijit,
+                          parser) {
+                    parser.parse();
+                    var map = new Map({
+                        basemap: "gray"
+                    });
+                    var view = new MapView({
+                        map: map,
+                        center: [120, 38],
+                        zoom: 7,
+                        container: "viewDiv"
+                    });
+                    //input data
+//                    var url_lights_F10 = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/F101994_v4b_web_stable_lights_avg_vis/ImageServer";
+//                    var url_lights_F12 = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/F121994_v4b_web_stable_lights_avg_vis/ImageServer";
+//                    var lights_F10 = new CcField(url_lights_F10);
+//                    var lights_F12 = new CcField(url_lights_F12);
+
+                    var url = "https://gis.ngdc.noaa.gov/arcgis/rest/services/dmsp/stable_lights/ImageServer";
+                    var lights_F10 = new CcField(url, {dimInfo: {Year: 1992, Satellite: "F10"}});
+                    var lights_F12 = new CcField(url, {dimInfo: {Year: 2012}});
+
+                    //display layer
+                    map.add(lights_F10.layer);
+                    on(dom.byId("DMSPF10"), "click", changeLayer);
+                    on(dom.byId("DMSPF12"), "click", changeLayer);
+
+                    //change layer
+                    function changeLayer() {
+                        var f10Checked = dom.byId("DMSPF10").checked;
+                        var f12Checked = dom.byId("DMSPF12").checked;
+                        if (f10Checked) {
+                            map.removeAll();
+                            map.add(lights_F10.layer);
+                        }
+                        if (f12Checked) {
+                            map.removeAll();
+                            map.add(lights_F12.layer);
+                        }
+                    }
+
+                    function executeLocal() {
+                        var scalar = dom.byId("scalar").value;
+                        var input = dom.byId("input").value;
+                        var op = dijit.byId("operation").get("displayedValue");
+                        if (input === "Scalar") {
+                            lights_F10.local(scalar, op);
+                        } else {//input is "F12"
+                            lights_F10.local(lights_F12, op);
+                        }
+                        console.log("local is done!");
+                    }
+
+                    function executeReset() {
+                        map.removeAll();
+                        lights_F10 = new CcField(url, {dimInfo: {Year: 1992, Satellite: "F10"}});
+                        map.add(lights_F10.layer);
+                    }
+
+                    app = {
+                        executeLocal: executeLocal,
+                        executeReset: executeReset
+                    };
+                });
+    </script>
+
+</head>
+
+<body class="claro">
+<div data-dojo-type="dijit.layout.BorderContainer"
+     data-dojo-props="design:'headline',gutters:false"
+     style="width: 100%; height: 100%; margin: 0;">
+
+    <div id="viewDiv" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'center'">
+    </div>
+
+    <div id="leftPanel" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'left'">
+        <div id="info">
+            <div>
+                <input type="radio" name="DMSP" id="DMSPF10"
+                       data-dojo-props='checked:true' checked>
+                <label for="DMSPF10">DMSP satellite number F10</label>
+                <br/>
+                <input type="radio" name="DMSP" id="DMSPF12">
+                <label for="DMSPF12">DMSP satellite number F12</label>
+            </div>
+            <table>
+                <tr>
+                    <td><p>Scalar:</p></td>
+                    <td><input type="text" id="scalar" value=30 size="8"></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td><label>Local:</label></td>
+                    <td>
+                        <select id="input" data-dojo-type="dijit/form/FilteringSelect"
+                                data-dojo-props='style:"width:80px;"'>
+                            <option value="raster" selected>F12</option>
+                            <option value="scalar">Scalar</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Operation:</label></td>
+                    <td>
+                        <select id="operation" data-dojo-type="dijit/form/FilteringSelect"
+                                data-dojo-props='style:"width:80px;"'>
+                            <option value="plus" selected>plus</option>
+                            <option value="minus">minus</option>
+                            <option value="average">average</option>
+                            <option value="max">max</option>
+                            <option value="min">min</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <hr/>
+            <table>
+                <tr>
+                    <td>
+                        <button id="btnReset" style="width:80px" onclick="app.executeReset()">Reset</button>
+                    </td>
+                    <td>
+                        <button id="btnClip" style="width:80px" onclick="app.executeLocal()">local</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id='legendDiv' style='display:none;margin-top:15px;'></div>
+    </div>
+</div>
+</body>
+</html>

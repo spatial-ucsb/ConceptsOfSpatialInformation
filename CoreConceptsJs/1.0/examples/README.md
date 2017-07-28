@@ -13,7 +13,7 @@ Contents
 Core concepts solutions
 -----------------------------------------
 
-### Example 1: Night lights (TODO)
+### Example 1: Night lights
 #### Problem statement:
 Lowe's question can be summarised as "What was the night time luminosity for the year 1994, in Mainland China,
 excluding gas flares, within 0.5 degrees from roads, on a 0.1 degree grid?"
@@ -64,7 +64,7 @@ roads.buffer(0.5, "degree").then(function(buffered_geometry){
 ```
 average_luminosity.coarsen(0.1, 0.1);
 ```
-### *Solution B*: (WIP)
+### *Solution B*:  (TODO)
 
 We could even take it a step further and treat Lowe's question as creating a **field** with a specific **domain**
 at a specific **granularity**.
