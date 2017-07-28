@@ -32,7 +32,7 @@ The problem-solving process involves translating spatial questions into the
 core concepts of spatial information and operations applied to them.
 ### *Solution A*：
 
-#####(1) Interpret luminosity data as fields; boundary, roads and gas flares as objects
+##### (1) Interpret luminosity data as fields; boundary, roads and gas flares as objects
 ```
 lights_F10 = new CcField(url_lights_F10);
 lights_F12 = new CcField(url_lights_F12);
@@ -40,12 +40,12 @@ boundary = new CcObject(url_china);
 roads = new CcObject(url_china_roads);
 gas_flares = new CcObject(url_china_flares);
 ```
-#####(2) What is the mean luminosity for the year 1994?
+##### (2) What is the mean luminosity for the year 1994?
 ```
 average_luminosity = lights_F10.local(lights_F12, "average");
 ```
 
-#####(3) What is the mean luminosity for the year 1994, in Mainland China, excluding gas flares, within 0.5 degrees from roads?
+##### (3) What is the mean luminosity for the year 1994, in Mainland China, excluding gas flares, within 0.5 degrees from roads?
 ```
 //in Mainland China
 boundary.getGeometry().then(function(boundary_geometry){
@@ -60,7 +60,7 @@ roads.buffer(0.5, "degree").then(function(buffered_geometry){
        average_luminosity.restrictDomain(buffered_geometry,"inside");
    });
 ```
-#####(4) What is the mean luminosity in a 0.1 by 0.1 degree area?
+##### (4) What is the mean luminosity in a 0.1 by 0.1 degree area?
 ```
 average_luminosity.coarsen(0.1, 0.1);
 ```

@@ -21,6 +21,7 @@ Members & contributors:
 * Michel Zimmer ([home](https://www.mzimmer.net))
 * Behzad Vahedi
 * Thomas Hervey ([home](http://www.thervey.me))
+* Sara Lafia ([home](http://www.geog.ucsb.edu/~lafia/))
 * Liangcun Jiang
 
 
