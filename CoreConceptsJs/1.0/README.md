@@ -5,7 +5,7 @@ Core Concepts of Spatial Information - JavaScript
 This JavaScript API is designed to provide experts outside GIS domain an easy-to-use spatial computing library over the Web.
 
 **Note**: This version of implementation is built on top of `ArcGIS JavaScript API 3.x`.
-It may be not compatible with ArcGIS JavaScript API 4.x.
+It may be not compatible with ArcGIS JavaScript API 4.x. Please refer to [version 2.0](../2.0/) for more information.
 
 Contents
 ----------------------
