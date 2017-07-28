@@ -5,7 +5,7 @@ Core Concepts of Spatial Information - JavaScript
 This JavaScript API is designed to provide experts outside GIS domain an easy-to-use spatial computing library over the Web.
 It is built on top of `ArcGIS JavaScript API 4.x`, and uses Dojo toolkit to ensure simplicity and efficiency.
 
-See the [Readme](../README.md) in the parent directory for general information about the Core Concepts.
+See the [Readme](../../README.md) in the parent directory for general information about the Core Concepts.
 
 Contents
 ----------------------
@@ -36,7 +36,7 @@ Use the API
 #### 2. Reference the ArcGIS API for JavaScript
 Use a second \<script\> to load the ArcGIS API for JavaScript from CDN
 ```
-<script src="https://js.arcgis.com/4.3/"></script>
+<script src="https://js.arcgis.com/4.4/"></script>
 ```
 #### 3. Load modules
 Use `require` to load specific modules from the API. The first parameter to `require` is an array of module ids
