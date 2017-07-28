@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>CcObject test</title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.4/esri/css/main.css">
+    <link rel="stylesheet" href="css/test1.css">
+
+    <!-- Configure Dojo first -->
+    <script>var dojoConfig = {
+        packages: [{
+            name: "CoreConcepts",
+            location: "/CoreConceptsJs" //The "location" is relative to your server path.
+        }]
+    };
+    </script>
+    <!--Load the ArcGIS API for JavaScript resources from CDN-->
+    <script src="https://js.arcgis.com/4.4/"></script>
+
+    <script>
+        require(["esri/Map", "esri/views/MapView", "CoreConcepts/CcObject"],
+                function (Map, MapView, CcObject) {
+                    //WKID:102100, projected coordinate system
+                    var url = "http://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/World_Countries_(Generalized)/FeatureServer/0";
+                    var obj1 = new CcObject(url, {SQL: "Country = 'China'"});
+                    var obj2 = new CcObject(url, {SQL: "Country = 'North Korea'"});
+                    var obj3 = new CcObject(url, {SQL: "Country = 'South Korea'"});
+
+                    var map = new Map({
+                        basemap: "topo",
+                        layers: [obj1.layer, obj2.layer, obj3.layer]
+                    });
+                    var view = new MapView({
+                        map: map,
+                        center: [120, 35],
+                        zoom: 3,
+                        container: "viewDiv"
+                    });
+
+                    //equals(China, China): true
+                    obj1.relation(obj1, "equals").then(function (result) {
+                        console.log("China equals China? " + result);
+                    });
+                    //intersects(China, North Korea): true
+                    obj1.relation(obj2, "intersects").then(function (result) {
+                        console.log("China intersects North Korea? " + result);
+                    });
+                    //touches(China, North Korea): true
+                    obj1.relation(obj2, "touches").then(function (result) {
+                        console.log("China touches North Korea? " + result);
+                    });
+                    //overlaps(China, North Korea): false
+                    obj1.relation(obj2, "overlaps").then(function (result) {
+                        console.log("China overlaps North Korea? " + result);
+                    });
+                    //crosses(China, North Korea): false
+                    obj1.relation(obj2, "crosses").then(function (result) {
+                        console.log("China crosses North Korea? " + result);
+                    });
+                    //contains(China, North Korea): false
+                    obj1.relation(obj2, "contains").then(function (result) {
+                        console.log("China contains North Korea? " + result);
+                    });
+                    //disjoint(China, North Korea): false
+                    obj1.relation(obj2, "disjoint").then(function (result) {
+                        console.log("China disjoint North Korea? " + result);
+                    });
+
+                    //disjoint(South Korea, China): true
+                    obj3.relation(obj1, "disjoint").then(function (result) {
+                        console.log("South Korea disjoint China? " + result);
+                    });
+                    //intersects(South Korea, China): false
+                    obj3.relation(obj1, "intersects").then(function (result) {
+                        console.log("South Korea intersects China? " + result);
+                    });
+                    //equals(South Korea, China): false
+                    obj3.relation(obj1, "equals").then(function (result) {
+                        console.log("South Korea equals China? " + result);
+                    });
+                    //within(South Korea, China): false
+                    obj3.relation(obj1, "within").then(function (result) {
+                        console.log("South Korea within China? " + result);
+                    });
+                    //relate(South Korea, China): false
+                    obj3.relation(obj1, "relate").then(function (result) {
+                        console.log("South Korea relate China? " + result);
+                    });
+                })
+    </script>
+</head>
+<body>
+<div id="viewDiv"></div>
+</body>
+</html>

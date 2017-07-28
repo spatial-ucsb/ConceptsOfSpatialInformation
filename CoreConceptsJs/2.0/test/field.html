@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Create a field</title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.4/esri/css/main.css">
+    <link rel="stylesheet" href="css/test1.css">
+
+    <!-- Configure Dojo first -->
+    <script>var dojoConfig = {
+        async: true,
+        packages: [{
+            name: "CoreConcepts",
+            location: "/CoreConceptsJs" //assume that js files are deployed under "www.yourserver.com/CoreConceptsJs/"
+        }]
+    };
+    </script>
+    <!--Load the ArcGIS API for JavaScript resources from CDN-->
+    <script src="https://js.arcgis.com/4.4/"></script>
+
+    <script>
+        require(["esri/Map", "esri/views/MapView", "esri/geometry/Polygon", "CoreConcepts/CcField"],
+                function (Map, MapView, Polygon, CcField) {
+                    //var url = "https://sampleserver6.arcgisonline.com/arcgis/rest/services/ScientificData/MODIS_Landcover/ImageServer";
+                    //var url = "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Toronto/ImageServer";
+                    //var url = "https://sampleserver6.arcgisonline.com/arcgis/rest/services/ScientificData/SeaTemperature/ImageServer";
+                    //var url = "https://sampleserver6.arcgisonline.com/arcgis/rest/services/ScientificData/NDFD_model/ImageServer";
+                    var url = "https://gis.ngdc.noaa.gov/arcgis/rest/services/dmsp/stable_lights/ImageServer";
+                    //var url = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/F101994_v4b_web_stable_lights_avg_vis/ImageServer";
+
+                    var p1 = new Polygon([[50, -20], [50, 60], [150, 60], [150, -20], [50, -20]]);
+                    var p2 = new Polygon([[60, 0], [100, 20], [100, -10], [60, 0]]);
+                    var opt = {domain: {inside: [p1], outside: [p2]}, granularity: [0.1, 0.1]};
+                    var field = new CcField(url, opt);
+                    //var field = new CcField(url);
+                    var map = new Map({
+                        basemap: "topo",
+                        layers: [field.layer]
+                    });
+                    var view = new MapView({
+                        container: "viewDiv",
+                        map: map,
+                        center: [130, 35],
+                        zoom: 3
+                    });
+                    //map.add(field.layer);
+                })
+    </script>
+</head>
+<body>
+<div id="viewDiv"></div>
+</body>
+</html>

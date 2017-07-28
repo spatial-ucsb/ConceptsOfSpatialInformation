@@ -1,6 +1,6 @@
 /**
  * JavaScript implementation of the core concept 'field'
- * version: 0.3.2
+ * version: 1.0.0
  * Dev Notes: coarsen() function need to be optimized.
  * (c) Liangcun Jiang
  * latest change: March 16, 2017.
@@ -131,7 +131,7 @@ define([
          */
         focal: function (kernelColumns, kernelRows, type) {
             var rfFocal = new RasterFunction();
-            rfFocal.functionName = "Local";
+            rfFocal.functionName = "Statistics";
             rfFocal.variableName = "Rasters";
             var functionArguments = {
                 "Type": type,

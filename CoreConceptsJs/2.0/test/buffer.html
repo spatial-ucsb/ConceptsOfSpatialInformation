@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Test buffer function</title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.4/esri/css/main.css">
+    <link rel="stylesheet" href="css/test1.css">
+
+    <!-- Configure Dojo first -->
+    <script>var dojoConfig = {
+//        parseOnLoad:true,
+//        async:true,
+        packages: [{
+            name: "CoreConceptsJs",
+            location: "/CoreConceptsJs" //The "location" is relative to your server path.
+        }]
+    };
+    </script>
+    <!--Load the ArcGIS API for JavaScript resources from CDN-->
+    <script src="https://js.arcgis.com/4.4/"></script>
+
+    <script>
+        require(["esri/Map", "esri/views/MapView",
+                    "dojo/_base/array",
+                    "esri/Graphic",
+                    "esri/symbols/SimpleFillSymbol",
+                    "CoreConceptsJs/CcObject"],
+                function (Map, MapView, array, Graphic, SimpleFillSymbol, CcObject) {
+//                    var url = "http://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/World_Countries_(Generalized)/FeatureServer/0";
+//                    var obj = new CcObject(url, {SQL:"Country = 'China'"});
+
+                    //var url = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/China_Roads/MapServer/0";
+                    var url = "https://ags-raid.geog.ucsb.edu:6443/arcgis/rest/services/light/china/MapServer/0";
+                    var obj = new CcObject(url);
+
+                    var map = new Map({
+                        basemap: "gray"
+                    });
+                    var view = new MapView({
+                        container: "viewDiv",
+                        map: map,
+                        center: [120, 35],
+                        zoom: 4
+                    });
+                    map.add(obj.layer);
+
+                    obj.buffer(0.5, "degree").then(function (bufferedGeo) {
+                        console.log(bufferedGeo);
+                        //show the buffer
+                        console.log("Showing the buffer...");
+                        var symbol = new SimpleFillSymbol({
+                            color: [255, 0, 0, 0.35],
+                            style: "solid",
+                            outline: {
+                                color: [255, 0, 0, 0.35],
+                                style: "solid"
+                            }
+                        });
+
+                        var graphics = new Graphic({
+                            geometry: bufferedGeo,
+                            symbol: symbol
+                        });
+
+                        view.graphics.add(graphics);
+                        console.log("Finished!");
+                    });
+
+                    console.log("This statement is executed first!");
+                })
+    </script>
+</head>
+<body>
+<div id="viewDiv"></div>
+</body>
+</html>

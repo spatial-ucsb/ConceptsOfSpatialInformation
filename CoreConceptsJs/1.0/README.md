@@ -1,16 +1,16 @@
 Core Concepts of Spatial Information - JavaScript
-=============================================
+=================================================
 
-Abstract: A JavaScript implementation of the core concepts.
+**Abstract**: A JavaScript implementation of the core concepts.
 This JavaScript API is designed to provide experts outside GIS domain an easy-to-use spatial computing library over the Web.
-It is built on top of ArcGIS JavaScript API 3.x, and uses Dojo toolkit to ensure simplicity and efficiency.
 
-See the [Readme](../README.md) in the parent directory for general information about the Core Concepts.
+**Note**: This version of implementation is built on top of `ArcGIS JavaScript API 3.x`.
+It may be not compatible with ArcGIS JavaScript API 4.x. Please refer to [version 2.0](../2.0/) for more information.
 
 Contents
 ----------------------
 - [`examples/`](examples): Usage examples of implementations.
-- [`test/`](test): Unit tests. (WIP)
+- [`test/`](test): Unit tests.
 - `CcField.js`: Implementations of fields.
 - `CcObject.js`: Implementations of objects.
 
