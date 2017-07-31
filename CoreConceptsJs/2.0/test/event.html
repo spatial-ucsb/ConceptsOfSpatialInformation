@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>CcEvent test</title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.4/esri/css/main.css">
+    <link rel="stylesheet" href="css/test1.css">
+
+    <!-- Configure Dojo first -->
+    <script>var dojoConfig = {
+        packages: [{
+            name: "CoreConcepts",
+            location: "/CoreConceptsJs" //The "location" is relative to your server path.
+        }]
+    };
+    </script>
+    <!--Load the ArcGIS API for JavaScript resources from CDN-->
+    <script src="https://js.arcgis.com/4.4/"></script>
+
+    <script>
+        require(["esri/Map", "esri/views/MapView", "CoreConcepts/CcObject", "CoreConcepts/CcEvent"],
+                function (Map, MapView, CcObject, CcEvent) {
+                    var map = new Map({
+                        basemap: "topo"
+                    });
+                    var view = new MapView({
+                        map: map,
+                        center: [120, 35],
+                        zoom: 3,
+                        container: "viewDiv"
+                    });
+
+                    var url = "http://utility.arcgis.com/usrsvcs/servers/d3b6dbf8137a4940b861938bc48a9774/rest/services/LiveFeeds/Hurricane_Recent/MapServer/1";
+                    var obj0 = new CcObject(url, {SQL: "STORMNAME = 'KULAP' AND STORMTYPE = 'Low'"});
+                    var obj1 = new CcObject(url, {SQL: "STORMNAME = 'KULAP' AND STORMTYPE = 'Tropical Depression' AND OBJECTID = 170"});
+                    var obj2 = new CcObject(url, {SQL: "STORMNAME = 'KULAP' AND STORMTYPE = 'Tropical Storm'"});
+                    var obj3 = new CcObject(url, {SQL: "STORMNAME = 'KULAP' AND STORMTYPE = 'Tropical Depression' AND OBJECTID = 172"});
+                    map.addMany([obj0.layer, obj1.layer, obj2.layer, obj3.layer]);
+                    //map.add(obj2.layer);
+
+                    // hurricanes: https://www.arcgis.com/home/webmap/viewer.html?webmap=2f5a28f82f4d41ec8dbe6cf96375a970
+                    // https://www.arcgis.com/apps/PublicInformation/index.html?appid=a2b187e887924f4488d273b5972ea062
+                    var t0 = new Date("July 19, 2017 17:00:00");
+                    var t1 = new Date("July 19, 2017 23:00:00");
+                    var t2 = new Date("July 20, 2017 17:00:00");
+                    var t3 = new Date("July 25, 2017 05:00:00");
+                    var t4 = new Date("July 25, 2017 17:00:00");
+                    //Low
+                    var tl_kulap = new CcEvent("wp092017_0", {start: t0, end: t1}, [obj0], {
+                        name: "KULAP",
+                        Intensity: 15,
+                        type: "Low"
+                    });
+                    //tropical depression
+                    var td1_kulap = new CcEvent("wp092017_1", {start: t1, end: t2}, [obj1], {
+                        name: "KULAP",
+                        Intensity: 30.00,
+                        type: "Tropical Depression"
+                    });
+                    //tropical storm
+                    var storm_kulap = new CcEvent("wp092017_2", {start: t2, end: t3}, [obj2], {
+                        name: "KULAP",
+                        Intensity: 50.00,
+                        type: "Tropical Storm"
+                    });
+                    //tropical depression
+                    var td2_kulap = new CcEvent("wp092017_3", {start: t3, end: t4}, [obj3], {
+                        name: "KULAP",
+                        Intensity: 30.00,
+                        type: "Tropical Depression"
+                    });
+
+
+                    var obj5 = new CcObject(url, {SQL: "STORMNAME = 'SONCA' AND STORMTYPE = 'LOW'"});
+                    var obj6 = new CcObject(url, {SQL: "STORMNAME = 'SONCA' AND STORMTYPE = 'Tropical Depression'"});
+                    var obj7 = new CcObject(url, {SQL: "STORMNAME = 'SONCA' AND STORMTYPE = 'Tropical Storm'"});
+                    map.addMany([obj5.layer, obj6.layer, obj7.layer]);
+
+                    var t5 = new Date("July 19, 2017 23:00:00");
+                    var t6 = new Date("July 20, 2017 05:00:00");
+                    var t7 = new Date("July 22, 2017 17:00:00");
+                    var t8 = new Date("July 24, 2017 23:00:00");
+                    //low
+                    var tl_sonca = new CcEvent("wp082017_0", {start: t5, end: t6}, [obj5], {
+                        name: "SONCA",
+                        Intensity: 15.00,
+                        type: "LOW"
+                    });
+                    //tropical depression
+                    var td_sonca = new CcEvent("wp082017_1", {start: t6, end: t7}, [obj6], {
+                        name: "SONCA",
+                        Intensity: 30.00,
+                        type: "Tropical Depression"
+                    });
+                    //tropical storm
+                    var storm_sonca = new CcEvent("wp082017_2", {start: t7, end: t8}, [obj7], {
+                        name: "SONCA",
+                        Intensity: 45.00,
+                        type: "Tropical Storm"
+                    });
+
+                    //Ask questions
+                    console.log("When did KULAP storm happen? " + storm_kulap.when());
+                    console.log("What was the time period of KULAP stotm? " + storm_kulap.within());
+                    console.log("Did SONCA storm happen during KULAP storm? " + storm_sonca.during(storm_kulap));
+                    console.log("Did SONCA Low happen before KULAP LOW? " + tl_sonca.before(tl_kulap));
+                    console.log("Did SONCA Low happen after KULAP LOW? " + tl_sonca.after(tl_kulap));
+                    console.log("Was there any temporal overlap between SONCA tropical depression and KULAP's first tropical depression? "
+                    + td_sonca.overlap(td1_kulap));
+
+                })
+    </script>
+</head>
+<body>
+<div id="viewDiv"></div>
+</body>
+</html>
