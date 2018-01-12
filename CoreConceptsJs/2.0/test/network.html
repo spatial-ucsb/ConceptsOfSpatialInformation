@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>network function test</title>
+    <!-- Configure Dojo first -->
+    <script>var dojoConfig = {
+        //baseUrl: "/",
+        packages: [
+            {name: "CoreConceptsJs", location: "//localhost:8080/CoreConceptsJs"}, // set the absolute path of file locations
+            {name: "lib", location: "//localhost:8080/CoreConceptsJs/lib"}
+        ]
+    };
+    </script>
+
+    <script src="https://js.arcgis.com/4.4/"></script>
+
+    <script>
+        var app;
+        require(["CoreConceptsJs/CcNetwork"],
+                function (CcNetwork) {
+
+                    var nd = [0, [1, {size: 18}], 2];
+                    var ed = [[0, 1], [0, 2], [1, 2], [2, 1, {distance: 15}]];
+                    var ntw = new CcNetwork(nd, ed);
+                    var nodes = ntw.nodes();
+                    var edges = ntw.edges();
+
+                    function executeShow() {
+                        document.getElementById("out").innerHTML = "nodes: " + nodes;
+                        document.getElementById("out0").innerHTML = "edges: " + edges;
+                        console.log("Show all nodes and edges:");
+                        console.log(ntw.nodes());
+                        console.log(ntw.edges());
+                    }
+
+                    function executeAddNode() {
+                        ntw.addNode(4, {size: 10});
+                        nodes = ntw.nodes();
+                        document.getElementById("out1").innerHTML = nodes;
+                        console.log("AddNode is done!");
+                        console.log(nodes);
+                    }
+
+                    function executeAddEdge() {
+                        ntw.addEdge(4, 0)
+                        ntw.addEdge(5, 4, {color: 'blue'});
+                        edges = ntw.edges();
+                        document.getElementById("out2").innerHTML = edges;
+                        console.log("AddEdge is done!");
+                        console.log(edges);
+                    }
+
+                    function executeConnected() {
+                        var b1 = ntw.connected(4, 2);
+                        document.getElementById("out3").innerHTML = b1;
+                        console.log("Is 4 and 2 connected? " + b1);
+                        var b2 = ntw.connected(2, 4);
+                        console.log("Is 2 and 4 connected? " + b2);
+                    }
+
+                    function executePath() {
+                        var p = ntw.shortestPath(4, 2);
+                        document.getElementById("out4").innerHTML = p;
+                        console.log("The shortest path between 4 and 2: " + p);
+                    }
+
+                    function executeDegree() {
+                        var d = ntw.degree(1);
+                        document.getElementById("out5").innerHTML = d;
+                        console.log("The degree of node 1: " + d);
+                        console.log("The degree of node 2: " + ntw.degree(2));
+                    }
+
+                    function executeDistance() {
+                        var p = ntw.distance(4, 2);
+                        document.getElementById("out6").innerHTML = p;
+                        console.log("The distance between 4 and 2: " + p);
+                    }
+
+                    function executeBreathFirst() {
+                        var nodes = ntw.breadthFirst(1, 2);
+                        document.getElementById("out7").innerHTML = nodes;
+                        console.log("All nodes within 2 units from node 1: " + nodes);
+                    }
+
+                    app = {
+                        executeShow: executeShow,
+                        executeAddNode: executeAddNode,
+                        executeAddEdge: executeAddEdge,
+                        executeConnected: executeConnected,
+                        executePath: executePath,
+                        executeDegree: executeDegree,
+                        executeDistance: executeDistance,
+                        executeBreathFirst: executeBreathFirst
+                    };
+                });
+    </script>
+
+</head>
+<body>
+<div>
+    <tr>
+        <td><p>Tests for 'network' concept:</p></td>
+    </tr>
+    <tr>
+        <td><p> Initial network: 0-->1<-->2<--0 </p></td>
+    </tr>
+    <tr>
+        <td><p> Then two nodes are added: 5-->4-->0-->1<-->2<--0</p></td>
+    </tr>
+</div>
+<div>
+    <table>
+        <tr>
+            <td>
+                <button id="btnShow" style="width:80px" onclick="app.executeShow()">Show</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <output type="text" id="out"></output>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <output type="text" id="out0"></output>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button id="btnAddNode" style="width:80px" onclick="app.executeAddNode()">AddNode</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <output type="text" id="out1"></output>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button id="btnAddEdge" style="width:80px" onclick="app.executeAddEdge()">AddEdge</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <output type="text" id="out2"></output>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button id="btnConnected" style="width:80px" onclick="app.executeConnected()">Is 4 and 2 connected?
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <output type="text" id="out3"></output>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button id="btnPath" style="width:80px" onclick="app.executePath()">Shortest path between 4 and 2
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <output type="text" id="out4"></output>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button id="btnDegree" style="width:80px" onclick="app.executeDegree()">Degree of node 1</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <output type="text" id="out5"></output>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button id="btnDistance" style="width:80px" onclick="app.executeDistance()">Distance between 4 and 2
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <output type="text" id="out6"></output>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button id="btnBreathFirst" style="width:80px" onclick="app.executeBreathFirst()">All nodes within 2
+                    units from Node 1
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <output type="text" id="out7"></output>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
